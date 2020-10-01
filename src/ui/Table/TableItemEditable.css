@@ -1,0 +1,25 @@
+/* Table Item Editable */
+
+.table-item-editable {
+    flex: 2 !important;
+
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start !important;
+
+    height: initial !important;
+}
+
+.table-item-editable__field-name {
+    font-weight: 600;
+}
+
+.table-item-editable__field-input {
+    padding-bottom: 10px;
+}
+
+.table-item-editable__actions {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}

@@ -1,0 +1,103 @@
+.pagination {
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pagination__indicator {
+    position: relative;
+
+    height: 22px;
+    margin-right: 20px;
+
+    font-size: 12px;
+}
+
+.pagination__indicator__current-value {
+    padding-right: 15px !important;
+    padding-left: 15px !important;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.pagination__indicator.active .pagination__indicator__current-value {
+    border-color: #000;
+}
+
+.pagination__controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    font-size: 14px;
+}
+
+.pagination__controls__button,
+.pagination__indicator__current-value__button {
+    width: 22px;
+    height: 22px;
+
+    border: none;
+    background: none;
+    outline: none;
+
+    font-size: 20px;
+    color: var(--color-inactive-icon);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: all 0.2s ease-out;
+}
+
+.pagination__controls__button.active,
+.pagination__indicator__current-value__button.active {
+    color: #000;
+}
+
+.pagination__indicator.active .pagination__indicator__current-value__button {
+    color: var(--color-active-icon);
+    transform: rotate(90deg);
+}
+
+.pagination__indicator__row-list {
+    position: absolute;
+
+    width: 100%;
+
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid #000;
+    border-top-width: 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    overflow: hidden;
+}
+
+.pagination__indicator.active .pagination__indicator__row-list {
+    display: flex;
+}
+
+.pagination__indicator__row-list__item {
+    width: 100%;
+    padding-top: 3px !important ;
+    padding-right: 22px !important;
+    text-align: center;
+}
+.pagination__indicator__row-list__item:last-of-type {
+    padding-bottom: 3px !important;
+}
+.pagination__indicator__row-list__item:hover {
+    background: #e7e8eb;
+}

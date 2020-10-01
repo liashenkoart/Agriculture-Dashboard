@@ -1,0 +1,109 @@
+/* table content */
+
+.table__content {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table__content * {
+    font-family: "Roboto";
+}
+
+.table__content .table-item,
+.table__content tr {
+    display: flex;
+    width: 100%;
+    /* height: 30px; */
+}
+
+.table__content thead {
+    background-color: #1f9992;
+}
+
+.table__content tbody tr:nth-child(2n + 1) {
+    background-color: #f3f3f3;
+}
+
+.table__content tbody tr:nth-child(2n) {
+    background-color: #fff;
+}
+
+.table__content tbody .table-item .toggler {
+    cursor: pointer;
+}
+
+.table__content tr {
+    display: flex;
+    align-items: center;
+}
+
+.table__content tr th {
+    font-weight: 700;
+}
+
+.table__content tr td {
+    font-weight: 400;
+}
+
+.table__content tr th,
+.table__content tr td {
+    position: relative;
+
+    /* padding-left: 10px; */
+
+    font-size: 12px;
+    height: 30px;
+
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+
+.table__content tr td.nested-table {
+    height: initial;
+    border-top: 1px solid #c5c5c5;
+    border-bottom: 1px solid #c5c5c5;
+    border-left: 1px solid #c5c5c5;
+}
+
+.table__content thead th {
+    color: #fff;
+}
+
+.table__content__default-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nested-table > .table__content > tbody > tr {
+    padding-left: 100px;
+}
+
+/* on item active */
+
+.table-item > td:first-of-type,
+.table-item > th:first-of-type,
+.table-header:first-of-type {
+    padding-left: 10px;
+}
+
+.nested-table__container ~ .table-item {
+    opacity: 0.5;
+}
+
+.table-item.active {
+    opacity: 1;
+}
+
+/* Footer */
+
+.table__content__new-item {
+    border-top: 1px solid #c5c5c5;
+    border-bottom: 1px solid #c5c5c5;
+}
+
+.table__content__new-item tr:nth-child(2n + 1),
+.table__content__new-item tr:nth-child(2n) {
+    background-color: #fff !important;
+}

@@ -1,0 +1,96 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+        "Droid Sans", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap");
+
+:root {
+    /* shadows */
+    --shadow-generic: 0px 4px 10px #c0d2e4;
+    --shadow-positive: 0px 4px 10px rgba(116, 167, 49, 0.44);
+    --shadow-medium: 0px 4px 10px rgba(255, 154, 61, 0.44);
+    --shadow-negative: 0px 4px 10px rgba(255, 61, 61, 0.44);
+
+    /* colors */
+    --color-inactive-icon: #8a9198;
+    --color-active-icon: #384e63;
+    --color-normal-status: #74a731;
+    --color-negative-alert: #ff3d3d;
+    --color-medium-alert: #ffbd3d;
+    --color-positive-alert: #22c11f;
+    --color-climate-green: #1f9992;
+    --color-general-grey: #404040;
+    --color-orange-climate: #f27930;
+    --color-over-menu-bar: #aae0df;
+    --color-dark-blue: #1d2934;
+    --color-red-graph-growing: #da3849;
+    --color-yellow-graph-growing: #e5a339;
+    --color-yellow-wind: #faaa11;
+    --color-blue-precipitation: #2288c1;
+
+    /* gradients */
+}
+
+/* text */
+.title-section-text {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.card-title {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.title {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.regular-text,
+.standard-text-card {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.table-text {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-size: 10px;
+}
+
+.table-title {
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.side-menu-title {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.side-menu-date-text {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.side-menu-text {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+}

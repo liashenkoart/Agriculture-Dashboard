@@ -1,0 +1,21 @@
+.table-item-editable__actions__button {
+    width: 26px;
+    height: 26px;
+    border-radius: 13px;
+
+    border: none;
+    background: none;
+    outline: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease-out;
+}
+
+.table-item-editable__actions__button:hover {
+    background-color: #ddd;
+}
