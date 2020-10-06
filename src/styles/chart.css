@@ -21,7 +21,14 @@ p.y-label {
 }
 
 .headerBlocksContainer {
+    margin-top: 30px;
     margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(135px, 1fr)) 80px;
+}
+
+.headerBlockContainer:hover {
+    box-shadow: 0px 4px 10px #E4A367;
 }
 
 .headerBlockContainer {
@@ -30,10 +37,10 @@ p.y-label {
     align-items: center;
     justify-content: center;
     height: 135px;
-    width: 174px;
     border: 0;
     box-shadow: 0px 4px 10px rgba(56, 78, 99, 0.2);
     border-radius: 20px;
+    transition: 200ms;
 }
 
 .headerBlock {
@@ -56,17 +63,20 @@ p.titleText {
 
 .blocks-container {
     display: inline-block;
-    position: relative;
-    bottom: -50px;
     margin-right: 22px;
+    margin-top: 2px;
 }
 
 .textBlockContainer {
-    width: 174px;
     padding: 16px 0;
     box-shadow: 0px 4px 10px rgba(56, 78, 99, 0.2);
     border-radius: 10px;
     cursor: pointer;
+    transition: 200ms;
+}
+
+.textBlockContainer:hover {
+    box-shadow: 0px 4px 10px #E4A367;
 }
 
 p.textBlock {
@@ -76,10 +86,7 @@ p.textBlock {
 }
 
 .dotIcon {
-    position: relative;
-    top: 40px;
     height: 135px;
-    width: 100px;
 }
 
 .title-container {
@@ -100,7 +107,7 @@ p.main-title {
 }
 
 .desc-card {
-    padding: 16px 30px;
+    padding: 13px 22px 7px 31px;
     box-shadow: 0px 4px 10px rgba(56, 78, 99, 0.2);
     border-radius: 10px;
     display: inline-flex;

@@ -30,7 +30,7 @@ const ChartActions = () => {
       </div>
       <div className="headerBlocksContainer">
         <div className="blocks-container">
-          <div className="textBlockContainer" style={{ marginBottom: 22, boxShadow: '0px 4px 10px #E4A367' }}>
+          <div className="textBlockContainer" style={{ marginBottom: 22 }}>
             <Typography className="textBlock">
               Montly
             </Typography>
@@ -41,7 +41,7 @@ const ChartActions = () => {
             </Typography>
           </div>
         </div>
-        <div className="headerBlockContainer" style={{ boxShadow: '0px 4px 10px #E4A367' }}>
+        <div className="headerBlockContainer">
           <Card className="headerBlock">
             <Box className="infoContainer">
               <img src={minMaxIcon}/>
@@ -91,12 +91,8 @@ const ChartActions = () => {
             </Box>
           </Card>
         </div>
-        <div className="headerBlockContainer dotIcon" style={{ width: 'auto', padding: '0 37px', marginBottom: 10 }}>
-          <Card className="headerBlock">
-            <Box className="infoContainer">
-              <img src={DotIcon}/>
-            </Box>
-          </Card>
+        <div className="headerBlockContainer dotIcon" style={{ width: 'auto', padding: '0 37px' }}>
+          <img src={DotIcon}/>
         </div>
       </div>
     </>

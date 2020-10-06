@@ -40,6 +40,7 @@ const Chart = ({ className }) => {
   const initialState = {
     min: [],
     max: [],
+    isClicked: false,
   };
 
   const [points, setPoints] = useState(initialState);
@@ -49,11 +50,13 @@ const Chart = ({ className }) => {
       setPoints((prevPoints) => ({
         ...prevPoints,
         min: [v],
+        isClicked: false,
       }));
     } else if (this.type === 'max') {
       setPoints((prevPoints) => ({
         ...prevPoints,
         max: [v],
+        isClicked: false,
       }));
     }
   };
@@ -209,6 +212,7 @@ const Chart = ({ className }) => {
                   data={historicalMaxTemp}
                   curve="curveMonotoneX"
                   onNearestX={handleSetPoints.bind({ type: 'max' })}
+                  onSeriesMouseOut={(e) => console.log(e)}
                 />
                 <LineSeries
                   color="#446EA1"
