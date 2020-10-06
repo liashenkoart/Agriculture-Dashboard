@@ -94,3 +94,13 @@ code {
     font-weight: 400;
     font-size: 14px;
 }
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+
+.area {
+    fill: lightsteelblue;
+}

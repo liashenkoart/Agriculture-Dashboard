@@ -16,14 +16,16 @@ const Footer = (props) => {
     //const classes = useStyles();
 
     return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {"Copyright © "}
-            <Link color="inherit" href="https://www.climate.ai">
-                Climate AI
-            </Link>{" "}
-            {new Date().getFullYear()}
-            {"."}
-        </Typography>
+        <div style={{ marginBottom: 20 }}>
+            <Typography variant="body2" color="textSecondary" align="center">
+                {"Copyright © "}
+                <Link color="inherit" href="https://www.climate.ai">
+                    Climate AI
+                </Link>{" "}
+                {new Date().getFullYear()}
+                {"."}
+            </Typography>
+        </div>
     )
 }
 

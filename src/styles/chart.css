@@ -1,0 +1,123 @@
+.chart-grid {
+    display: grid;
+    grid-template-columns: 1fr minmax(120px, auto);
+    grid-gap: 30px;
+}
+
+.chart-block {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+p.y-label {
+    writing-mode: vertical-lr;
+    text-align: center;
+    transform: rotate(180deg);
+    color: #E4A367;
+}
+
+.y-axis .rv-xy-plot__axis__tick__text {
+    fill: #E4A367 !important
+}
+
+.headerBlocksContainer {
+    margin-bottom: 10px;
+}
+
+.headerBlockContainer {
+    margin-right: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 135px;
+    width: 174px;
+    border: 0;
+    box-shadow: 0px 4px 10px rgba(56, 78, 99, 0.2);
+    border-radius: 20px;
+}
+
+.headerBlock {
+    box-shadow: none !important;
+    border-radius: 20px 20px 0 0 !important;
+    cursor: pointer;
+}
+
+p.titleText {
+    font-family: "Montserrat-Bold", sans-serif;
+    font-size: 18px;
+}
+
+.infoContainer {
+    text-align: center;
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.blocks-container {
+    display: inline-block;
+    position: relative;
+    bottom: -50px;
+    margin-right: 22px;
+}
+
+.textBlockContainer {
+    width: 174px;
+    padding: 16px 0;
+    box-shadow: 0px 4px 10px rgba(56, 78, 99, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+p.textBlock {
+    font-family: "Montserrat-Bold", sans-serif;
+    font-size: 18px;
+    text-align: center;
+}
+
+.dotIcon {
+    position: relative;
+    top: 40px;
+    height: 135px;
+    width: 100px;
+}
+
+.title-container {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+p.main-title {
+    font-family: "Montserrat-Bold", sans-serif;
+    font-size: 24px;
+}
+
+.desc-card {
+    padding: 16px 30px;
+    box-shadow: 0px 4px 10px rgba(56, 78, 99, 0.2);
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.profileTextContainer {
+    margin-right: 20px;
+}
+
+p.profile-bold {
+    font-family: "Montserrat-Bold", sans-serif;
+    font-size: 18px;
+}
+
+span.profile-light {
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    margin-left: 10px;
+}
