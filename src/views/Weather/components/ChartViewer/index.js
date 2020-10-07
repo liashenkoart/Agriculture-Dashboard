@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/styles';
 
 import RedDotsIcon from '../../../../assets/Chart/red-dots.svg';
 import BlueDotsIcon from '../../../../assets/Chart/blue-dots.svg';
+import RedObserved from '../../../../assets/Chart/red-observed.svg';
+import BlueObserved from '../../../../assets/Chart/blue-observed.svg';
 
 const useStyles = makeStyles(() => ({
   chartViewer: {
@@ -44,13 +46,17 @@ const ChartViewer = ({ points }) => {
               {new Date(points.min[0].x).getDate()}<sup>th</sup> {monthNames[new Date(points.min[0].x).getMonth()]}
             </Typography>
             <Box className={infoContainer}>
-              <img src={RedDotsIcon}/>
+              {
+                points.target === 'forecast' ? <img src={RedDotsIcon}/> : <img src={RedObserved}/>
+              }
               <Typography className={temperatureText}>
                 {Math.floor(points.max[0].y)}℃
               </Typography>
             </Box>
             <Box className={infoContainer} style={{ marginBottom: 0 }}>
-              <img src={BlueDotsIcon}/>
+              {
+                points.target === 'forecast' ? <img src={BlueDotsIcon}/> : <img src={BlueObserved}/>
+              }
               <Typography className={temperatureText}>
                 {Math.floor(points.min[0].y)}℃
               </Typography>
