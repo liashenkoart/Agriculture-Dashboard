@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -11,7 +11,9 @@ import {
   HorizontalGridLines,
   LineSeries,
   AreaSeries,
-  MarkSeries
+  MarkSeries,
+  Crosshair,
+  Hint
 } from 'react-vis';
 
 import ChartViewer from '../ChartViewer';
@@ -41,18 +43,19 @@ const Chart = ({ className }) => {
     min: [],
     max: [],
     isClicked: false,
+    target: '',
   };
 
   const [points, setPoints] = useState(initialState);
 
-  const handleSetPoints = function(v) {
-    if (this.type === 'min') {
+  const handleSetPoints = function (v) {
+    if (this.type === 'min' && points.target === this.target) {
       setPoints((prevPoints) => ({
         ...prevPoints,
         min: [v],
         isClicked: false,
       }));
-    } else if (this.type === 'max') {
+    } else if (this.type === 'max' && points.target === this.target) {
       setPoints((prevPoints) => ({
         ...prevPoints,
         max: [v],
@@ -61,9 +64,20 @@ const Chart = ({ className }) => {
     }
   };
 
+  useEffect(() => {
+    console.log(points);
+  }, [points]);
+
   const handleMouseLeave = useCallback(() => {
     setPoints(initialState);
   }, []);
+
+  const handleMouseOver = function () {
+    setPoints((prevPoints) => ({
+      ...prevPoints,
+      target: this.target,
+    }));
+  };
 
   const tickFormat = (d) => monthNames[new Date(d).getMonth()];
 
@@ -100,6 +114,8 @@ const Chart = ({ className }) => {
       y: forecastMaxArr[index],
     }
   });
+
+  debugger;
 
   const climMinLightenY0Arr = [];
   const climMinLightenY1Arr = [];
@@ -169,7 +185,7 @@ const Chart = ({ className }) => {
 
   return (
     <>
-      <ChartActions />
+      <ChartActions/>
       <Box className="chart-grid">
         <Card className={clsx(classes.root, className)}>
           <CardContent>
@@ -182,9 +198,8 @@ const Chart = ({ className }) => {
                 xType="time"
                 onMouseLeave={handleMouseLeave}
               >
-                <ChartViewer points={points} />
-                <VerticalGridLines />
-                <HorizontalGridLines />
+                <VerticalGridLines/>
+                <HorizontalGridLines/>
                 <AreaSeries
                   data={climMaxLighten}
                   color="#FFC1C3"
@@ -205,26 +220,31 @@ const Chart = ({ className }) => {
                   color="#446EA1"
                   data={historicalMinTemp}
                   curve="curveMonotoneX"
-                  onNearestX={handleSetPoints.bind({ type: 'min' })}
+                  onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
+                  onNearestX={handleSetPoints.bind({ type: 'min', target: 'historical' })}
                 />
                 <LineSeries
                   color="#FF3D3D"
                   data={historicalMaxTemp}
                   curve="curveMonotoneX"
-                  onNearestX={handleSetPoints.bind({ type: 'max' })}
-                  onSeriesMouseOut={(e) => console.log(e)}
+                  onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
+                  onNearestX={handleSetPoints.bind({ type: 'max', target: 'historical' })}
                 />
                 <LineSeries
                   color="#446EA1"
                   data={forecastMinTemp}
                   curve="curveMonotoneX"
                   strokeStyle="dashed"
+                  onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
+                  onNearestX={handleSetPoints.bind({ type: 'min', target: 'forecast' })}
                 />
                 <LineSeries
                   color="#FF3D3D"
                   data={forecastMaxTemp}
                   curve="curveMonotoneX"
                   strokeStyle="dashed"
+                  onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
+                  onNearestX={handleSetPoints.bind({ type: 'max', target: 'forecast' })}
                 />
                 {
                   points.min.length || points.max.length ? (
@@ -257,13 +277,23 @@ const Chart = ({ className }) => {
                     />
                   ) : null
                 }
-                <XAxis tickFormat={tickFormat} />
-                <YAxis className="y-axis" />
+                <Crosshair
+                  values={points.min}
+                  style={{
+                    line: {
+                      display: 'none'
+                    }
+                  }}
+                >
+                  <ChartViewer points={points}/>
+                </Crosshair>
+                <XAxis tickFormat={tickFormat}/>
+                <YAxis className="y-axis"/>
               </FlexibleWidthXYPlot>
             </div>
           </CardContent>
         </Card>
-        <ChartHeader />
+        <ChartHeader/>
       </Box>
     </>
   )

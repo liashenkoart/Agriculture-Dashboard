@@ -7,14 +7,11 @@ import BlueDotsIcon from '../../../../assets/Chart/blue-dots.svg';
 
 const useStyles = makeStyles(() => ({
   chartViewer: {
-    position: 'absolute',
-    zIndex: 1,
-    right: 20,
-    top: 20,
     boxShadow: '0px 4px 10px rgba(56, 78, 99, 0.2)',
     border: 0,
     borderRadius: 20,
     padding: '14px 33px',
+    margin: 20,
   },
   titleText: {
     fontFamily: 'Montserrat-Bold',
