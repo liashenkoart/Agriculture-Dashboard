@@ -13,8 +13,8 @@ import {
   AreaSeries,
   MarkSeries,
   Crosshair,
-  Hint
 } from 'react-vis';
+import CsvDownloader from 'react-csv-downloader';
 
 import ChartViewer from '../ChartViewer';
 import ChartHeader from '../ChartHeader';
@@ -115,8 +115,6 @@ const Chart = ({ className }) => {
     }
   });
 
-  debugger;
-
   const climMinLightenY0Arr = [];
   const climMinLightenY1Arr = [];
   const climMinDarkenY0Arr = [];
@@ -183,9 +181,68 @@ const Chart = ({ className }) => {
     }
   });
 
+  const histCsvCols = Object.keys(historical).map((item) => {
+    return {
+      id: item,
+      displayName: item,
+    }
+  });
+
+  const histCsvData = historical.time.map((item, index) => {
+    return {
+      'time': item,
+      't2m_min': historical['t2m_min'][index],
+      't2m_max': historical['t2m_max'][index],
+    };
+  });
+
+  const forcCsvCols = Object.keys(forecast).map((item) => {
+    return {
+      id: item,
+      displayName: item,
+    }
+  });
+
+  const forcCsvData = forecast.time.map((item, index) => {
+    return {
+      'time': item,
+      't2m_min': forecastMinArr[index],
+      't2m_max': forecastMaxArr[index],
+    };
+  });
+
+  const climCsvCols = Object.keys(clim).map((item) => {
+    return {
+      id: item,
+      displayName: item,
+    }
+  });
+
+  const climMaxArr = [].concat.apply([], Object.values(clim['t2m_max']));
+  const climMinArr = [].concat.apply([], Object.values(clim['t2m_min']));
+
+  const climCsvData = clim.time.map((item, index) => {
+    return {
+      'time': item,
+      't2m_min': climMinArr[index],
+      't2m_max': climMaxArr[index],
+    };
+  });
+
   return (
     <>
       <ChartActions/>
+      <Box className="btns-container">
+        <CsvDownloader filename="myfile" columns={histCsvCols} datas={histCsvData}>
+          <button>Historical</button>
+        </CsvDownloader>
+        <CsvDownloader filename="myfile" columns={forcCsvCols} datas={forcCsvData}>
+          <button>Forecast</button>
+        </CsvDownloader>
+        <CsvDownloader filename="myfile" columns={climCsvCols} datas={climCsvData}>
+          <button>Climate</button>
+        </CsvDownloader>
+      </Box>
       <Box className="chart-grid">
         <Card className={clsx(classes.root, className)}>
           <CardContent>
