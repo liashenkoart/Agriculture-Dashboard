@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Typography, Box } from '@material-ui/core';
 
 import minMaxIcon from '../../../../assets/Chart/min-max.svg';
@@ -8,7 +8,11 @@ import OilIcon from '../../../../assets/Chart/oil.svg';
 import DotIcon from '../../../../assets/Chart/dots.svg';
 import Profile from '../../../../assets/Chart/profile.svg';
 
-const ChartActions = () => {
+const ChartActions = ({ onStateChange }) => {
+  const [state, setState] = useState({
+    isMonthly: true,
+    currentTab: 'minmax',
+  });
 
   return (
     <>
@@ -30,18 +34,50 @@ const ChartActions = () => {
       </div>
       <div className="headerBlocksContainer">
         <div className="blocks-container">
-          <div className="textBlockContainer" style={{ marginBottom: 22 }}>
+          <div className="textBlockContainer"
+               style={{
+                 marginBottom: 22,
+                 boxShadow: state.isMonthly ? '0px 4px 10px #E4A367' : ''
+               }}
+               onClick={() => {
+                 setState({
+                   ...state,
+                   isMonthly: true,
+                 })
+               }}
+          >
             <Typography className="textBlock">
               Montly
             </Typography>
           </div>
-          <div className="textBlockContainer">
+          <div className="textBlockContainer"
+               style={{
+                 marginBottom: 22,
+                 boxShadow: !state.isMonthly ? '0px 4px 10px #E4A367' : ''
+               }}
+               onClick={() => {
+                 setState({
+                   ...state,
+                   isMonthly: false,
+                 })
+               }}
+          >
             <Typography className="textBlock">
               Daily
             </Typography>
           </div>
         </div>
-        <div className="headerBlockContainer">
+        <div className="headerBlockContainer"
+             style={{
+               boxShadow: state.currentTab === 'minmax' ? '0px 4px 10px #E4A367' : ''
+             }}
+             onClick={() => {
+               setState({
+                 ...state,
+                 currentTab: 'minmax',
+               })
+             }}
+        >
           <Card className="headerBlock">
             <Box className="infoContainer">
               <img src={minMaxIcon}/>
@@ -54,7 +90,17 @@ const ChartActions = () => {
             </Box>
           </Card>
         </div>
-        <div className="headerBlockContainer">
+        <div className="headerBlockContainer"
+             style={{
+               boxShadow: state.currentTab === 'precipitation' ? '0px 4px 10px #E4A367' : ''
+             }}
+             onClick={() => {
+               setState({
+                 ...state,
+                 currentTab: 'precipitation',
+               })
+             }}
+        >
           <Card className="headerBlock">
             <Box className="infoContainer">
               <img src={CloudIcon}/>
@@ -66,7 +112,17 @@ const ChartActions = () => {
             </Box>
           </Card>
         </div>
-        <div className="headerBlockContainer">
+        <div className="headerBlockContainer"
+             style={{
+               boxShadow: state.currentTab === 'solltemp' ? '0px 4px 10px #E4A367' : ''
+             }}
+             onClick={() => {
+               setState({
+                 ...state,
+                 currentTab: 'solltemp',
+               })
+             }}
+        >
           <Card className="headerBlock">
             <Box className="infoContainer">
               <img src={SunIcon}/>
@@ -78,7 +134,17 @@ const ChartActions = () => {
             </Box>
           </Card>
         </div>
-        <div className="headerBlockContainer">
+        <div className="headerBlockContainer"
+             style={{
+               boxShadow: state.currentTab === 'sollmolsture' ? '0px 4px 10px #E4A367' : ''
+             }}
+             onClick={() => {
+               setState({
+                 ...state,
+                 currentTab: 'sollmolsture',
+               })
+             }}
+        >
           <Card className="headerBlock">
             <Box className="infoContainer">
               <img src={OilIcon}/>

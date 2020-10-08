@@ -231,7 +231,7 @@ const Chart = ({ className }) => {
 
   return (
     <>
-      <ChartActions/>
+      <ChartActions />
       <Box className="btns-container">
         <CsvDownloader filename="myfile" columns={histCsvCols} datas={histCsvData}>
           <button>Historical</button>
