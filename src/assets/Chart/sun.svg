@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="45.113" height="42" viewBox="0 0 45.113 42">
     <g id="icons8-sun" transform="translate(1 1)" opacity="0.98">
-        <path id="Контур_1" data-name="Контур 1" d="M20.5,8C13.6,8,8,13.194,8,19.6s5.6,11.6,12.5,11.6,12.5-5.194,12.5-11.6S27.411,8,20.5,8Z" transform="translate(1.052 0.398)"/>
-        <path id="Контур_2" data-name="Контур 2" d="M23.556,2V6.615m0,30.769V42M45.113,22H40.138M6.975,22H2M38.8,7.858l-3.517,3.263M11.831,32.878,8.314,36.142m30.484,0-3.517-3.263M11.831,11.122,8.314,7.858" transform="translate(-2 -2)" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+        <path id="Circuit_1" data-name="Circuit 1" d="M20.5,8C13.6,8,8,13.194,8,19.6s5.6,11.6,12.5,11.6,12.5-5.194,12.5-11.6S27.411,8,20.5,8Z" transform="translate(1.052 0.398)"/>
+        <path id="Circuit_2" data-name="Circuit 2" d="M23.556,2V6.615m0,30.769V42M45.113,22H40.138M6.975,22H2M38.8,7.858l-3.517,3.263M11.831,32.878,8.314,36.142m30.484,0-3.517-3.263M11.831,11.122,8.314,7.858" transform="translate(-2 -2)" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
     </g>
 </svg>
