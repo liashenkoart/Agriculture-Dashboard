@@ -98,7 +98,7 @@ const Chart = ({ className }) => {
       return monthNames[new Date(d).getMonth()];
     } else {
       console.log(new Date(d).getDate());
-      return new Date(d).getDate();
+      return `${new Date(d).getDate()} ${monthNames[new Date(d).getMonth()]}`;
     }
   };
 
