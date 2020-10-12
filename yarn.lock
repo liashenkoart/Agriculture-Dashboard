@@ -7593,6 +7593,11 @@ file-loader@^6.0.0:
     loader-utils "^2.0.0"
     schema-utils "^2.7.1"
 
+file-saver@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/file-saver/-/file-saver-2.0.2.tgz#06d6e728a9ea2df2cce2f8d9e84dfcdc338ec17a"
+  integrity sha512-Wz3c3XQ5xroCxd1G8b7yL0Ehkf0TC9oYC6buPFkNnU9EnaPlifeAFCyCh+iewXTyFRcg0a6j3J7FmJsIhlhBdw==
+
 file-system-cache@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/file-system-cache/-/file-system-cache-1.0.5.tgz#84259b36a2bbb8d3d6eb1021d3132ffe64cfff4f"
@@ -12996,6 +13001,13 @@ react-color@^2.17.0:
     prop-types "^15.5.10"
     reactcss "^1.2.0"
     tinycolor2 "^1.4.1"
+
+react-csv-downloader@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-csv-downloader/-/react-csv-downloader-2.1.0.tgz#a001676c11313efdfec07e1e4a6a892248feca62"
+  integrity sha512-bDr+AIzoQrGyxSQV1NdMINjrMjuI26jz6blPCp7lFJLR1PEfbSTjrxOzbcurrS/3Z34mSb8C/3AgBmJo1teaMg==
+  dependencies:
+    file-saver "^2.0.2"
 
 react-dev-utils@^10.0.0, react-dev-utils@^10.2.1:
   version "10.2.1"
