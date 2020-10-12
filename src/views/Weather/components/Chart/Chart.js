@@ -193,6 +193,7 @@ const Chart = ({ className }) => {
                 height={500}
                 onMouseLeave={handleMouseLeave}
                 yDomain={[minY, maxY]}
+                xType="time"
               >
                 <VerticalGridLines/>
                 <HorizontalGridLines/>
