@@ -6,7 +6,11 @@
 
 .chart-block {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto calc(100% - 40px);
+}
+
+.flexible-chart {
+    width: calc(100% - 40px);
 }
 
 p.y-label {

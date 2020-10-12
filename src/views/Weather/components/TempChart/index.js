@@ -1,7 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Box, Card, CardContent, Typography } from '@material-ui/core';
 import {
   FlexibleWidthXYPlot,
@@ -29,40 +26,25 @@ import {
   getForecastMinArr,
   getForecastMaxArr,
   trimmData,
-  minX,
-  maxX,
-} from '../../../../helpers/dataConverter';
+} from './helper';
 
 import historical from '../../../../data/historical';
 import forecast from '../../../../data/forecast';
 import clim from '../../../../data/clim';
 
 import ChartViewer from '../ChartViewer';
+import clsx from 'clsx';
 import ChartHeader from '../ChartHeader';
-import ChartActions from '../ChartActions';
+import { makeStyles } from '@material-ui/styles';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    boxShadow: theme.palette.effectStyles.backGlowCards.boxShadow,
-    borderRadius: '20px',
-  },
-}));
-
-const Chart = ({ className }) => {
-  const classes = useStyles();
-
+const TempChart = ({ actionsState }) => {
   const initialState = {
     min: [],
     max: [],
-    isClicked: false,
     target: '',
   };
 
   const [points, setPoints] = useState(initialState);
-  const [actionsState, setActionsState] = useState({
-    isMonthly: true,
-    currentTab: 'minmax',
-  });
 
   const handleSetPoints = function (v) {
     if (this.type === 'min' && points.target === this.target) {
@@ -88,10 +70,6 @@ const Chart = ({ className }) => {
       target: this.target,
     }));
   }, []);
-
-  const handleChangeAction = useCallback((state) => {
-    setActionsState(state);
-  }, [actionsState]);
 
   const tickFormat = (d) => {
     if (actionsState.isMonthly) {
@@ -165,12 +143,17 @@ const Chart = ({ className }) => {
     };
   });
 
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      boxShadow: theme.palette.effectStyles.backGlowCards.boxShadow,
+      borderRadius: '20px',
+    },
+  }));
+
+  const classes = useStyles();
+
   return (
     <>
-      <ChartActions
-        initialState={actionsState}
-        onStateChange={handleChangeAction}
-      />
       <Box className="btns-container">
         <CsvDownloader filename="myfile" columns={histCsvCols} datas={histCsvData}>
           <button>Historical</button>
@@ -183,13 +166,14 @@ const Chart = ({ className }) => {
         </CsvDownloader>
       </Box>
       <Box className="chart-grid">
-        <Card className={clsx(classes.root, className)}>
+        <Card className={clsx(classes.root)}>
           <CardContent>
             <div className="chart-block">
               <Typography className="y-label">
                 Tempereture in °F
               </Typography>
               <FlexibleWidthXYPlot
+                className="flexible-chart"
                 height={500}
                 onMouseLeave={handleMouseLeave}
                 yDomain={[minY, maxY]}
@@ -198,28 +182,23 @@ const Chart = ({ className }) => {
                 <VerticalGridLines/>
                 <HorizontalGridLines/>
                 <AreaSeries
-                  // data={climMaxLighten}
                   data={!actionsState.isMonthly ? trimmData(climMaxLighten) : climMaxLighten}
                   color="#FFC1C3"
                 />
                 <AreaSeries
-                  // data={climMaxDarken}
                   data={!actionsState.isMonthly ? trimmData(climMaxDarken) : climMaxDarken}
                   color="#FF8D91"
                 />
                 <AreaSeries
-                  // data={climMinLighten}
                   data={!actionsState.isMonthly ? trimmData(climMinLighten) : climMinLighten}
                   color="#D9ECFF"
                 />
                 <AreaSeries
-                  // data={climMinDarken}
                   data={!actionsState.isMonthly ? trimmData(climMinDarken) : climMinDarken}
                   color="#B0D2F6"
                 />
                 <LineSeries
                   color="#446EA1"
-                  // data={historicalMinTemp}
                   data={!actionsState.isMonthly ? trimmData(historicalMinTemp) : historicalMinTemp}
                   curve="curveMonotoneX"
                   onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
@@ -227,7 +206,6 @@ const Chart = ({ className }) => {
                 />
                 <LineSeries
                   color="#FF3D3D"
-                  // data={historicalMaxTemp}
                   data={!actionsState.isMonthly ? trimmData(historicalMaxTemp) : historicalMaxTemp}
                   curve="curveMonotoneX"
                   onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
@@ -235,7 +213,6 @@ const Chart = ({ className }) => {
                 />
                 <LineSeries
                   color="#446EA1"
-                  // data={forecastMinTemp}
                   data={!actionsState.isMonthly ? trimmData(forecastMinTemp) : forecastMinTemp}
                   curve="curveMonotoneX"
                   strokeStyle="dashed"
@@ -244,7 +221,6 @@ const Chart = ({ className }) => {
                 />
                 <LineSeries
                   color="#FF3D3D"
-                  // data={forecastMaxTemp}
                   data={!actionsState.isMonthly ? trimmData(forecastMaxTemp) : forecastMaxTemp}
                   curve="curveMonotoneX"
                   strokeStyle="dashed"
@@ -294,14 +270,10 @@ const Chart = ({ className }) => {
             </div>
           </CardContent>
         </Card>
-        <ChartHeader />
+        <ChartHeader/>
       </Box>
     </>
-  )
+  );
 };
 
-Chart.propTypes = {
-  className: PropTypes.string,
-};
-
-export default Chart;
+export default TempChart;
