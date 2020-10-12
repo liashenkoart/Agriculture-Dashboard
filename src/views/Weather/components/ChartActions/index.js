@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Typography, Box } from '@material-ui/core';
 
 import minMaxIcon from '../../../../assets/Chart/min-max.svg';
@@ -8,11 +8,12 @@ import OilIcon from '../../../../assets/Chart/oil.svg';
 import DotIcon from '../../../../assets/Chart/dots.svg';
 import Profile from '../../../../assets/Chart/profile.svg';
 
-const ChartActions = ({ onStateChange }) => {
-  const [state, setState] = useState({
-    isMonthly: true,
-    currentTab: 'minmax',
-  });
+const ChartActions = ({ initialState, onStateChange }) => {
+  const [state, setState] = useState(initialState);
+
+  useEffect(() => {
+    onStateChange(state);
+  }, [state]);
 
   return (
     <>
