@@ -12,6 +12,7 @@ import {
   MarkSeries,
   Crosshair,
 } from 'react-vis';
+import CsvDownloader from 'react-csv-downloader';
 
 import {
   monthNames,
@@ -80,10 +81,67 @@ const PrecipitationChart = () => {
     },
   }));
 
+  const histCsvCols = Object.keys(historical).map((item) => {
+    return {
+      id: item,
+      displayName: item,
+    }
+  });
+
+  const histCsvData = historical.time.map((item, index) => {
+    return {
+      'time': item,
+      'tp_sum': historical['tp_sum'][index],
+    };
+  });
+
+  const forcCsvCols = Object.keys(forecast).map((item) => {
+    return {
+      id: item,
+      displayName: item,
+    }
+  });
+
+  const forcCsvData = forecast.time.map((item, index) => {
+    return {
+      'time': item,
+      'tp_sum': forecastArr[index],
+    };
+  });
+
+  const climCsvCols = Object.keys(clim).map((item) => {
+    return {
+      id: item,
+      displayName: item,
+    }
+  });
+
+  console.log(clim);
+
+  const climArr = [].concat.apply([], Object.values(clim['tp_sum']));
+
+  const climCsvData = clim.time.map((item, index) => {
+    return {
+      'time': item,
+      'tp_sum': climArr[index],
+    };
+  });
+
   const classes = useStyles();
 
   return (
     <>
+      <Box className="btns-container">
+        <CsvDownloader filename="myfile" columns={histCsvCols} datas={histCsvData}>
+          <button>Historical</button>
+        </CsvDownloader>
+        <CsvDownloader filename="myfile" columns={forcCsvCols} datas={forcCsvData}>
+          <button>Forecast</button>
+        </CsvDownloader>
+        <CsvDownloader filename="myfile" columns={climCsvCols} datas={climCsvData}>
+          <button>Climate</button>
+        </CsvDownloader>
+      </Box>
       <Box className="chart-grid">
         <Card className={clsx(classes.root)}>
           <CardContent>

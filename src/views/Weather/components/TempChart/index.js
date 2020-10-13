@@ -262,7 +262,10 @@ const TempChart = ({ actionsState }) => {
                   values={points.min}
                   style={{ line: { display: 'none' } }}
                 >
-                  <ChartViewer points={points}/>
+                  <ChartViewer
+                    type="temp"
+                    points={points}
+                  />
                 </Crosshair>
                 <XAxis tickFormat={tickFormat}/>
                 <YAxis className="y-axis"/>

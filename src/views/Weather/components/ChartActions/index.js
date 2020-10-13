@@ -15,11 +15,22 @@ const ChartActions = ({ initialState, onStateChange }) => {
     onStateChange(state);
   }, [state]);
 
+  let headerTitle = '';
+
+  switch (state.currentTab) {
+    case 'minmax':
+      headerTitle = 'Minimum and Maximum Temperature';
+      break;
+    case 'precipitation':
+      headerTitle = 'Precipitation';
+      break;
+  }
+
   return (
     <>
       <div className="title-container">
         <Typography className="main-title">
-          Minimum and Maximum Temperature
+          {headerTitle}
         </Typography>
         <div className="desc-card">
           <div className="profileTextContainer">
@@ -38,22 +49,6 @@ const ChartActions = ({ initialState, onStateChange }) => {
           <div className="textBlockContainer"
                style={{
                  marginBottom: 22,
-                 boxShadow: state.isMonthly ? '0px 4px 10px #E4A367' : ''
-               }}
-               onClick={() => {
-                 setState({
-                   ...state,
-                   isMonthly: true,
-                 })
-               }}
-          >
-            <Typography className="textBlock">
-              Montly
-            </Typography>
-          </div>
-          <div className="textBlockContainer"
-               style={{
-                 marginBottom: 22,
                  boxShadow: !state.isMonthly ? '0px 4px 10px #E4A367' : ''
                }}
                onClick={() => {
@@ -65,6 +60,22 @@ const ChartActions = ({ initialState, onStateChange }) => {
           >
             <Typography className="textBlock">
               Daily
+            </Typography>
+          </div>
+          <div className="textBlockContainer"
+               style={{
+                 marginBottom: 22,
+                 boxShadow: state.isMonthly ? '0px 4px 10px #E4A367' : ''
+               }}
+               onClick={() => {
+                 setState({
+                   ...state,
+                   isMonthly: true,
+                 })
+               }}
+          >
+            <Typography className="textBlock">
+              Monthly
             </Typography>
           </div>
         </div>
