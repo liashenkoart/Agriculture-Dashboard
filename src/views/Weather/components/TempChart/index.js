@@ -34,7 +34,7 @@ import clim from '../../../../data/clim';
 
 import ChartViewer from '../ChartViewer';
 import clsx from 'clsx';
-import ChartHeader from '../ChartHeader';
+import ChartSpecs from '../ChartSpecs';
 import { makeStyles } from '@material-ui/styles';
 
 const TempChart = ({ actionsState }) => {
@@ -270,7 +270,7 @@ const TempChart = ({ actionsState }) => {
             </div>
           </CardContent>
         </Card>
-        <ChartHeader/>
+        <ChartSpecs type="temp" />
       </Box>
     </>
   );

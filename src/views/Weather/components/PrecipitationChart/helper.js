@@ -48,10 +48,15 @@ const getClim = (clim) => {
   };
 };
 
+const getMinY = (historicalTemp) => Math.min(...historicalTemp.map((d) => d.y));
+const getMaxY = (historicalTemp) => Math.max(...historicalTemp.map((d) => d.y));
+
 export {
   monthNames,
   getHistoricalTemp,
   getForecastArr,
   getForecastTemp,
   getClim,
+  getMinY,
+  getMaxY,
 }

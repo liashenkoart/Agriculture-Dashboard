@@ -34,36 +34,63 @@ const useStyles = makeStyles(() => ({
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const ChartViewer = ({ points }) => {
+const ChartViewer = ({ type, points }) => {
   const { chartViewer, titleText, temperatureText, infoContainer } = useStyles();
 
-  return (
-    <>
-      {
-        points.min.length && points.max.length ? (
+  const rendererComponent = (type) => {
+    switch (type) {
+      case 'precipitation':
+        return (
           <Card className={chartViewer}>
             <Typography className={titleText}>
-              {new Date(points.min[0].x).getDate()}<sup>th</sup> {monthNames[new Date(points.min[0].x).getMonth()]}
+              {new Date(points.data[0].x).getDate()}<sup>th</sup> {monthNames[new Date(points.data[0].x).getMonth()]}
             </Typography>
             <Box className={infoContainer}>
-              {
-                points.target === 'forecast' ? <img src={RedDotsIcon}/> : <img src={RedObserved}/>
-              }
-              <Typography className={temperatureText}>
-                {Math.floor(points.max[0].y)}℃
-              </Typography>
-            </Box>
-            <Box className={infoContainer} style={{ marginBottom: 0 }}>
               {
                 points.target === 'forecast' ? <img src={BlueDotsIcon}/> : <img src={BlueObserved}/>
               }
               <Typography className={temperatureText}>
-                {Math.floor(points.min[0].y)}℃
+                {Math.floor(points.data[0].y)}℃
               </Typography>
             </Box>
           </Card>
-        ) : null
-      }
+        );
+      case 'temp':
+        return (
+          <>
+            {
+              points.min.length && points.max.length ? (
+                <Card className={chartViewer}>
+                  <Typography className={titleText}>
+                    {new Date(points.min[0].x).getDate()}<sup>th</sup> {monthNames[new Date(points.min[0].x).getMonth()]}
+                  </Typography>
+                  <Box className={infoContainer}>
+                    {
+                      points.target === 'forecast' ? <img src={RedDotsIcon}/> : <img src={RedObserved}/>
+                    }
+                    <Typography className={temperatureText}>
+                      {Math.floor(points.max[0].y)}℃
+                    </Typography>
+                  </Box>
+                  <Box className={infoContainer} style={{ marginBottom: 0 }}>
+                    {
+                      points.target === 'forecast' ? <img src={BlueDotsIcon}/> : <img src={BlueObserved}/>
+                    }
+                    <Typography className={temperatureText}>
+                      {Math.floor(points.min[0].y)}℃
+                    </Typography>
+                  </Box>
+                </Card>
+              ) : null
+            }
+          </>
+        );
+    }
+  };
+
+  return (
+    <>
+      {rendererComponent(type)}
     </>
   );
 };
