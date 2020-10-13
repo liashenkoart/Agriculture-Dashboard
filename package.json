@@ -17,7 +17,6 @@
     "chart.js": "^2.9.3",
     "chartjs-plugin-downsample": "^1.1.0",
     "clsx": "^1.1.0",
-    "d3": "^6.2.0",
     "date-fns": "^2.9.0",
     "firebase": "^7.14.2",
     "google-map-react": "^1.1.6",
