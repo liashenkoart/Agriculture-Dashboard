@@ -148,7 +148,7 @@ const PrecipitationChart = ({ actionsState }) => {
           <CardContent>
             <div className="chart-block">
               <Typography className="y-label">
-                Tempereture in °F
+                Precipitation [mm]
               </Typography>
               <FlexibleWidthXYPlot
                 className="flexible-chart"
