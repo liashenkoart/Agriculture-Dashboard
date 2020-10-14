@@ -19,7 +19,7 @@ const TabView = () => {
       case 'minmax':
         return <TempChart actionsState={actionsState} />;
       case 'precipitation':
-        return <PrecipitationChart />;
+        return <PrecipitationChart actionsState={actionsState} />;
     }
   }, [actionsState]);
 

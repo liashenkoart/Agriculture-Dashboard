@@ -48,6 +48,12 @@ const getClim = (clim) => {
   };
 };
 
+const trimmData = (data) => data.filter((item) => {
+  const minX = new Date().getTime() - 12 * 24 * 60 * 60 * 1000;
+  const maxX = new Date().getTime() + 14 * 24 * 60 * 60 * 1000;
+  return (minX <= item.x && item.x <= maxX);
+});
+
 const getMinY = (historicalTemp) => Math.min(...historicalTemp.map((d) => d.y));
 const getMaxY = (historicalTemp) => Math.max(...historicalTemp.map((d) => d.y));
 
@@ -59,4 +65,5 @@ export {
   getClim,
   getMinY,
   getMaxY,
+  trimmData,
 }

@@ -22,6 +22,7 @@ import {
   getClim,
   getMinY,
   getMaxY,
+  trimmData,
 } from './helper';
 
 import historical from '../../../../data/historical_tp';
@@ -32,7 +33,7 @@ import clsx from 'clsx';
 import ChartSpecs from '../ChartSpecs';
 import ChartViewer from '../ChartViewer';
 
-const PrecipitationChart = () => {
+const PrecipitationChart = ({ actionsState }) => {
   const initialState = {
     data: [],
     target: '',
@@ -154,29 +155,34 @@ const PrecipitationChart = () => {
                 height={500}
                 xType="time"
                 onMouseLeave={handleMouseLeave}
+                yDomain={[minY, maxY]}
               >
                 <VerticalGridLines/>
                 <HorizontalGridLines/>
                 <XAxis tickFormat={tickFormat}/>
                 <YAxis className="y-axis"/>
                 <AreaSeries
-                  data={climLighten}
+                  // data={climLighten}
+                  data={!actionsState.isMonthly ? trimmData(climLighten) : climLighten}
                   color="#C0E1EB"
                 />
                 <AreaSeries
-                  data={climDarken}
+                  data={!actionsState.isMonthly ? trimmData(climDarken) : climDarken}
+                  // data={climDarken}
                   color="#A0CBE0"
                 />
                 <LineSeries
                   color="#237CB5"
-                  data={historicalTemp}
+                  // data={historicalTemp}
+                  data={!actionsState.isMonthly ? trimmData(historicalTemp) : historicalTemp}
                   curve="curveMonotoneX"
                   onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
                   onNearestX={handleSetPoints.bind({ target: 'historical' })}
                 />
                 <LineSeries
                   color="#237CB5"
-                  data={forecastTemp}
+                  // data={forecastTemp}
+                  data={!actionsState.isMonthly ? trimmData(forecastTemp) : forecastTemp}
                   curve="curveMonotoneX"
                   strokeStyle="dashed"
                   onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
