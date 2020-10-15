@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'react-vis/dist/style.css';
+import '@material/react-checkbox/dist/checkbox.css';
+import 'rc-dropdown/assets/index.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

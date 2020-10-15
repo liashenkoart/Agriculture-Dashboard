@@ -62,22 +62,38 @@ const ChartActions = ({ initialState, onStateChange }) => {
               Daily
             </Typography>
           </div>
-          <div className="textBlockContainer"
-               style={{
-                 marginBottom: 22,
-                 boxShadow: state.isMonthly ? '0px 4px 10px #E4A367' : ''
-               }}
-               onClick={() => {
-                 setState({
-                   ...state,
-                   isMonthly: true,
-                 })
-               }}
-          >
-            <Typography className="textBlock">
-              Monthly
-            </Typography>
-          </div>
+          {
+            state.currentTab !== 'solltemp' && state.currentTab !== 'sollmolsture' ? (
+              <div className="textBlockContainer"
+                   style={{
+                     marginBottom: 22,
+                     boxShadow: state.isMonthly ? '0px 4px 10px #E4A367' : ''
+                   }}
+                   onClick={() => {
+                     setState({
+                       ...state,
+                       isMonthly: true,
+                     })
+                   }}
+              >
+                <Typography className="textBlock">
+                  Monthly
+                </Typography>
+              </div>
+            ) : (
+              <div className="textBlockContainer"
+                   style={{
+                     marginBottom: 22,
+                     boxShadow: '0px 4px 10px rgba(56, 78, 99, 0.2)',
+                     cursor: 'auto'
+                   }}
+              >
+                <Typography className="textBlock">
+                  Monthly
+                </Typography>
+              </div>
+            )
+          }
         </div>
         <div className="headerBlockContainer"
              style={{

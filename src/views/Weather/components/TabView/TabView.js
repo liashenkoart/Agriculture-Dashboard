@@ -6,7 +6,7 @@ import ChartActions from '../ChartActions';
 
 const TabView = () => {
   const [actionsState, setActionsState] = useState({
-    isMonthly: true,
+    isMonthly: false,
     currentTab: 'minmax',
   });
 

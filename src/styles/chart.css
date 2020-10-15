@@ -150,3 +150,64 @@ span.profile-light {
     border-radius: 10px;
     margin-left: 22px;
 }
+
+.content-dropdown {
+    padding: 30px 20px 10px 20px;
+    box-shadow: 0px 4px 10px rgba(56, 78, 99, 0.2);
+    width: 140px;
+    border-radius: 0 0 10px 10px;
+    background: #fff;
+    margin-top: -20px;
+    flex-direction: column;
+    display: flex;
+}
+
+button.button-dropdown {
+    background: #325588;
+    display: flex;
+    width: 180px;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    position: relative;
+    z-index: 9999;
+}
+
+button.button-dropdown:focus {
+    outline: none;
+}
+
+button.button-dropdown img {
+    margin-left: 20px;
+}
+
+button.export-now {
+    border: 0;
+    background: #325588;
+    border-radius: 20px;
+    color: #fff;
+    font-family: "Montserrat", sans-serif;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+button.export-now:focus {
+    outline: none;
+}
+
+.dropdown-item {
+    display: grid;
+    grid-template-columns: 42px auto;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+p.dropdown-item-text {
+    padding-left: 10px;
+    font-family: "Montserrat", sans-serif;
+}
+
+.hidden-link {
+    display: none;
+}

@@ -114,3 +114,7 @@ code {
 .area {
     fill: lightsteelblue;
 }
+
+header.mui-fixed {
+    z-index: 100000 !important;
+}

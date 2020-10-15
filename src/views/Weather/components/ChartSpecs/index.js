@@ -140,6 +140,18 @@ const ChartSpecs = ({ type }) => {
                     50%
                   </Typography>
                 </Box>
+                <Box className={infoContainer} style={{ marginTop: 14 }}>
+                  <img src={BlueLightenHistoricalIcon}/>
+                  <Typography className={temperatureText}>
+                    90%
+                  </Typography>
+                </Box>
+                <Box className={infoContainer} style={{ marginBottom: 0 }}>
+                  <img src={BlueDarkenHistoricalIcon}/>
+                  <Typography className={temperatureText}>
+                    50%
+                  </Typography>
+                </Box>
               </>
             ) : (
               <>
