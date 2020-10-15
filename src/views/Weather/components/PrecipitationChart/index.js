@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Box, Card, CardContent, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import {
@@ -12,7 +12,6 @@ import {
   MarkSeries,
   Crosshair,
 } from 'react-vis';
-import CsvDownloader from 'react-csv-downloader';
 
 import {
   monthNames,
@@ -32,8 +31,10 @@ import clim from '../../../../data/clim_tp';
 import clsx from 'clsx';
 import ChartSpecs from '../ChartSpecs';
 import ChartViewer from '../ChartViewer';
+import Dropdown from '../Dropdown';
 
 const PrecipitationChart = ({ actionsState }) => {
+  const chartRef = useRef(null);
   const initialState = {
     data: [],
     target: '',
@@ -82,50 +83,49 @@ const PrecipitationChart = ({ actionsState }) => {
     },
   }));
 
-  const histCsvCols = Object.keys(historical).map((item) => {
-    return {
-      id: item,
-      displayName: item,
-    }
-  });
-
   const histCsvData = historical.time.map((item, index) => {
-    return {
-      'time': item,
-      'tp_sum': historical['tp_sum'][index],
-    };
-  });
-
-  const forcCsvCols = Object.keys(forecast).map((item) => {
-    return {
-      id: item,
-      displayName: item,
-    }
+    return [
+      item,
+      historical['tp_sum'][index],
+    ];
   });
 
   const forcCsvData = forecast.time.map((item, index) => {
-    return {
-      'time': item,
-      'tp_sum': forecastArr[index],
-    };
+    return [
+      item,
+      forecastArr[index],
+    ];
   });
-
-  const climCsvCols = Object.keys(clim).map((item) => {
-    return {
-      id: item,
-      displayName: item,
-    }
-  });
-
-  console.log(clim);
 
   const climArr = [].concat.apply([], Object.values(clim['tp_sum']));
 
   const climCsvData = clim.time.map((item, index) => {
-    return {
-      'time': item,
-      'tp_sum': climArr[index],
-    };
+    return [
+      item,
+      climArr[index],
+    ];
+  });
+
+  const combinedCsvData = (clim, forecast, historical) => clim.map((item, index) => {
+    if (historical[index] && !forecast[index]) {
+      return [
+        ...item,
+        [''],
+        [''],
+        ...historical[index],
+      ];
+    } else if (forecast[index]) {
+      return [
+        ...item,
+        ...forecast[index],
+        [''],
+        [''],
+      ]
+    } else {
+      return [
+        ...item,
+      ];
+    }
   });
 
   const classes = useStyles();
@@ -133,15 +133,18 @@ const PrecipitationChart = ({ actionsState }) => {
   return (
     <>
       <Box className="btns-container">
-        <CsvDownloader filename="myfile" columns={histCsvCols} datas={histCsvData}>
-          <button>Historical</button>
-        </CsvDownloader>
-        <CsvDownloader filename="myfile" columns={forcCsvCols} datas={forcCsvData}>
-          <button>Forecast</button>
-        </CsvDownloader>
-        <CsvDownloader filename="myfile" columns={climCsvCols} datas={climCsvData}>
-          <button>Climate</button>
-        </CsvDownloader>
+        <Dropdown
+          chartRef={chartRef}
+          cols={[
+            'clim_time',
+            'clim_tp_sum',
+            'forecast_time',
+            'forecast_tp_sum',
+            'observed_time',
+            'observed_tp_sum',
+          ]}
+          data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
+        />
       </Box>
       <Box className="chart-grid">
         <Card className={clsx(classes.root)}>
@@ -155,7 +158,9 @@ const PrecipitationChart = ({ actionsState }) => {
                 height={500}
                 xType="time"
                 onMouseLeave={handleMouseLeave}
+                ref={chartRef}
                 yDomain={[minY, maxY]}
+                style={{ backgroundColor: '#fff' }}
               >
                 <VerticalGridLines/>
                 <HorizontalGridLines/>

@@ -97,13 +97,6 @@ const TempChart = ({ actionsState }) => {
   const { climMinLighten, climMinDarken } = useMemo(() => getClimMin(clim), [clim]);
   const { climMaxLighten, climMaxDarken } = useMemo(() => getClimMax(clim), [clim]);
 
-  const histCsvCols = Object.keys(historical).map((item) => {
-    return {
-      id: item,
-      displayName: item,
-    }
-  });
-
   const histCsvData = historical.time.map((item, index) => {
     return [
       item,
@@ -112,26 +105,12 @@ const TempChart = ({ actionsState }) => {
     ];
   });
 
-  const forcCsvCols = Object.keys(forecast).map((item) => {
-    return {
-      id: item,
-      displayName: item,
-    }
-  });
-
   const forcCsvData = forecast.time.map((item, index) => {
     return [
       item,
       forecastMinArr[index],
       forecastMaxArr[index],
     ];
-  });
-
-  const climCsvCols = Object.keys(clim).map((item) => {
-    return {
-      id: item,
-      displayName: item,
-    }
   });
 
   const climMaxArr = [].concat.apply([], Object.values(clim['t2m_max']));
@@ -147,7 +126,6 @@ const TempChart = ({ actionsState }) => {
 
   const combinedCsvData = (clim, forecast, historical) => clim.map((item, index) => {
     if (historical[index] && !forecast[index]) {
-      console.log('h');
       return [
         ...item,
         [''],
@@ -156,7 +134,6 @@ const TempChart = ({ actionsState }) => {
         ...historical[index],
       ];
     } else if (forecast[index]) {
-      console.log('f');
       return [
         ...item,
         ...forecast[index],
@@ -165,7 +142,6 @@ const TempChart = ({ actionsState }) => {
         [''],
       ]
     } else {
-      console.log('c');
       return [
         ...item,
       ];
