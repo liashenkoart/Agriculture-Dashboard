@@ -14,24 +14,9 @@ const ChartActions = ({ initialState, onStateChange }) => {
   useEffect(() => {
     onStateChange(state);
   }, [state]);
-
-  let headerTitle = '';
-
-  switch (state.currentTab) {
-    case 'minmax':
-      headerTitle = 'Minimum and Maximum Temperature';
-      break;
-    case 'precipitation':
-      headerTitle = 'Precipitation';
-      break;
-  }
-
   return (
     <>
       <div className="title-container">
-        <Typography className="main-title">
-          {headerTitle}
-        </Typography>
         <div className="desc-card">
           <div className="profileTextContainer">
             <Typography className="profile-bold">

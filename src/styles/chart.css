@@ -95,19 +95,25 @@ p.textBlock {
 
 .title-container {
     display: inline-flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-}
-
-.title-container {
     width: 100%;
-    display: flex;
-    justify-content: space-between;
 }
 
 p.main-title {
     font-family: "Montserrat-Bold", sans-serif;
     font-size: 24px;
+}
+.main-titles {
+    font-family: "Montserrat-Bold", sans-serif;
+    font-size: 24px !important;
+    fill: #263238 !important;
+}
+
+.main-titles text {
+    font-family: "Montserrat-Bold", sans-serif;
+    font-size: 24px !important;
+    fill: #263238 !important;
 }
 
 .desc-card {

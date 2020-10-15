@@ -11,6 +11,7 @@ import {
   AreaSeries,
   MarkSeries,
   Crosshair,
+  ChartLabel
 } from 'react-vis';
 
 import {
@@ -225,6 +226,13 @@ const PrecipitationChart = ({ actionsState }) => {
                     points={points}
                   />
                 </Crosshair>
+                <ChartLabel
+                  text="Precipitation"
+                  className="main-titles"
+                  includeMargin={false}
+                  xPercent={0.035}
+                  yPercent={0.1}
+                />
               </FlexibleWidthXYPlot>
             </div>
           </CardContent>

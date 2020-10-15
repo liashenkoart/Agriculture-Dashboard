@@ -10,6 +10,7 @@ import {
   AreaSeries,
   MarkSeries,
   Crosshair,
+  ChartLabel,
 } from 'react-vis';
 import Dropdown from '../Dropdown';
 
@@ -280,6 +281,13 @@ const TempChart = ({ actionsState }) => {
                     points={points}
                   />
                 </Crosshair>
+                <ChartLabel
+                  text="Minimum and Maximum Temperature"
+                  className="main-titles"
+                  includeMargin={false}
+                  xPercent={0.035}
+                  yPercent={0.1}
+                />
                 <XAxis tickFormat={tickFormat}/>
                 <YAxis className="y-axis"/>
               </FlexibleWidthXYPlot>
