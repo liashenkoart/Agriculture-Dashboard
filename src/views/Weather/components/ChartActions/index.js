@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, Typography, Box } from '@material-ui/core';
 
 import minMaxIcon from '../../../../assets/Chart/min-max.svg';
@@ -7,8 +7,6 @@ import SunIcon from '../../../../assets/Chart/sun.svg';
 import OilIcon from '../../../../assets/Chart/oil.svg';
 import DotIcon from '../../../../assets/Chart/dots.svg';
 import Profile from '../../../../assets/Chart/profile.svg';
-import { CSVLink } from 'react-csv';
-import DownloadIcon from '../../../../assets/Chart/download.svg';
 import Dropdown from 'rc-dropdown/es';
 
 const ChartActions = ({ initialState, onStateChange }) => {
@@ -17,6 +15,21 @@ const ChartActions = ({ initialState, onStateChange }) => {
   useEffect(() => {
     onStateChange(state);
   }, [state]);
+
+  const minMaxTab = useRef(null);
+  const precipitationTab = useRef(null);
+  const sollTempTab = useRef(null);
+  const sollMolsture = useRef(null);
+
+  const tabsDisabled = state.extraPrecipitationChart || state.additional2 || state.additional3 || state.additional4;
+
+  if (tabsDisabled) {
+    minMaxTab.current.classList.remove('headerBlockContainer-hover');
+    precipitationTab.current.classList.remove('headerBlockContainer-hover');
+    sollTempTab.current.classList.remove('headerBlockContainer-hover');
+    sollMolsture.current.classList.remove('headerBlockContainer-hover');
+  }
+
   return (
     <>
       <div className="title-container">
@@ -83,16 +96,22 @@ const ChartActions = ({ initialState, onStateChange }) => {
             )
           }
         </div>
-        <div className="headerBlockContainer"
-             style={{
-               boxShadow: state.currentTab === 'minmax' ? '0px 4px 10px #E4A367' : ''
-             }}
-             onClick={() => {
-               setState({
-                 ...state,
-                 currentTab: 'minmax',
-               })
-             }}
+        <div
+          ref={minMaxTab}
+          className="headerBlockContainer headerBlockContainer-hover"
+          style={{
+            boxShadow: state.currentTab === 'minmax' && !tabsDisabled ? '0px 4px 10px #E4A367' : ''
+          }}
+          onClick={() => {
+            setState({
+              ...state,
+              currentTab: 'minmax',
+              extraPrecipitationChart: false,
+              additional2: false,
+              additional3: false,
+              additional4: false,
+            })
+          }}
         >
           <Card className="headerBlock">
             <Box className="infoContainer">
@@ -106,16 +125,22 @@ const ChartActions = ({ initialState, onStateChange }) => {
             </Box>
           </Card>
         </div>
-        <div className="headerBlockContainer"
-             style={{
-               boxShadow: state.currentTab === 'precipitation' ? '0px 4px 10px #E4A367' : ''
-             }}
-             onClick={() => {
-               setState({
-                 ...state,
-                 currentTab: 'precipitation',
-               })
-             }}
+        <div
+          ref={precipitationTab}
+          className="headerBlockContainer headerBlockContainer-hover"
+          style={{
+            boxShadow: state.currentTab === 'precipitation' && !tabsDisabled ? '0px 4px 10px #E4A367' : ''
+          }}
+          onClick={() => {
+            setState({
+              ...state,
+              currentTab: 'precipitation',
+              extraPrecipitationChart: false,
+              additional2: false,
+              additional3: false,
+              additional4: false,
+            })
+          }}
         >
           <Card className="headerBlock">
             <Box className="infoContainer">
@@ -128,16 +153,22 @@ const ChartActions = ({ initialState, onStateChange }) => {
             </Box>
           </Card>
         </div>
-        <div className="headerBlockContainer"
-             style={{
-               boxShadow: state.currentTab === 'solltemp' ? '0px 4px 10px #E4A367' : ''
-             }}
-             onClick={() => {
-               setState({
-                 ...state,
-                 currentTab: 'solltemp',
-               })
-             }}
+        <div
+          ref={sollTempTab}
+          className="headerBlockContainer headerBlockContainer-hover"
+          style={{
+            boxShadow: state.currentTab === 'solltemp' && !tabsDisabled ? '0px 4px 10px #E4A367' : ''
+          }}
+          onClick={() => {
+            setState({
+              ...state,
+              currentTab: 'solltemp',
+              extraPrecipitationChart: false,
+              additional2: false,
+              additional3: false,
+              additional4: false,
+            })
+          }}
         >
           <Card className="headerBlock">
             <Box className="infoContainer">
@@ -150,16 +181,22 @@ const ChartActions = ({ initialState, onStateChange }) => {
             </Box>
           </Card>
         </div>
-        <div className="headerBlockContainer"
-             style={{
-               boxShadow: state.currentTab === 'sollmolsture' ? '0px 4px 10px #E4A367' : ''
-             }}
-             onClick={() => {
-               setState({
-                 ...state,
-                 currentTab: 'sollmolsture',
-               })
-             }}
+        <div
+          ref={sollMolsture}
+          className="headerBlockContainer headerBlockContainer-hover"
+          style={{
+            boxShadow: state.currentTab === 'sollmolsture' && !tabsDisabled ? '0px 4px 10px #E4A367' : ''
+          }}
+          onClick={() => {
+            setState({
+              ...state,
+              currentTab: 'sollmolsture',
+              extraPrecipitationChart: false,
+              additional2: false,
+              additional3: false,
+              additional4: false,
+            })
+          }}
         >
           <Card className="headerBlock">
             <Box className="infoContainer">
@@ -173,47 +210,66 @@ const ChartActions = ({ initialState, onStateChange }) => {
             </Box>
           </Card>
         </div>
-        {
-          state.currentTab === 'precipitation' ? (
-            <Dropdown
-              overlayClassName="more-dropdown-container"
-              trigger="click"
-              overlay={(
-                <div className="more-content-dropdown">
-                  <div
-                    className="more-item-dropdown"
-                    onClick={() => {
-                      setState({
-                        ...state,
-                        extraPrecipitationChart: !state.extraPrecipitationChart,
-                      })
-                    }}
-                  >
-                    Precipitation-evaporation
-                  </div>
-                  <div className="more-item-dropdown">
-                    Aditional Graph 2
-                  </div>
-                  <div className="more-item-dropdown">
-                    Aditional Graph 3
-                  </div>
-                  <div className="more-item-dropdown">
-                    Aditional Graph 4
-                  </div>
-                </div>
-              )}
-              animation="slide-up"
-            >
-              <div className="headerBlockContainer dotIcon" style={{ width: 'auto', padding: '0 37px' }}>
-                <img src={DotIcon}/>
+        <Dropdown
+          overlayClassName="more-dropdown-container"
+          trigger="click"
+          overlay={(
+            <div className="more-content-dropdown">
+              <div
+                className="more-item-dropdown"
+                onClick={() => {
+                  setState({
+                    ...state,
+                    extraPrecipitationChart: !state.extraPrecipitationChart,
+                  })
+                }}
+              >
+                Precipitation-evaporation
               </div>
-            </Dropdown>
-          ) : (
-            <div className="headerBlockContainer dotIcon" style={{ width: 'auto', padding: '0 37px' }}>
-              <img src={DotIcon}/>
+              <div
+                className="more-item-dropdown"
+                onClick={() => {
+                  setState({
+                    ...state,
+                    additional2: !state.additional2,
+                  })
+                }}
+              >
+                Aditional Graph 2
+              </div>
+              <div
+                className="more-item-dropdown"
+                onClick={() => {
+                  setState({
+                    ...state,
+                    additional3: !state.additional3,
+                  })
+                }}
+              >
+                Aditional Graph 3
+              </div>
+              <div
+                className="more-item-dropdown"
+                onClick={() => {
+                  setState({
+                    ...state,
+                    additional4: !state.additional4,
+                  })
+                }}
+              >
+                Aditional Graph 4
+              </div>
             </div>
-          )
-        }
+          )}
+          animation="slide-up"
+        >
+          <div
+            className="headerBlockContainer headerBlockContainer-hover dotIcon"
+            style={{ width: 'auto', padding: '0 37px' }}
+          >
+            <img src={DotIcon}/>
+          </div>
+        </Dropdown>
       </div>
     </>
   );

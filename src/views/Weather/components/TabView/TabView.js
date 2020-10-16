@@ -9,6 +9,9 @@ const TabView = () => {
     isMonthly: false,
     currentTab: 'minmax',
     extraPrecipitationChart: false,
+    additional2: false,
+    additional3: false,
+    additional4: false,
   });
 
   const handleChangeAction = useCallback((state) => {
@@ -23,8 +26,6 @@ const TabView = () => {
         return <PrecipitationChart actionsState={actionsState} />;
     }
   }, [actionsState]);
-
-  console.log(actionsState);
 
   return (
     <>
