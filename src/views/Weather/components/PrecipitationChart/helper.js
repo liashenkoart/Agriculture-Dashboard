@@ -5,9 +5,19 @@ const getHistoricalTemp = (historical) => historical.time.map((item, index) => (
   y: historical['tp_sum'][index],
 }));
 
+const getExtraHistoricalTemp = (historical) => historical.time.map((item, index) => ({
+  x: new Date(item).getTime(),
+  y: historical['tp-e_sum'][index],
+}));
+
 const getForecastArr = (forecast) => [].concat.apply([], Object.values(forecast['tp_sum']));
 
 const getForecastTemp = (forecast, forecastMinArr) => forecast.time.map((item, index) => ({
+  x: new Date(item).getTime(),
+  y: forecastMinArr[index],
+}));
+
+const getExtraForecastTemp = (forecast, forecastMinArr) => forecast.time.map((item, index) => ({
   x: new Date(item).getTime(),
   y: forecastMinArr[index],
 }));
@@ -48,6 +58,42 @@ const getClim = (clim) => {
   };
 };
 
+const getExtraClim = (clim) => {
+  const climLightenY0Arr = [];
+  const climLightenY1Arr = [];
+  const climDarkenY0Arr = [];
+  const climDarkenY1Arr = [];
+
+  for (let key in clim['tp-e_sum']) {
+    if (+key === 0.05) {
+      climLightenY0Arr.push(...clim['tp-e_sum'][key]);
+    } else if (+key === 0.95) {
+      climLightenY1Arr.push(...clim['tp-e_sum'][key]);
+    } else if (+key === 0.25) {
+      climDarkenY0Arr.push(...clim['tp-e_sum'][key]);
+    } else if (+key === 0.75) {
+      climDarkenY1Arr.push(...clim['tp-e_sum'][key]);
+    }
+  }
+
+  const extraClimLighten = clim.time.map((item, index) => ({
+    x: new Date(item).getTime(),
+    y0: climLightenY0Arr[index],
+    y: climLightenY1Arr[index],
+  }));
+
+  const extraClimDarken = clim.time.map((item, index) => ({
+    x: new Date(item).getTime(),
+    y0: climDarkenY0Arr[index],
+    y: climDarkenY1Arr[index],
+  }));
+
+  return {
+    extraClimLighten,
+    extraClimDarken,
+  };
+};
+
 const trimmData = (data) => data.filter((item) => {
   const minX = new Date().getTime() - 12 * 24 * 60 * 60 * 1000;
   const maxX = new Date().getTime() + 14 * 24 * 60 * 60 * 1000;
@@ -60,9 +106,12 @@ const getMaxY = (historicalTemp) => Math.max(...historicalTemp.map((d) => d.y));
 export {
   monthNames,
   getHistoricalTemp,
+  getExtraHistoricalTemp,
   getForecastArr,
   getForecastTemp,
+  getExtraForecastTemp,
   getClim,
+  getExtraClim,
   getMinY,
   getMaxY,
   trimmData,

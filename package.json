@@ -30,7 +30,6 @@
     "react-chartjs-2": "^2.9.0",
     "react-component-export-image": "^0.1.7",
     "react-csv": "^2.0.3",
-    "react-csv-downloader": "^2.1.0",
     "react-dom": "^16.12.0",
     "react-firebase-file-uploader": "^2.4.3",
     "react-perfect-scrollbar": "^1.5.8",

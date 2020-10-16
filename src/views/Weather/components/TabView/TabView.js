@@ -8,6 +8,7 @@ const TabView = () => {
   const [actionsState, setActionsState] = useState({
     isMonthly: false,
     currentTab: 'minmax',
+    extraPrecipitationChart: false,
   });
 
   const handleChangeAction = useCallback((state) => {

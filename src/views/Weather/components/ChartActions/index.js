@@ -7,6 +7,9 @@ import SunIcon from '../../../../assets/Chart/sun.svg';
 import OilIcon from '../../../../assets/Chart/oil.svg';
 import DotIcon from '../../../../assets/Chart/dots.svg';
 import Profile from '../../../../assets/Chart/profile.svg';
+import { CSVLink } from 'react-csv';
+import DownloadIcon from '../../../../assets/Chart/download.svg';
+import Dropdown from 'rc-dropdown/es';
 
 const ChartActions = ({ initialState, onStateChange }) => {
   const [state, setState] = useState(initialState);
@@ -170,9 +173,47 @@ const ChartActions = ({ initialState, onStateChange }) => {
             </Box>
           </Card>
         </div>
-        <div className="headerBlockContainer dotIcon" style={{ width: 'auto', padding: '0 37px' }}>
-          <img src={DotIcon}/>
-        </div>
+        {
+          state.currentTab === 'precipitation' ? (
+            <Dropdown
+              overlayClassName="more-dropdown-container"
+              trigger="click"
+              overlay={(
+                <div className="more-content-dropdown">
+                  <div
+                    className="more-item-dropdown"
+                    onClick={() => {
+                      setState({
+                        ...state,
+                        extraPrecipitationChart: !state.extraPrecipitationChart,
+                      })
+                    }}
+                  >
+                    Precipitation-evaporation
+                  </div>
+                  <div className="more-item-dropdown">
+                    Aditional Graph 2
+                  </div>
+                  <div className="more-item-dropdown">
+                    Aditional Graph 3
+                  </div>
+                  <div className="more-item-dropdown">
+                    Aditional Graph 4
+                  </div>
+                </div>
+              )}
+              animation="slide-up"
+            >
+              <div className="headerBlockContainer dotIcon" style={{ width: 'auto', padding: '0 37px' }}>
+                <img src={DotIcon}/>
+              </div>
+            </Dropdown>
+          ) : (
+            <div className="headerBlockContainer dotIcon" style={{ width: 'auto', padding: '0 37px' }}>
+              <img src={DotIcon}/>
+            </div>
+          )
+        }
       </div>
     </>
   );
