@@ -1,8 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="44" height="43" viewBox="0 0 44 43">
-    <defs>
-        <pattern id="pattern" preserveAspectRatio="none" width="100%" height="100%" viewBox="0 0 48 48">
-            <image width="48" height="48" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAABk0lEQVRoge2XTy8DQRiHHw7+xAonoW4EBxIfgqv0onoTFy58ABIfCnEqvoDGwaU4SkjbpCdOTZpy2Bm7+kdnp52ZbcyT/C5Ndud59307swsej8fj+c+MDPh+m8AOsAVkgEXx+7vIHXANPA543b7ZBorAl2LuCQt1zixwhbp4ay6AGevWgjXgpYegSp6BVcvuLACvfYrH80b0fzHOJPAwQHmZIjBuo4BzA/IyZ6blM8CnwQI+CMdTmdGEBRwBQcJrkjANHBq8PyXMPX2ZJ1PyKxbkZZZVpZKMkM29WnmtJAUsaYjootyBbgTACXBL+BLWwN74yDTE2jfCRXnzyAMVB8K9UgFyveRPgWYKZLulKRw7kk+5fLyItk4EQDkFcqqpEh56P7vQATDfqS0pZQ7Yh6iArDsXbbIQFbDhUESXdYg+6uvAmDsXLerAhOxAzaWJJjWIRqjkUESXEkQFXDoU0eWX89CeA3H2GJ6TeLe9ISFD/S4kyZHOcSrzx5NvJQCOgQLuvwcKwmVKVd7j8Xg8Ho8tvgHt9lfSZGsIEAAAAABJRU5ErkJggg=="/>
-        </pattern>
-    </defs>
-    <rect id="icons8-cloud-48" width="44" height="43" opacity="0.98" fill="url(#pattern)"/>
+<svg width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M19.35 6.04C18.67 2.59 15.64 0 12 0C9.11 0 6.6 1.64 5.35 4.04C2.34 4.36 0 6.91 0 10C0 13.31 2.69 16 6 16H19C21.76 16 24 13.76 24 11C24 8.36 21.95 6.22 19.35 6.04Z" fill="#fff"/>
 </svg>

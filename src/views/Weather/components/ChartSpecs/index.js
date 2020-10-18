@@ -2,6 +2,8 @@ import React from 'react';
 import { Card, Typography, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
+import Dropdown from '../Dropdown';
+
 import RedDotsIcon from '../../../../assets/Chart/red-dots.svg';
 import BlueDotsIcon from '../../../../assets/Chart/blue-dots.svg';
 import RedObservedIcon from '../../../../assets/Chart/red-observed.svg';
@@ -15,36 +17,38 @@ const useStyles = makeStyles(() => ({
   headerBlocksContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 20,
   },
   headerBlockContainer: {
-    margin: '0 auto 25px auto',
+    marginBottom: 18,
+    borderBottom: '0.5px solid #A3B1BD',
+    '&:last-child': {
+      borderBottom: '0 !important',
+    }
   },
   headerBlock: {
-    boxShadow: '0px 4px 10px rgba(56, 78, 99, 0.2)',
     border: 0,
-    borderRadius: 20,
-    padding: '14px 33px',
+    paddingBottom: 16,
+    borderRadius: 0,
+    boxShadow: 'none',
   },
   titleText: {
-    textAlign: 'center',
-    fontFamily: 'Montserrat-Bold',
-    fontSize: 18,
-    marginBottom: 14,
+    fontFamily: 'Montserrat',
+    fontWeight: 600,
+    fontSize: 12,
+    marginBottom: 9,
   },
   temperatureText: {
     fontFamily: 'Roboto',
-    fontSize: 14,
-    marginLeft: 8,
+    fontSize: 12,
+    marginLeft: 12,
   },
   infoContainer: {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: 14,
   },
 }));
 
-const ChartSpecs = ({ type }) => {
+const ChartSpecs = ({ type, chartRef, data }) => {
   const {
     headerBlocksContainer,
     headerBlockContainer,
@@ -56,6 +60,20 @@ const ChartSpecs = ({ type }) => {
 
   return (
     <div className={headerBlocksContainer}>
+      <div className="btns-container">
+        <Dropdown
+          chartRef={chartRef}
+          cols={[
+            'clim_time',
+            'clim_tp_sum',
+            'forecast_time',
+            'forecast_tp_sum',
+            'observed_time',
+            'observed_tp_sum',
+          ]}
+          data={data}
+        />
+      </div>
       <div className={headerBlockContainer}>
         <Typography className={titleText}>
           Observed

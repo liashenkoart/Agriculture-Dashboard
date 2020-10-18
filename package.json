@@ -24,6 +24,7 @@
     "google-map-react": "^1.1.6",
     "google-maps": "^4.2.3",
     "material-table": "^1.57.2",
+    "material-ui-icons": "^1.0.0-beta.36",
     "moment": "^2.24.0",
     "rc-dropdown": "^3.2.0",
     "react": "^16.12.0",

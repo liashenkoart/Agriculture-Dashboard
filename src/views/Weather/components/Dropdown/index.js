@@ -2,20 +2,33 @@ import React, { useState, useRef } from 'react';
 import Dropdown from 'rc-dropdown';
 import downloadSVG from 'export-svg-with-styles';
 import Checkbox from '@material-ui/core/Checkbox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { withStyles } from '@material-ui/core';
 import { CSVLink } from 'react-csv';
 
 import DownloadIcon from '../../../../assets/Chart/download.svg';
+import ArrowDownBlue from '../../../../assets/Chart/arrow-down-blue.svg';
+import DownloadIconWhite from '../../../../assets/Chart/download-white.svg';
+import ArrowDownWhite from '../../../../assets/Chart/arrow-down-white.svg';
 
 const CustomCheckbox = withStyles({
   root: {
-    color: '#325588',
+    color: '#1A2935',
     '&$checked': {
       color: '#325588',
     },
   },
   checked: {},
-})((props) => <Checkbox color="default" {...props} />);
+})((props) => (
+  <Checkbox
+    color="default"
+    style={{ width: 10, height: 10, padding: 0 }}
+    icon={<CheckBoxOutlineBlankIcon style={{ fontSize: 10 }} />}
+    checkedIcon={<CheckBoxIcon style={{ fontSize: 10 }} />}
+    {...props}
+  />
+));
 
 const DropdownComponent = ({ cols, data }) => {
   const linkRef = useRef(null);
@@ -70,6 +83,7 @@ const DropdownComponent = ({ cols, data }) => {
       visible={state.visible}
       overlay={(
         <div className="content-dropdown">
+          <p style={{ paddingLeft: 0, marginBottom: 10 }} className="dropdown-item-text">Export as </p>
           <div className="dropdown-item">
             <CustomCheckbox
               checked={state.exportToPng}
@@ -81,7 +95,7 @@ const DropdownComponent = ({ cols, data }) => {
               }}
               disableRipple
             />
-            <p className="dropdown-item-text">Export to Png</p>
+            <p className="dropdown-item-text">Export as <span className="dropdown-item-text-bold">Png</span></p>
           </div>
           <div className="dropdown-item">
             <CustomCheckbox
@@ -94,7 +108,13 @@ const DropdownComponent = ({ cols, data }) => {
               }}
               disableRipple
             />
-            <p className="dropdown-item-text">Export to CSV</p>
+            <p className="dropdown-item-text">Export as <span className="dropdown-item-text-bold">CSV</span></p>
+          </div>
+          <div className="dropdown-item">
+            <CustomCheckbox
+              disableRipple
+            />
+            <p className="dropdown-item-text">Export <span className="dropdown-item-text-bold">hincast</span> data as CSV</p>
           </div>
           <CSVLink
             ref={linkRef}
@@ -115,6 +135,10 @@ const DropdownComponent = ({ cols, data }) => {
     >
       <button
         className="button-dropdown"
+        style={{
+          backgroundColor: state.visible ? '#00548D' : '',
+          color: state.visible ? '#fff' : '#00548D'
+        }}
         onClick={() => {
           setState({
             ...state,
@@ -122,8 +146,23 @@ const DropdownComponent = ({ cols, data }) => {
           })
         }}
       >
-        Export
-        <img src={DownloadIcon} alt=""/>
+        <div className="buttonDropdownLeftSide">
+          {
+            !state.visible ? (
+              <img src={DownloadIcon} alt=""/>
+            ) : (
+              <img src={DownloadIconWhite} alt=""/>
+            )
+          }
+          Export
+        </div>
+        {
+          !state.visible ? (
+            <img src={ArrowDownBlue} alt=""/>
+          ) : (
+            <img src={ArrowDownWhite} alt=""/>
+          )
+        }
       </button>
     </Dropdown>
   );

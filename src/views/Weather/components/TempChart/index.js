@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, useRef } from 'react';
+import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import { Box, Card, CardContent, Typography } from '@material-ui/core';
 import {
   FlexibleWidthXYPlot,
@@ -45,6 +45,7 @@ const TempChart = ({ actionsState }) => {
     min: [],
     max: [],
     target: '',
+    chartWidth: 0,
   };
 
   const [points, setPoints] = useState(initialState);
@@ -62,6 +63,13 @@ const TempChart = ({ actionsState }) => {
       }));
     }
   };
+
+  useEffect(() => {
+    setPoints((prevState) => ({
+      ...prevState,
+      chartWidth: chartRef.current.offsetWidth,
+    }));
+  }, [chartRef.current]);
 
   const handleMouseLeave = useCallback(() => {
     setPoints(initialState);
@@ -160,141 +168,126 @@ const TempChart = ({ actionsState }) => {
 
   return (
     <>
-      <Box className="btns-container">
-        <Dropdown
-          chartRef={chartRef}
-          cols={[
-            'clim_time',
-            'clim_t2m_min',
-            'clim_t2m_max',
-            'forecast_time',
-            'forecast_t2m_min',
-            'forecast_t2m_max',
-            'observed_time',
-            'observed_t2m_min',
-            'observed_t2m_max',
-          ]}
-          data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
-        />
-      </Box>
-      <Box className="chart-grid">
+      <Box className="">
         <Card className={clsx(classes.root)}>
-          <CardContent>
-            <div className="chart-block">
-              <Typography className="y-label">
-                Tempereture in °F
-              </Typography>
-              <FlexibleWidthXYPlot
-                className="flexible-chart"
-                height={500}
-                onMouseLeave={handleMouseLeave}
-                yDomain={[minY, maxY]}
-                xType="time"
-                ref={chartRef}
-                style={{ backgroundColor: '#fff' }}
-              >
-                <VerticalGridLines/>
-                <HorizontalGridLines/>
-                <AreaSeries
-                  data={!actionsState.isMonthly ? trimmData(climMaxLighten) : climMaxLighten}
-                  color="#FFC1C3"
-                />
-                <AreaSeries
-                  data={!actionsState.isMonthly ? trimmData(climMaxDarken) : climMaxDarken}
-                  color="#FF8D91"
-                />
-                <AreaSeries
-                  data={!actionsState.isMonthly ? trimmData(climMinLighten) : climMinLighten}
-                  color="#D9ECFF"
-                />
-                <AreaSeries
-                  data={!actionsState.isMonthly ? trimmData(climMinDarken) : climMinDarken}
-                  color="#B0D2F6"
-                />
-                <LineSeries
-                  color="#446EA1"
-                  data={!actionsState.isMonthly ? trimmData(historicalMinTemp) : historicalMinTemp}
-                  curve="curveMonotoneX"
-                  onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
-                  onNearestX={handleSetPoints.bind({ type: 'min', target: 'historical' })}
-                />
-                <LineSeries
-                  color="#FF3D3D"
-                  data={!actionsState.isMonthly ? trimmData(historicalMaxTemp) : historicalMaxTemp}
-                  curve="curveMonotoneX"
-                  onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
-                  onNearestX={handleSetPoints.bind({ type: 'max', target: 'historical' })}
-                />
-                <LineSeries
-                  color="#446EA1"
-                  data={!actionsState.isMonthly ? trimmData(forecastMinTemp) : forecastMinTemp}
-                  curve="curveMonotoneX"
-                  strokeStyle="dashed"
-                  onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
-                  onNearestX={handleSetPoints.bind({ type: 'min', target: 'forecast' })}
-                />
-                <LineSeries
-                  color="#FF3D3D"
-                  data={!actionsState.isMonthly ? trimmData(forecastMaxTemp) : forecastMaxTemp}
-                  curve="curveMonotoneX"
-                  strokeStyle="dashed"
-                  onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
-                  onNearestX={handleSetPoints.bind({ type: 'max', target: 'forecast' })}
-                />
-                {
-                  points.min.length || points.max.length ? (
-                    <LineSeries
-                      data={[{
-                        x: points.min.length ? points.min[0].x : points.max[0].x,
-                        y: minY
-                      }, {
-                        x: points.min.length ? points.min[0].x : points.max[0].x,
-                        y: maxY
-                      }]}
-                      strokeStyle="dashed"
-                      color="#707070"
-                    />
-                  ) : null
-                }
-                {
-                  points.min.length ? (
-                    <MarkSeries
-                      data={points.min}
-                      color="#446EA1"
-                    />
-                  ) : null
-                }
-                {
-                  points.max.length ? (
-                    <MarkSeries
-                      data={points.max}
-                      color="#FF152F"
-                    />
-                  ) : null
-                }
-                <Crosshair
-                  values={points.min}
-                  style={{ line: { display: 'none' } }}
-                >
-                  <ChartViewer
-                    type="temp"
-                    points={points}
+          <CardContent className="chart-grid">
+            <FlexibleWidthXYPlot
+              className="flexible-chart"
+              height={500}
+              onMouseLeave={handleMouseLeave}
+              yDomain={[minY, maxY]}
+              xType="time"
+              ref={chartRef}
+              style={{ backgroundColor: '#fff' }}
+            >
+              <VerticalGridLines/>
+              <HorizontalGridLines/>
+              <AreaSeries
+                data={!actionsState.isMonthly ? trimmData(climMaxLighten) : climMaxLighten}
+                color="#F8D6C5"
+              />
+              <AreaSeries
+                data={!actionsState.isMonthly ? trimmData(climMaxDarken) : climMaxDarken}
+                color="#FDBE9D"
+              />
+              <AreaSeries
+                data={!actionsState.isMonthly ? trimmData(climMinLighten) : climMinLighten}
+                color="#DBEBF5"
+              />
+              <AreaSeries
+                data={!actionsState.isMonthly ? trimmData(climMinDarken) : climMinDarken}
+                color="#C6E2F1"
+              />
+              <LineSeries
+                color="#0089C6"
+                data={!actionsState.isMonthly ? trimmData(historicalMinTemp) : historicalMinTemp}
+                curve="curveMonotoneX"
+                onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
+                onNearestX={handleSetPoints.bind({ type: 'min', target: 'historical' })}
+              />
+              <LineSeries
+                color="#FF7100"
+                data={!actionsState.isMonthly ? trimmData(historicalMaxTemp) : historicalMaxTemp}
+                curve="curveMonotoneX"
+                onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
+                onNearestX={handleSetPoints.bind({ type: 'max', target: 'historical' })}
+              />
+              <LineSeries
+                color="#0089C6"
+                data={!actionsState.isMonthly ? trimmData(forecastMinTemp) : forecastMinTemp}
+                curve="curveMonotoneX"
+                strokeStyle="dashed"
+                onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
+                onNearestX={handleSetPoints.bind({ type: 'min', target: 'forecast' })}
+              />
+              <LineSeries
+                color="#FF7100"
+                data={!actionsState.isMonthly ? trimmData(forecastMaxTemp) : forecastMaxTemp}
+                curve="curveMonotoneX"
+                strokeStyle="dashed"
+                onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
+                onNearestX={handleSetPoints.bind({ type: 'max', target: 'forecast' })}
+              />
+              {
+                points.min.length || points.max.length ? (
+                  <LineSeries
+                    data={[{
+                      x: points.min.length ? points.min[0].x : points.max[0].x,
+                      y: minY
+                    }, {
+                      x: points.min.length ? points.min[0].x : points.max[0].x,
+                      y: maxY
+                    }]}
+                    strokeStyle="dashed"
+                    color="#707070"
                   />
-                </Crosshair>
-                <ChartLabel
-                  text="Minimum and Maximum Temperature"
-                  className="main-titles"
-                  includeMargin={false}
-                  xPercent={0.035}
-                  yPercent={0.1}
+                ) : null
+              }
+              {
+                points.min.length ? (
+                  <MarkSeries
+                    data={points.min}
+                    color="#0089C6"
+                  />
+                ) : null
+              }
+              {
+                points.max.length ? (
+                  <MarkSeries
+                    data={points.max}
+                    color="#FF7100"
+                  />
+                ) : null
+              }
+              <Crosshair
+                values={points.min}
+                style={{ line: { display: 'none' } }}
+              >
+                <ChartViewer
+                  type="temp"
+                  points={points}
                 />
-                <XAxis tickFormat={tickFormat}/>
-                <YAxis className="y-axis"/>
-              </FlexibleWidthXYPlot>
-            </div>
+              </Crosshair>
+              <ChartLabel
+                text="Minimum and Maximum Temperature"
+                className="main-titles"
+                includeMargin={false}
+                xPercent={0.035}
+                yPercent={0.1}
+              />
+              <XAxis
+                tickFormat={tickFormat}
+                tickTotal={points.chartWidth ? points.chartWidth / 45 : null}
+              />
+              <YAxis />
+            </FlexibleWidthXYPlot>
+            <ChartSpecs
+              type="temp"
+              chartRef={chartRef}
+              data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
+            />
           </CardContent>
         </Card>
-        <ChartSpecs type="temp" />
       </Box>
     </>
   );

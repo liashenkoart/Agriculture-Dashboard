@@ -1,13 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Dropdown from 'rc-dropdown';
 import { Card, Typography, Box } from '@material-ui/core';
 
+import minMaxIconActive from '../../../../assets/Chart/min-max-active.svg';
+import CloudIconActive from '../../../../assets/Chart/cloud-active.svg';
+import SunIconActive from '../../../../assets/Chart/sun-active.svg';
+import OilIconActive from '../../../../assets/Chart/oil-active.svg';
 import minMaxIcon from '../../../../assets/Chart/min-max.svg';
 import CloudIcon from '../../../../assets/Chart/cloud.svg';
 import SunIcon from '../../../../assets/Chart/sun.svg';
 import OilIcon from '../../../../assets/Chart/oil.svg';
 import DotIcon from '../../../../assets/Chart/dots.svg';
+import DotIconWhite from '../../../../assets/Chart/dots-white.svg';
+import Logo from '../../../../assets/Chart/logo.svg';
 import Profile from '../../../../assets/Chart/profile.svg';
-import Dropdown from 'rc-dropdown/es';
 
 const ChartActions = ({ initialState, onStateChange }) => {
   const [state, setState] = useState(initialState);
@@ -32,25 +38,22 @@ const ChartActions = ({ initialState, onStateChange }) => {
 
   return (
     <>
-      <div className="title-container">
-        <div className="desc-card">
-          <div className="profileTextContainer">
-            <Typography className="profile-bold">
-              Crop: <span className="profile-light">Sorghum</span>
-            </Typography>
-            <Typography className="profile-bold">
-              Extension: <span className="profile-light">80 Ha</span>
-            </Typography>
-          </div>
+      <div className="mainProfileBlockContainer">
+        <div className="mainProfileBlock">
           <img src={Profile} alt=""/>
+          <div className="mainProfileBlockText">
+            <p className="mainProfileBlockTitle">John Doe</p>
+            <p className="mainProfileBlockDesc">Settings</p>
+          </div>
         </div>
       </div>
       <div className="headerBlocksContainer">
         <div className="blocks-container">
           <div className="textBlockContainer"
                style={{
-                 marginBottom: 22,
-                 boxShadow: !state.isMonthly ? '0px 4px 10px #E4A367' : ''
+                 marginBottom: 15,
+                 boxShadow: !state.isMonthly && '0px 4px 10px #C0D2E4',
+                 backgroundColor: !state.isMonthly ? '#00548D' : '',
                }}
                onClick={() => {
                  setState({
@@ -59,7 +62,12 @@ const ChartActions = ({ initialState, onStateChange }) => {
                  })
                }}
           >
-            <Typography className="textBlock">
+            <Typography
+              className="textBlock"
+              style={{
+                color: !state.isMonthly ? '#fff' : ''
+              }}
+            >
               Daily
             </Typography>
           </div>
@@ -68,7 +76,8 @@ const ChartActions = ({ initialState, onStateChange }) => {
               <div className="textBlockContainer"
                    style={{
                      marginBottom: 22,
-                     boxShadow: state.isMonthly ? '0px 4px 10px #E4A367' : ''
+                     boxShadow: state.isMonthly && '0px 4px 10px #C0D2E4',
+                     backgroundColor: state.isMonthly ? '#00548D' : '',
                    }}
                    onClick={() => {
                      setState({
@@ -77,7 +86,12 @@ const ChartActions = ({ initialState, onStateChange }) => {
                      })
                    }}
               >
-                <Typography className="textBlock">
+                <Typography
+                  className="textBlock"
+                  style={{
+                    color: state.isMonthly ? '#fff' : ''
+                  }}
+                >
                   Monthly
                 </Typography>
               </div>
@@ -85,7 +99,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
               <div className="textBlockContainer"
                    style={{
                      marginBottom: 22,
-                     boxShadow: '0px 4px 10px rgba(56, 78, 99, 0.2)',
+                     boxShadow: state.isMonthly && '0px 4px 10px #C0D2E4',
                      cursor: 'auto'
                    }}
               >
@@ -100,7 +114,8 @@ const ChartActions = ({ initialState, onStateChange }) => {
           ref={minMaxTab}
           className="headerBlockContainer headerBlockContainer-hover"
           style={{
-            boxShadow: state.currentTab === 'minmax' && !tabsDisabled ? '0px 4px 10px #E4A367' : ''
+            boxShadow: state.currentTab === 'minmax' && !tabsDisabled ? '0px 4px 10px #00548D' : '',
+            backgroundColor: state.currentTab === 'minmax' && !tabsDisabled ? '#00548D' : '',
           }}
           onClick={() => {
             setState({
@@ -115,11 +130,22 @@ const ChartActions = ({ initialState, onStateChange }) => {
         >
           <Card className="headerBlock">
             <Box className="infoContainer">
-              <img src={minMaxIcon}/>
+              {
+                state.currentTab === 'minmax' && !tabsDisabled ? (
+                  <img src={minMaxIcon}/>
+                ) : (
+                  <img src={minMaxIconActive}/>
+                )
+              }
             </Box>
             <Box className="infoContainer">
-              <Typography className="titleText">
-                Min & Max<br/>
+              <Typography
+                className="titleText"
+                style={{
+                  color: state.currentTab === 'minmax' && !tabsDisabled ? '#fff' : ''
+                }}
+              >
+                Min & Max
                 Temp
               </Typography>
             </Box>
@@ -129,7 +155,8 @@ const ChartActions = ({ initialState, onStateChange }) => {
           ref={precipitationTab}
           className="headerBlockContainer headerBlockContainer-hover"
           style={{
-            boxShadow: state.currentTab === 'precipitation' && !tabsDisabled ? '0px 4px 10px #E4A367' : ''
+            boxShadow: state.currentTab === 'precipitation' && !tabsDisabled ? '0px 4px 10px #00548D' : '',
+            backgroundColor: state.currentTab === 'precipitation' && !tabsDisabled ? '#00548D' : '',
           }}
           onClick={() => {
             setState({
@@ -144,11 +171,23 @@ const ChartActions = ({ initialState, onStateChange }) => {
         >
           <Card className="headerBlock">
             <Box className="infoContainer">
-              <img src={CloudIcon}/>
+              {
+                state.currentTab === 'precipitation' && !tabsDisabled ? (
+                  <img src={CloudIcon}/>
+                ) : (
+                  <img src={CloudIconActive}/>
+                )
+              }
             </Box>
             <Box className="infoContainer">
-              <Typography className="titleText" style={{ marginBottom: 30 }}>
-                Precipitation<br/>
+              <Typography
+                className="titleText"
+                style={{
+                  marginBottom: 30,
+                  color: state.currentTab === 'precipitation' && !tabsDisabled ? '#fff' : ''
+                }}
+              >
+                Precipitation
               </Typography>
             </Box>
           </Card>
@@ -157,7 +196,8 @@ const ChartActions = ({ initialState, onStateChange }) => {
           ref={sollTempTab}
           className="headerBlockContainer headerBlockContainer-hover"
           style={{
-            boxShadow: state.currentTab === 'solltemp' && !tabsDisabled ? '0px 4px 10px #E4A367' : ''
+            boxShadow: state.currentTab === 'solltemp' && !tabsDisabled ? '0px 4px 10px #00548D' : '',
+            backgroundColor: state.currentTab === 'solltemp' && !tabsDisabled ? '#00548D' : '',
           }}
           onClick={() => {
             setState({
@@ -172,11 +212,23 @@ const ChartActions = ({ initialState, onStateChange }) => {
         >
           <Card className="headerBlock">
             <Box className="infoContainer">
-              <img src={SunIcon}/>
+              {
+                state.currentTab === 'solltemp' && !tabsDisabled ? (
+                  <img src={SunIcon}/>
+                ) : (
+                  <img src={SunIconActive}/>
+                )
+              }
             </Box>
             <Box className="infoContainer">
-              <Typography className="titleText" style={{ marginBottom: 10 }}>
-                Soll<br/> Temperature
+              <Typography
+                className="titleText"
+                style={{
+                  marginBottom: 10,
+                  color: state.currentTab === 'solltemp' && !tabsDisabled ? '#fff' : '',
+                }}
+              >
+                Soll Temperature
               </Typography>
             </Box>
           </Card>
@@ -185,7 +237,8 @@ const ChartActions = ({ initialState, onStateChange }) => {
           ref={sollMolsture}
           className="headerBlockContainer headerBlockContainer-hover"
           style={{
-            boxShadow: state.currentTab === 'sollmolsture' && !tabsDisabled ? '0px 4px 10px #E4A367' : ''
+            boxShadow: state.currentTab === 'sollmolsture' && !tabsDisabled ? '0px 4px 10px #00548D' : '',
+            backgroundColor: state.currentTab === 'sollmolsture' && !tabsDisabled ? '#00548D' : '',
           }}
           onClick={() => {
             setState({
@@ -200,11 +253,23 @@ const ChartActions = ({ initialState, onStateChange }) => {
         >
           <Card className="headerBlock">
             <Box className="infoContainer">
-              <img src={OilIcon}/>
+              {
+                state.currentTab === 'sollmolsture' && !tabsDisabled ? (
+                  <img src={OilIcon}/>
+                ) : (
+                  <img src={OilIconActive}/>
+                )
+              }
             </Box>
             <Box className="infoContainer">
-              <Typography className="titleText" style={{ marginBottom: 10 }}>
-                Soll<br/>
+              <Typography
+                className="titleText"
+                style={{
+                  marginBottom: 10,
+                  color: state.currentTab === 'sollmolsture' && !tabsDisabled ? '#fff' : ''
+                }}
+              >
+                Soll
                 Molsture
               </Typography>
             </Box>
@@ -213,6 +278,13 @@ const ChartActions = ({ initialState, onStateChange }) => {
         <Dropdown
           overlayClassName="more-dropdown-container"
           trigger="click"
+          visible={state.extraDropdown}
+          onVisibleChange={() => {
+            setState({
+              ...state,
+              extraDropdown: !state.extraDropdown,
+            })
+          }}
           overlay={(
             <div className="more-content-dropdown">
               <div
@@ -265,11 +337,28 @@ const ChartActions = ({ initialState, onStateChange }) => {
         >
           <div
             className="headerBlockContainer headerBlockContainer-hover dotIcon"
-            style={{ width: 'auto', padding: '0 37px' }}
+            style={{
+              backgroundColor: state.extraDropdown ? '#01548D' : ''
+            }}
           >
-            <img src={DotIcon}/>
+            {
+              !state.extraDropdown ? (
+                <img src={DotIcon} />
+              ) : (
+                <img src={DotIconWhite} />
+              )
+            }
           </div>
         </Dropdown>
+        <div className="headerBlockContainer profileBlock">
+          <div className="profileTextContainer">
+            <p className="profileTextBold">Variety: <span className="profileText">Yukon Gold</span></p>
+            <p className="profileTextBold">Variety: <span className="profileText">Yukon Gold</span></p>
+            <p className="profileTextBold">Variety: <span className="profileText">Yukon Gold</span></p>
+            <p className="profileTextBold">Variety: <span className="profileText">Yukon Gold</span></p>
+          </div>
+          <img src={Logo} alt=""/>
+        </div>
       </div>
     </>
   );

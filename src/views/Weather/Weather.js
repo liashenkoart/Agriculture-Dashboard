@@ -1,7 +1,7 @@
 // Import React
 import React, { useContext, useEffect } from "react"
 // Import Components
-import { DailyForecast, Chart, WeatherSideBar, WeatherWidget } from "./components"
+import { DailyForecast, TabView, WeatherSideBar, WeatherWidget } from "./components"
 // Import Libraries
 import { makeStyles } from "@material-ui/styles"
 import { Grid } from "@material-ui/core"
@@ -339,7 +339,7 @@ const Weather = () => {
             <Grid className="GRID-CONTAINER" container spacing={4}>
                 <Grid className="LEFT-SUBGRID-CONTAINER" container item spacing={4}>
                     <Grid item lg={12}>
-                        <Chart />
+                        <TabView />
                     </Grid>
                 </Grid>
             </Grid>

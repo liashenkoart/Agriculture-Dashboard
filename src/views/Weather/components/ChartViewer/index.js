@@ -9,26 +9,25 @@ import BlueObserved from '../../../../assets/Chart/blue-observed.svg';
 
 const useStyles = makeStyles(() => ({
   chartViewer: {
-    boxShadow: '0px 4px 10px rgba(56, 78, 99, 0.2)',
+    boxShadow: '0px 4px 10px #C0D2E4',
     border: 0,
-    borderRadius: 20,
-    padding: '14px 33px',
-    margin: 20,
+    borderRadius: 10,
+    padding: '10px 10px',
+    // marginBottom: 12
   },
   titleText: {
-    fontFamily: 'Montserrat-Bold',
-    fontSize: 18,
-    marginBottom: 14,
+    fontFamily: 'Roboto',
+    fontSize: 12,
   },
   temperatureText: {
     fontFamily: 'Roboto',
-    fontSize: 14,
-    marginLeft: 8,
+    fontSize: 12,
+    marginLeft: 12,
   },
   infoContainer: {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: 14,
+    marginRight: 30,
   },
 }));
 
