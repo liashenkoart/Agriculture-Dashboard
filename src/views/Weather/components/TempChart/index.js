@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
+import React, { useCallback, useMemo, useState, useRef, useEffect, useContext } from 'react';
 import { Box, Card, CardContent, Typography } from '@material-ui/core';
 import {
   FlexibleWidthXYPlot,
@@ -12,7 +12,9 @@ import {
   Crosshair,
   ChartLabel,
 } from 'react-vis';
-import Dropdown from '../Dropdown';
+
+import { AuthContext } from '../../../../Auth/Auth';
+import networking from '../../../../Util/Networking';
 
 import {
   monthNames,
@@ -40,6 +42,7 @@ import { makeStyles } from '@material-ui/styles';
 
 const TempChart = ({ actionsState }) => {
   const chartRef = useRef(null);
+  const { currentUser } = useContext(AuthContext);
 
   const initialState = {
     min: [],
