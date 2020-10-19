@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo, useState, useRef, useEffect, useContext } from 'react';
-import { Box, Card, CardContent, Typography } from '@material-ui/core';
+import React, { useCallback, useMemo, useState, useRef, useEffect, useContext, memo } from 'react';
+import { Box, Card, CardContent, CircularProgress } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import {
   FlexibleWidthXYPlot,
   XAxis,
@@ -31,10 +32,6 @@ import {
   trimmData,
 } from './helper';
 
-import historical from '../../../../data/historical';
-import forecast from '../../../../data/forecast';
-import clim from '../../../../data/clim';
-
 import ChartViewer from '../ChartViewer';
 import clsx from 'clsx';
 import ChartSpecs from '../ChartSpecs';
@@ -43,6 +40,7 @@ import { makeStyles } from '@material-ui/styles';
 const TempChart = ({ actionsState }) => {
   const chartRef = useRef(null);
   const { currentUser } = useContext(AuthContext);
+  const { id } = useParams();
 
   const initialState = {
     min: [],
@@ -52,6 +50,25 @@ const TempChart = ({ actionsState }) => {
   };
 
   const [points, setPoints] = useState(initialState);
+
+  const [data, setData] = useState({
+    'ds_hist': {
+      time: [],
+      't2m_min': [],
+      't2m_max': [],
+    },
+    'ds_fc': {
+      time: [],
+      't2m_min': [],
+      't2m_max': [],
+    },
+    'ds_clim': {
+      time: [],
+      't2m_min': [],
+      't2m_max': [],
+    },
+    pending: true,
+  });
 
   const handleSetPoints = function (v) {
     if (this.type === 'min' && points.target === this.target) {
@@ -68,11 +85,34 @@ const TempChart = ({ actionsState }) => {
   };
 
   useEffect(() => {
+    currentUser
+      .getIdToken()
+      .then((userToken) => {
+        console.log(userToken);
+        networking.get(`/api/v1/weather/temperature/daily/${id}`, {
+          extraHeaders: { 'User-Token': userToken },
+        })
+          .then((res) => {
+            setData({
+              ...res.data,
+              pending: false,
+            });
+          })
+          .catch(() => {
+            setData((prevData) => ({
+              ...prevData,
+              pending: false,
+            }));
+          });
+      });
+  }, [actionsState.isMonthly, actionsState.currentTab]);
+
+  useEffect(() => {
     setPoints((prevState) => ({
       ...prevState,
-      chartWidth: chartRef.current.offsetWidth,
+      chartWidth: data.pending ? 0 : chartRef.current.offsetWidth,
     }));
-  }, [chartRef.current]);
+  }, [chartRef.current, data.pending]);
 
   const handleMouseLeave = useCallback(() => {
     setPoints(initialState);
@@ -89,35 +129,37 @@ const TempChart = ({ actionsState }) => {
     if (actionsState.isMonthly) {
       return monthNames[new Date(d).getMonth()];
     } else {
-      console.log(new Date(d).getDate());
       return `${new Date(d).getDate()} ${monthNames[new Date(d).getMonth()]}`;
     }
   };
 
-  const historicalMinTemp = useMemo(() => getHistoricalMinTemp(historical), [historical]);
-  const historicalMaxTemp = useMemo(() => getHistoricalMaxTemp(historical), [historical]);
+  const historicalMinTemp = useMemo(() => getHistoricalMinTemp(data['ds_hist']), [data]);
+  const historicalMaxTemp = useMemo(() => getHistoricalMaxTemp(data['ds_hist']), [data]);
 
-  const minY = useMemo(() => getMinY(historicalMinTemp), [historicalMinTemp]);
-  const maxY = useMemo(() => getMaxY(historicalMaxTemp), [historicalMaxTemp]);
+  const minYHistorical = useMemo(() => getMinY(historicalMinTemp), [historicalMinTemp]);
+  const maxYHistorical = useMemo(() => getMaxY(historicalMaxTemp), [historicalMaxTemp]);
 
-  const forecastMinArr = useMemo(() => getForecastMinArr(forecast), [forecast]);
-  const forecastMaxArr = useMemo(() => getForecastMaxArr(forecast), [forecast]);
+  const forecastMinArr = useMemo(() => getForecastMinArr(data['ds_fc']), [data]);
+  const forecastMaxArr = useMemo(() => getForecastMaxArr(data['ds_fc']), [data]);
 
-  const forecastMinTemp = useMemo(() => getForecastMinTemp(forecast, forecastMinArr), [forecast, forecastMinArr]);
-  const forecastMaxTemp = useMemo(() => getForecastMaxTemp(forecast, forecastMaxArr), [forecast, forecastMaxArr]);
+  const forecastMinTemp = useMemo(() => getForecastMinTemp(data['ds_fc'], forecastMinArr), [data, forecastMinArr]);
+  const forecastMaxTemp = useMemo(() => getForecastMaxTemp(data['ds_fc'], forecastMaxArr), [data, forecastMaxArr]);
 
-  const { climMinLighten, climMinDarken } = useMemo(() => getClimMin(clim), [clim]);
-  const { climMaxLighten, climMaxDarken } = useMemo(() => getClimMax(clim), [clim]);
+  const minYForecast = useMemo(() => getMinY(forecastMinTemp), [forecastMinTemp]);
+  const maxYForecast = useMemo(() => getMaxY(forecastMaxTemp), [forecastMaxTemp]);
 
-  const histCsvData = historical.time.map((item, index) => {
+  const { climMinLighten, climMinDarken } = useMemo(() => getClimMin(data['ds_clim']), [data]);
+  const { climMaxLighten, climMaxDarken } = useMemo(() => getClimMax(data['ds_clim']), [data]);
+
+  const histCsvData = data['ds_hist'].time.map((item, index) => {
     return [
       item,
-      historical['t2m_min'][index],
-      historical['t2m_max'][index],
+      data['ds_hist']['t2m_min'][index],
+      data['ds_hist']['t2m_max'][index],
     ];
   });
 
-  const forcCsvData = forecast.time.map((item, index) => {
+  const forcCsvData = data['ds_fc'].time.map((item, index) => {
     return [
       item,
       forecastMinArr[index],
@@ -125,10 +167,10 @@ const TempChart = ({ actionsState }) => {
     ];
   });
 
-  const climMaxArr = [].concat.apply([], Object.values(clim['t2m_max']));
-  const climMinArr = [].concat.apply([], Object.values(clim['t2m_min']));
+  const climMaxArr = [].concat.apply([], Object.values(data['ds_clim']['t2m_max']));
+  const climMinArr = [].concat.apply([], Object.values(data['ds_clim']['t2m_min']));
 
-  const climCsvData = clim.time.map((item, index) => {
+  const climCsvData = data['ds_clim'].time.map((item, index) => {
     return [
       item,
       climMinArr[index],
@@ -170,129 +212,144 @@ const TempChart = ({ actionsState }) => {
   const classes = useStyles();
 
   return (
-    <>
-      <Box className="">
-        <Card className={clsx(classes.root)}>
-          <CardContent className="chart-grid">
-            <FlexibleWidthXYPlot
-              className="flexible-chart"
-              height={500}
-              onMouseLeave={handleMouseLeave}
-              yDomain={[minY, maxY]}
-              xType="time"
-              ref={chartRef}
-              style={{ backgroundColor: '#fff' }}
-            >
-              <VerticalGridLines/>
-              <HorizontalGridLines/>
-              <AreaSeries
-                data={!actionsState.isMonthly ? trimmData(climMaxLighten) : climMaxLighten}
-                color="#F8D6C5"
+    <Card className={clsx(classes.root)}>
+      <CardContent className="chart-grid">
+        {
+          data.pending ? (
+            <>
+              <Box className="chart-preload-container">
+                <CircularProgress />
+              </Box>
+              <ChartSpecs
+                type="temp"
+                chartRef={chartRef}
+                data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
               />
-              <AreaSeries
-                data={!actionsState.isMonthly ? trimmData(climMaxDarken) : climMaxDarken}
-                color="#FDBE9D"
-              />
-              <AreaSeries
-                data={!actionsState.isMonthly ? trimmData(climMinLighten) : climMinLighten}
-                color="#DBEBF5"
-              />
-              <AreaSeries
-                data={!actionsState.isMonthly ? trimmData(climMinDarken) : climMinDarken}
-                color="#C6E2F1"
-              />
-              <LineSeries
-                color="#0089C6"
-                data={!actionsState.isMonthly ? trimmData(historicalMinTemp) : historicalMinTemp}
-                curve="curveMonotoneX"
-                onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
-                onNearestX={handleSetPoints.bind({ type: 'min', target: 'historical' })}
-              />
-              <LineSeries
-                color="#FF7100"
-                data={!actionsState.isMonthly ? trimmData(historicalMaxTemp) : historicalMaxTemp}
-                curve="curveMonotoneX"
-                onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
-                onNearestX={handleSetPoints.bind({ type: 'max', target: 'historical' })}
-              />
-              <LineSeries
-                color="#0089C6"
-                data={!actionsState.isMonthly ? trimmData(forecastMinTemp) : forecastMinTemp}
-                curve="curveMonotoneX"
-                strokeStyle="dashed"
-                onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
-                onNearestX={handleSetPoints.bind({ type: 'min', target: 'forecast' })}
-              />
-              <LineSeries
-                color="#FF7100"
-                data={!actionsState.isMonthly ? trimmData(forecastMaxTemp) : forecastMaxTemp}
-                curve="curveMonotoneX"
-                strokeStyle="dashed"
-                onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
-                onNearestX={handleSetPoints.bind({ type: 'max', target: 'forecast' })}
-              />
-              {
-                points.min.length || points.max.length ? (
-                  <LineSeries
-                    data={[{
-                      x: points.min.length ? points.min[0].x : points.max[0].x,
-                      y: minY
-                    }, {
-                      x: points.min.length ? points.min[0].x : points.max[0].x,
-                      y: maxY
-                    }]}
-                    strokeStyle="dashed"
-                    color="#707070"
-                  />
-                ) : null
-              }
-              {
-                points.min.length ? (
-                  <MarkSeries
-                    data={points.min}
-                    color="#0089C6"
-                  />
-                ) : null
-              }
-              {
-                points.max.length ? (
-                  <MarkSeries
-                    data={points.max}
-                    color="#FF7100"
-                  />
-                ) : null
-              }
-              <Crosshair
-                values={points.min}
-                style={{ line: { display: 'none' } }}
+            </>
+          ) : (
+            <>
+              <FlexibleWidthXYPlot
+                className="flexible-chart"
+                height={500}
+                onMouseLeave={handleMouseLeave}
+                yDomain={[Math.min(minYHistorical, minYForecast), Math.max(maxYHistorical, maxYForecast)]}
+                xType="time"
+                ref={chartRef}
+                style={{
+                  backgroundColor: '#fff',
+                }}
               >
-                <ChartViewer
-                  type="temp"
-                  points={points}
+                <VerticalGridLines/>
+                <HorizontalGridLines/>
+                <AreaSeries
+                  data={!actionsState.isMonthly ? trimmData(climMaxLighten) : climMaxLighten}
+                  color="#F8D6C5"
                 />
-              </Crosshair>
-              <ChartLabel
-                text="Minimum and Maximum Temperature"
-                className="main-titles"
-                includeMargin={false}
-                xPercent={0.035}
-                yPercent={0.1}
+                <AreaSeries
+                  data={!actionsState.isMonthly ? trimmData(climMaxDarken) : climMaxDarken}
+                  color="#FDBE9D"
+                />
+                <AreaSeries
+                  data={!actionsState.isMonthly ? trimmData(climMinLighten) : climMinLighten}
+                  color="#DBEBF5"
+                />
+                <AreaSeries
+                  data={!actionsState.isMonthly ? trimmData(climMinDarken) : climMinDarken}
+                  color="#C6E2F1"
+                />
+                <LineSeries
+                  color="#0089C6"
+                  data={!actionsState.isMonthly ? trimmData(historicalMinTemp) : historicalMinTemp}
+                  curve="curveMonotoneX"
+                  onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
+                  onNearestX={handleSetPoints.bind({ type: 'min', target: 'historical' })}
+                />
+                <LineSeries
+                  color="#FF7100"
+                  data={!actionsState.isMonthly ? trimmData(historicalMaxTemp) : historicalMaxTemp}
+                  curve="curveMonotoneX"
+                  onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
+                  onNearestX={handleSetPoints.bind({ type: 'max', target: 'historical' })}
+                />
+                <LineSeries
+                  color="#0089C6"
+                  data={!actionsState.isMonthly ? trimmData(forecastMinTemp) : forecastMinTemp}
+                  curve="curveMonotoneX"
+                  strokeStyle="dashed"
+                  onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
+                  onNearestX={handleSetPoints.bind({ type: 'min', target: 'forecast' })}
+                />
+                <LineSeries
+                  color="#FF7100"
+                  data={!actionsState.isMonthly ? trimmData(forecastMaxTemp) : forecastMaxTemp}
+                  curve="curveMonotoneX"
+                  strokeStyle="dashed"
+                  onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
+                  onNearestX={handleSetPoints.bind({ type: 'max', target: 'forecast' })}
+                />
+                {
+                  points.min.length || points.max.length ? (
+                    <LineSeries
+                      data={[{
+                        x: points.min.length ? points.min[0].x : points.max[0].x,
+                        y: Math.min(minYHistorical, minYForecast),
+                      }, {
+                        x: points.min.length ? points.min[0].x : points.max[0].x,
+                        y: Math.max(maxYHistorical, maxYForecast),
+                      }]}
+                      strokeStyle="dashed"
+                      color="#707070"
+                    />
+                  ) : null
+                }
+                {
+                  points.min.length ? (
+                    <MarkSeries
+                      data={points.min}
+                      color="#0089C6"
+                    />
+                  ) : null
+                }
+                {
+                  points.max.length ? (
+                    <MarkSeries
+                      data={points.max}
+                      color="#FF7100"
+                    />
+                  ) : null
+                }
+                <Crosshair
+                  values={points.min}
+                  style={{ line: { display: 'none' } }}
+                >
+                  <ChartViewer
+                    type="temp"
+                    points={points}
+                  />
+                </Crosshair>
+                <ChartLabel
+                  text="Minimum and Maximum Temperature"
+                  className="main-titles"
+                  includeMargin={false}
+                  xPercent={0.035}
+                  yPercent={0.1}
+                />
+                <XAxis
+                  tickFormat={tickFormat}
+                  tickTotal={points.chartWidth ? points.chartWidth / 45 : null}
+                />
+                <YAxis/>
+              </FlexibleWidthXYPlot>
+              <ChartSpecs
+                type="temp"
+                chartRef={chartRef}
+                data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
               />
-              <XAxis
-                tickFormat={tickFormat}
-                tickTotal={points.chartWidth ? points.chartWidth / 45 : null}
-              />
-              <YAxis />
-            </FlexibleWidthXYPlot>
-            <ChartSpecs
-              type="temp"
-              chartRef={chartRef}
-              data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
-            />
-          </CardContent>
-        </Card>
-      </Box>
-    </>
+            </>
+          )
+        }
+      </CardContent>
+    </Card>
   );
 };
 

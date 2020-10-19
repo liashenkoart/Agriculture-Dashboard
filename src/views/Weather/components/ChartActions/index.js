@@ -292,6 +292,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
                 onClick={() => {
                   setState({
                     ...state,
+                    currentTab: 'precipitation',
                     extraPrecipitationChart: !state.extraPrecipitationChart,
                   })
                 }}
