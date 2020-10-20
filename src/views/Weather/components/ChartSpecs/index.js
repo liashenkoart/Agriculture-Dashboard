@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Typography, Box } from '@material-ui/core';
+import { Card, Typography, Box, Slider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
 import Dropdown from '../Dropdown';
@@ -48,7 +48,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ChartSpecs = ({ type, chartRef, data }) => {
+const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
   const {
     headerBlocksContainer,
     headerBlockContainer,
@@ -60,6 +60,22 @@ const ChartSpecs = ({ type, chartRef, data }) => {
 
   return (
     <div className={headerBlocksContainer}>
+      {
+        actionsState.extraPrecipitationChart ? (
+          <div className="slider-container">
+            <Slider
+              defaultValue={1}
+              aria-labelledby="discrete-slider-small-steps"
+              step={0.1}
+              marks
+              min={1}
+              max={1.5}
+              valueLabelDisplay="auto"
+              onChange={onSliderChange}
+            />
+          </div>
+        ) : null
+      }
       <div className="btns-container">
         <Dropdown
           chartRef={chartRef}

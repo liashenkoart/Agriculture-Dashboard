@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect, useContext } from 'react';
-import { Box, Card, CardContent, CircularProgress } from '@material-ui/core';
+import { Box, Card, CardContent, CircularProgress, Slider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { useParams } from 'react-router-dom';
 import {
@@ -79,6 +79,7 @@ const PrecipitationChart = ({ actionsState }) => {
       'e_sum': [],
     },
     pending: true,
+    coefficient: 1,
   });
 
   useEffect(() => {
@@ -125,10 +126,11 @@ const PrecipitationChart = ({ actionsState }) => {
             extraHeaders: { 'User-Token': userToken },
           })
             .then((res) => {
-              setEvaporationData({
+              setEvaporationData((prevState) => ({
+                ...prevState,
                 ...res.data,
                 pending: false,
-              });
+              }));
             })
             .catch(() => {
               setEvaporationData((prevData) => ({
@@ -171,22 +173,28 @@ const PrecipitationChart = ({ actionsState }) => {
 
   const { climLighten, climDarken } = useMemo(() => getClim(data['ds_clim']), [data]);
 
-  const extraHistoricalTemp = useMemo(() => getExtraHistoricalTemp(evaporationData['ds_hist']), [evaporationData]);
+  const extraHistoricalTemp = useMemo(() => {
+    return getExtraHistoricalTemp(evaporationData['ds_hist'], evaporationData.coefficient);
+  }, [evaporationData]);
 
   const extraForecastArr = useMemo(() => getExtraForecastArr(evaporationData['ds_fc']), [evaporationData]);
-  const extraForecastTemp = useMemo(() => getExtraForecastTemp(evaporationData['ds_fc'], extraForecastArr), [evaporationData, extraForecastArr]);
+  const extraForecastTemp = useMemo(() => {
+    return getExtraForecastTemp(evaporationData['ds_fc'], extraForecastArr, evaporationData.coefficient);
+  }, [evaporationData, extraForecastArr]);
 
-  const { extraClimLighten, extraClimDarken } = useMemo(() => getExtraClim(evaporationData['ds_clim']), [evaporationData]);
+  const { extraClimLighten, extraClimDarken } = useMemo(() => {
+    return getExtraClim(evaporationData['ds_clim'], evaporationData.coefficient);
+  }, [evaporationData]);
 
   const minYHistorical = useMemo(() => getMinY(historicalTemp), [historicalTemp]);
   const maxYHistorical = useMemo(() => getMaxY(historicalTemp), [historicalTemp]);
   const minYForecast = useMemo(() => getMinY(forecastTemp), [forecastTemp]);
   const maxYForecast = useMemo(() => getMaxY(forecastTemp), [forecastTemp]);
 
-  const extraMinYHistorical = useMemo(() => getMinY(extraHistoricalTemp), [extraHistoricalTemp]);
-  const extraMaxYHistorical = useMemo(() => getMaxY(extraHistoricalTemp), [extraHistoricalTemp]);
-  const extraMinYForecast = useMemo(() => getMinY(extraForecastTemp), [extraForecastTemp]);
-  const extraMaxYForecast = useMemo(() => getMaxY(extraForecastTemp), [extraForecastTemp]);
+  const extraMinYHistorical = useMemo(() => getMinY(extraHistoricalTemp), [evaporationData.pending]);
+  const extraMaxYHistorical = useMemo(() => getMaxY(extraHistoricalTemp), [evaporationData.pending]);
+  const extraMinYForecast = useMemo(() => getMinY(extraForecastTemp), [evaporationData.pending]);
+  const extraMaxYForecast = useMemo(() => getMaxY(extraForecastTemp), [evaporationData.pending]);
 
   const histCsvData = data['ds_hist'].time.map((item, index) => {
     return [
@@ -233,6 +241,13 @@ const PrecipitationChart = ({ actionsState }) => {
     }
   });
 
+  const handleChangeSlider = useCallback((e, value) => {
+    setEvaporationData((prevState) => ({
+      ...prevState,
+      coefficient: value,
+    }));
+  }, []);
+
   const useStyles = makeStyles((theme) => ({
     root: {
       boxShadow: theme.palette.effectStyles.backGlowCards.boxShadow,
@@ -256,6 +271,8 @@ const PrecipitationChart = ({ actionsState }) => {
                   type="temp"
                   chartRef={chartRef}
                   data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
+                  actionsState={actionsState}
+                  onSliderChange={handleChangeSlider}
                 />
               </>
             ) : (
@@ -272,9 +289,7 @@ const PrecipitationChart = ({ actionsState }) => {
                       [Math.min(extraMinYHistorical, extraMinYForecast), Math.max(extraMaxYHistorical, extraMaxYForecast)]
                   }
                   style={{ backgroundColor: '#fff' }}
-                  margin={{
-                    top: 70
-                  }}
+                  margin={{ top: 70 }}
                 >
                   <VerticalGridLines/>
                   <HorizontalGridLines/>
@@ -384,6 +399,8 @@ const PrecipitationChart = ({ actionsState }) => {
                   type="precipitation"
                   chartRef={chartRef}
                   data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
+                  actionsState={actionsState}
+                  onSliderChange={handleChangeSlider}
                 />
               </>
             )

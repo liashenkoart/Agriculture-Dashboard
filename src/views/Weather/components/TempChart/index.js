@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, useRef, useEffect, useContext, memo } from 'react';
+import React, { useCallback, useMemo, useState, useRef, useEffect, useContext } from 'react';
 import { Box, Card, CardContent, CircularProgress } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import {
@@ -224,6 +224,7 @@ const TempChart = ({ actionsState }) => {
                 type="temp"
                 chartRef={chartRef}
                 data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
+                actionsState={actionsState}
               />
             </>
           ) : (
@@ -235,12 +236,8 @@ const TempChart = ({ actionsState }) => {
                 yDomain={[Math.min(minYHistorical, minYForecast), Math.max(maxYHistorical, maxYForecast)]}
                 xType="time"
                 ref={chartRef}
-                style={{
-                  backgroundColor: '#fff',
-                }}
-                margin={{
-                  top: 70
-                }}
+                style={{ backgroundColor: '#fff' }}
+                margin={{ top: 70 }}
               >
                 <VerticalGridLines/>
                 <HorizontalGridLines/>
@@ -347,6 +344,7 @@ const TempChart = ({ actionsState }) => {
                 type="temp"
                 chartRef={chartRef}
                 data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
+                actionsState={actionsState}
               />
             </>
           )

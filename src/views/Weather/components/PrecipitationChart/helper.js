@@ -5,9 +5,9 @@ const getHistoricalTemp = (historical) => historical.time.map((item, index) => (
   y: historical['tp_sum'][index],
 }));
 
-const getExtraHistoricalTemp = (historical) => historical.time.map((item, index) => ({
+const getExtraHistoricalTemp = (historical, coefficient) => historical.time.map((item, index) => ({
   x: new Date(item).getTime(),
-  y: historical['e_sum'][index],
+  y: historical['e_sum'][index] * coefficient,
 }));
 
 const getForecastArr = (forecast) => [].concat.apply([], Object.values(forecast['tp_sum']));
@@ -19,9 +19,9 @@ const getForecastTemp = (forecast, forecastMinArr) => forecast.time.map((item, i
   y: forecastMinArr[index],
 }));
 
-const getExtraForecastTemp = (forecast, forecastMinArr) => forecast.time.map((item, index) => ({
+const getExtraForecastTemp = (forecast, forecastMinArr, coefficient) => forecast.time.map((item, index) => ({
   x: new Date(item).getTime(),
-  y: forecastMinArr[index],
+  y: forecastMinArr[index] * coefficient,
 }));
 
 const getClim = (clim) => {
@@ -60,7 +60,7 @@ const getClim = (clim) => {
   };
 };
 
-const getExtraClim = (clim) => {
+const getExtraClim = (clim, coefficient) => {
   const climLightenY0Arr = [];
   const climLightenY1Arr = [];
   const climDarkenY0Arr = [];
@@ -80,14 +80,14 @@ const getExtraClim = (clim) => {
 
   const extraClimLighten = clim.time.map((item, index) => ({
     x: new Date(item).getTime(),
-    y0: climLightenY0Arr[index],
-    y: climLightenY1Arr[index],
+    y0: climLightenY0Arr[index] * coefficient,
+    y: climLightenY1Arr[index] * coefficient,
   }));
 
   const extraClimDarken = clim.time.map((item, index) => ({
     x: new Date(item).getTime(),
-    y0: climDarkenY0Arr[index],
-    y: climDarkenY1Arr[index],
+    y0: climDarkenY0Arr[index] * coefficient,
+    y: climDarkenY1Arr[index] * coefficient,
   }));
 
   return {
