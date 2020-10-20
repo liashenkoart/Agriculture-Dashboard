@@ -119,10 +119,32 @@ const PrecipitationChart = ({ actionsState }) => {
         ...prevData,
         pending: true,
       }));
+      setData((prevData) => ({
+        ...prevData,
+        pending: true,
+      }));
       currentUser
         .getIdToken()
-        .then((userToken) => {
-          networking.get(`/api/v1/weather/evaporation/daily/${id}`, {
+        .then(async (userToken) => {
+          await networking.get(`/api/v1/weather/precipitation/daily/${id}`, {
+            extraHeaders: { 'User-Token': userToken },
+          })
+            .then((res) => {
+              setData({
+                ...res.data,
+                pending: false,
+              });
+            })
+            .catch(() => {
+              setData((prevData) => ({
+                ...prevData,
+                pending: false,
+              }));
+            });
+          return userToken;
+        })
+        .then(async (userToken) => {
+          await networking.get(`/api/v1/weather/evaporation/daily/${id}`, {
             extraHeaders: { 'User-Token': userToken },
           })
             .then((res) => {
@@ -174,17 +196,17 @@ const PrecipitationChart = ({ actionsState }) => {
   const { climLighten, climDarken } = useMemo(() => getClim(data['ds_clim']), [data]);
 
   const extraHistoricalTemp = useMemo(() => {
-    return getExtraHistoricalTemp(evaporationData['ds_hist'], evaporationData.coefficient);
-  }, [evaporationData]);
+    return getExtraHistoricalTemp(historicalTemp, evaporationData['ds_hist'], evaporationData.coefficient);
+  }, [evaporationData, historicalTemp]);
 
   const extraForecastArr = useMemo(() => getExtraForecastArr(evaporationData['ds_fc']), [evaporationData]);
   const extraForecastTemp = useMemo(() => {
-    return getExtraForecastTemp(evaporationData['ds_fc'], extraForecastArr, evaporationData.coefficient);
-  }, [evaporationData, extraForecastArr]);
+    return getExtraForecastTemp(forecastTemp, evaporationData['ds_fc'], extraForecastArr, evaporationData.coefficient);
+  }, [evaporationData, extraForecastArr, forecastTemp]);
 
   const { extraClimLighten, extraClimDarken } = useMemo(() => {
-    return getExtraClim(evaporationData['ds_clim'], evaporationData.coefficient);
-  }, [evaporationData]);
+    return getExtraClim({ climLighten, climDarken }, evaporationData['ds_clim'], evaporationData.coefficient);
+  }, [evaporationData, climLighten, climDarken]);
 
   const minYHistorical = useMemo(() => getMinY(historicalTemp), [historicalTemp]);
   const maxYHistorical = useMemo(() => getMaxY(historicalTemp), [historicalTemp]);

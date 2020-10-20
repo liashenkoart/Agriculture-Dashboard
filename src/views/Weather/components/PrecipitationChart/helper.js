@@ -5,9 +5,9 @@ const getHistoricalTemp = (historical) => historical.time.map((item, index) => (
   y: historical['tp_sum'][index],
 }));
 
-const getExtraHistoricalTemp = (historical, coefficient) => historical.time.map((item, index) => ({
+const getExtraHistoricalTemp = (historical, extraHistorical, coefficient) => extraHistorical.time.map((item, index) => ({
   x: new Date(item).getTime(),
-  y: historical['e_sum'][index] * coefficient,
+  y: historical[index].y - extraHistorical['e_sum'][index] * coefficient,
 }));
 
 const getForecastArr = (forecast) => [].concat.apply([], Object.values(forecast['tp_sum']));
@@ -19,9 +19,9 @@ const getForecastTemp = (forecast, forecastMinArr) => forecast.time.map((item, i
   y: forecastMinArr[index],
 }));
 
-const getExtraForecastTemp = (forecast, forecastMinArr, coefficient) => forecast.time.map((item, index) => ({
+const getExtraForecastTemp = (forecast, extraForecast, forecastMinArr, coefficient) => extraForecast.time.map((item, index) => ({
   x: new Date(item).getTime(),
-  y: forecastMinArr[index] * coefficient,
+  y: forecast[index].y - forecastMinArr[index] * coefficient,
 }));
 
 const getClim = (clim) => {
@@ -60,34 +60,34 @@ const getClim = (clim) => {
   };
 };
 
-const getExtraClim = (clim, coefficient) => {
+const getExtraClim = (clim, extraClim, coefficient) => {
   const climLightenY0Arr = [];
   const climLightenY1Arr = [];
   const climDarkenY0Arr = [];
   const climDarkenY1Arr = [];
 
-  for (let key in clim['e_sum']) {
+  for (let key in extraClim['e_sum']) {
     if (+key === 0.05) {
-      climLightenY0Arr.push(...clim['e_sum'][key]);
+      climLightenY0Arr.push(...extraClim['e_sum'][key]);
     } else if (+key === 0.95) {
-      climLightenY1Arr.push(...clim['e_sum'][key]);
+      climLightenY1Arr.push(...extraClim['e_sum'][key]);
     } else if (+key === 0.25) {
-      climDarkenY0Arr.push(...clim['e_sum'][key]);
+      climDarkenY0Arr.push(...extraClim['e_sum'][key]);
     } else if (+key === 0.75) {
-      climDarkenY1Arr.push(...clim['e_sum'][key]);
+      climDarkenY1Arr.push(...extraClim['e_sum'][key]);
     }
   }
 
-  const extraClimLighten = clim.time.map((item, index) => ({
+  const extraClimLighten = extraClim.time.map((item, index) => ({
     x: new Date(item).getTime(),
-    y0: climLightenY0Arr[index] * coefficient,
-    y: climLightenY1Arr[index] * coefficient,
+    y0: clim.climLighten[index].y0 - climLightenY0Arr[index] * coefficient,
+    y: clim.climLighten[index].y - climLightenY1Arr[index] * coefficient,
   }));
 
-  const extraClimDarken = clim.time.map((item, index) => ({
+  const extraClimDarken = extraClim.time.map((item, index) => ({
     x: new Date(item).getTime(),
-    y0: climDarkenY0Arr[index] * coefficient,
-    y: climDarkenY1Arr[index] * coefficient,
+    y0: clim.climDarken[index].y0 -climDarkenY0Arr[index] * coefficient,
+    y: clim.climDarken[index].y - climDarkenY1Arr[index] * coefficient,
   }));
 
   return {
