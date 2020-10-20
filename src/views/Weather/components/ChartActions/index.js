@@ -293,6 +293,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
                   setState({
                     ...state,
                     currentTab: 'precipitation',
+                    extraDropdown: false,
                     extraPrecipitationChart: !state.extraPrecipitationChart,
                   })
                 }}
@@ -304,6 +305,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
                 onClick={() => {
                   setState({
                     ...state,
+                    extraDropdown: false,
                     additional2: !state.additional2,
                   })
                 }}
@@ -315,6 +317,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
                 onClick={() => {
                   setState({
                     ...state,
+                    extraDropdown: false,
                     additional3: !state.additional3,
                   })
                 }}
@@ -326,6 +329,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
                 onClick={() => {
                   setState({
                     ...state,
+                    extraDropdown: false,
                     additional4: !state.additional4,
                   })
                 }}

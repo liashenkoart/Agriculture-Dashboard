@@ -20,6 +20,7 @@ import {
   getHistoricalTemp,
   getExtraHistoricalTemp,
   getForecastArr,
+  getExtraForecastArr,
   getForecastTemp,
   getExtraForecastTemp,
   getClim,
@@ -28,10 +29,6 @@ import {
   getMaxY,
   trimmData,
 } from './helper';
-
-import extraHistorical from '../../../../data/historical_tp-e';
-import extraForecast from '../../../../data/forecast_tp-e';
-import extraClim from '../../../../data/clim_tp-e';
 
 import clsx from 'clsx';
 import ChartSpecs from '../ChartSpecs';
@@ -68,34 +65,80 @@ const PrecipitationChart = ({ actionsState }) => {
     pending: true,
   });
 
+  const [evaporationData, setEvaporationData] = useState({
+    'ds_hist': {
+      time: [],
+      'e_sum': [],
+    },
+    'ds_fc': {
+      time: [],
+      'e_sum': [],
+    },
+    'ds_clim': {
+      time: [],
+      'e_sum': [],
+    },
+    pending: true,
+  });
+
   useEffect(() => {
     setPoints((prevState) => ({
       ...prevState,
-      chartWidth: data.pending ? 0 : chartRef.current.offsetWidth,
+      chartWidth: data.pending || evaporationData.pending ? 0 : chartRef.current.offsetWidth,
     }));
   }, [chartRef.current, data.pending]);
 
   useEffect(() => {
-    currentUser
-      .getIdToken()
-      .then((userToken) => {
-        networking.get(`/api/v1/weather/precipitation/daily/${id}`, {
-          extraHeaders: { 'User-Token': userToken },
-        })
-          .then((res) => {
-            setData({
-              ...res.data,
-              pending: false,
-            });
+    if (!actionsState.extraPrecipitationChart) {
+      setData((prevData) => ({
+        ...prevData,
+        pending: true,
+      }));
+      currentUser
+        .getIdToken()
+        .then((userToken) => {
+          networking.get(`/api/v1/weather/precipitation/daily/${id}`, {
+            extraHeaders: { 'User-Token': userToken },
           })
-          .catch(() => {
-            setData((prevData) => ({
-              ...prevData,
-              pending: false,
-            }));
-          });
-      });
-  }, [actionsState.isMonthly, actionsState.currentTab]);
+            .then((res) => {
+              setData({
+                ...res.data,
+                pending: false,
+              });
+            })
+            .catch(() => {
+              setData((prevData) => ({
+                ...prevData,
+                pending: false,
+              }));
+            });
+        });
+    } else {
+      setEvaporationData((prevData) => ({
+        ...prevData,
+        pending: true,
+      }));
+      currentUser
+        .getIdToken()
+        .then((userToken) => {
+          networking.get(`/api/v1/weather/evaporation/daily/${id}`, {
+            extraHeaders: { 'User-Token': userToken },
+          })
+            .then((res) => {
+              setEvaporationData({
+                ...res.data,
+                pending: false,
+              });
+            })
+            .catch(() => {
+              setEvaporationData((prevData) => ({
+                ...prevData,
+                pending: false,
+              }));
+            });
+        });
+    }
+  }, [actionsState.extraPrecipitationChart]);
 
   const handleSetPoints = function (v) {
     if (points.target === this.target) {
@@ -128,17 +171,22 @@ const PrecipitationChart = ({ actionsState }) => {
 
   const { climLighten, climDarken } = useMemo(() => getClim(data['ds_clim']), [data]);
 
-  const extraHistoricalTemp = useMemo(() => getExtraHistoricalTemp(extraHistorical), [extraHistorical]);
+  const extraHistoricalTemp = useMemo(() => getExtraHistoricalTemp(evaporationData['ds_hist']), [evaporationData]);
 
-  const extraForecastTemp = useMemo(() => getExtraForecastTemp(extraForecast, forecastArr), [extraForecast, forecastArr]);
+  const extraForecastArr = useMemo(() => getExtraForecastArr(evaporationData['ds_fc']), [evaporationData]);
+  const extraForecastTemp = useMemo(() => getExtraForecastTemp(evaporationData['ds_fc'], extraForecastArr), [evaporationData, extraForecastArr]);
 
-  const { extraClimLighten, extraClimDarken } = useMemo(() => getExtraClim(extraClim), [extraClim]);
+  const { extraClimLighten, extraClimDarken } = useMemo(() => getExtraClim(evaporationData['ds_clim']), [evaporationData]);
 
-  const minY = useMemo(() => getMinY(historicalTemp), [historicalTemp]);
-  const maxY = useMemo(() => getMaxY(historicalTemp), [historicalTemp]);
+  const minYHistorical = useMemo(() => getMinY(historicalTemp), [historicalTemp]);
+  const maxYHistorical = useMemo(() => getMaxY(historicalTemp), [historicalTemp]);
+  const minYForecast = useMemo(() => getMinY(forecastTemp), [forecastTemp]);
+  const maxYForecast = useMemo(() => getMaxY(forecastTemp), [forecastTemp]);
 
-  const extraMinY = useMemo(() => getMinY(extraHistoricalTemp), [extraHistoricalTemp]);
-  const extraMaxY = useMemo(() => getMaxY(extraHistoricalTemp), [extraHistoricalTemp]);
+  const extraMinYHistorical = useMemo(() => getMinY(extraHistoricalTemp), [extraHistoricalTemp]);
+  const extraMaxYHistorical = useMemo(() => getMaxY(extraHistoricalTemp), [extraHistoricalTemp]);
+  const extraMinYForecast = useMemo(() => getMinY(extraForecastTemp), [extraForecastTemp]);
+  const extraMaxYForecast = useMemo(() => getMaxY(extraForecastTemp), [extraForecastTemp]);
 
   const histCsvData = data['ds_hist'].time.map((item, index) => {
     return [
@@ -199,17 +247,17 @@ const PrecipitationChart = ({ actionsState }) => {
       <Card className={clsx(classes.root)}>
         <CardContent className="chart-grid">
           {
-            data.pending ? (
-                <>
-                  <Box className="chart-preload-container">
-                    <CircularProgress />
-                  </Box>
-                  <ChartSpecs
-                    type="temp"
-                    chartRef={chartRef}
-                    data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
-                  />
-                </>
+            (data.pending && !actionsState.extraPrecipitationChart) || (evaporationData.pending && actionsState.extraPrecipitationChart) ? (
+              <>
+                <Box className="chart-preload-container">
+                  <CircularProgress/>
+                </Box>
+                <ChartSpecs
+                  type="temp"
+                  chartRef={chartRef}
+                  data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
+                />
+              </>
             ) : (
               <>
                 <FlexibleWidthXYPlot
@@ -218,7 +266,11 @@ const PrecipitationChart = ({ actionsState }) => {
                   xType="time"
                   onMouseLeave={handleMouseLeave}
                   ref={chartRef}
-                  yDomain={!actionsState.extraPrecipitationChart ? [minY, maxY] : [extraMinY, extraMaxY]}
+                  yDomain={
+                    !actionsState.extraPrecipitationChart ?
+                      [Math.min(minYHistorical, minYForecast), Math.max(maxYHistorical, maxYForecast)] :
+                      [Math.min(extraMinYHistorical, extraMinYForecast), Math.max(extraMaxYHistorical, extraMaxYForecast)]
+                  }
                   style={{ backgroundColor: '#fff' }}
                 >
                   <VerticalGridLines/>
@@ -289,10 +341,14 @@ const PrecipitationChart = ({ actionsState }) => {
                         <LineSeries
                           data={[{
                             x: points.data[0].x,
-                            y: !actionsState.extraPrecipitationChart ? minY : extraMinY,
+                            y: !actionsState.extraPrecipitationChart ?
+                              Math.min(minYForecast, minYHistorical) :
+                              Math.min(extraMinYForecast, extraMinYHistorical),
                           }, {
                             x: points.data[0].x,
-                            y: !actionsState.extraPrecipitationChart ? maxY : extraMaxY,
+                            y: !actionsState.extraPrecipitationChart ?
+                              Math.max(maxYForecast, maxYHistorical) :
+                              Math.max(extraMaxYForecast, extraMaxYHistorical),
                           }]}
                           strokeStyle="dashed"
                           color="#707070"

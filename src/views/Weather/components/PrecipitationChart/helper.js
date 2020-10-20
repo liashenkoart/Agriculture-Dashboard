@@ -7,10 +7,12 @@ const getHistoricalTemp = (historical) => historical.time.map((item, index) => (
 
 const getExtraHistoricalTemp = (historical) => historical.time.map((item, index) => ({
   x: new Date(item).getTime(),
-  y: historical['tp-e_sum'][index],
+  y: historical['e_sum'][index],
 }));
 
 const getForecastArr = (forecast) => [].concat.apply([], Object.values(forecast['tp_sum']));
+
+const getExtraForecastArr = (forecast) => [].concat.apply([], Object.values(forecast['e_sum']));
 
 const getForecastTemp = (forecast, forecastMinArr) => forecast.time.map((item, index) => ({
   x: new Date(item).getTime(),
@@ -64,15 +66,15 @@ const getExtraClim = (clim) => {
   const climDarkenY0Arr = [];
   const climDarkenY1Arr = [];
 
-  for (let key in clim['tp-e_sum']) {
+  for (let key in clim['e_sum']) {
     if (+key === 0.05) {
-      climLightenY0Arr.push(...clim['tp-e_sum'][key]);
+      climLightenY0Arr.push(...clim['e_sum'][key]);
     } else if (+key === 0.95) {
-      climLightenY1Arr.push(...clim['tp-e_sum'][key]);
+      climLightenY1Arr.push(...clim['e_sum'][key]);
     } else if (+key === 0.25) {
-      climDarkenY0Arr.push(...clim['tp-e_sum'][key]);
+      climDarkenY0Arr.push(...clim['e_sum'][key]);
     } else if (+key === 0.75) {
-      climDarkenY1Arr.push(...clim['tp-e_sum'][key]);
+      climDarkenY1Arr.push(...clim['e_sum'][key]);
     }
   }
 
@@ -108,6 +110,7 @@ export {
   getHistoricalTemp,
   getExtraHistoricalTemp,
   getForecastArr,
+  getExtraForecastArr,
   getForecastTemp,
   getExtraForecastTemp,
   getClim,
