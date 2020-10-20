@@ -92,9 +92,8 @@ const SollTempChart = ({ actionsState }) => {
           extraHeaders: { 'User-Token': userToken },
         })
           .then((res) => {
-            console.log(JSON.parse(res.data));
             setData({
-              ...JSON.parse(res.data),
+              ...res.data,
               pending: false,
             });
           })
