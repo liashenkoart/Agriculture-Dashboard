@@ -328,7 +328,7 @@ const SollTempChart = ({ actionsState }) => {
                   />
                 </Crosshair>
                 <ChartLabel
-                  text="Minimum and Maximum Temperature"
+                  text="Soll temperature"
                   className="main-titles"
                   includeMargin={false}
                   xPercent={0.035}
