@@ -272,6 +272,9 @@ const PrecipitationChart = ({ actionsState }) => {
                       [Math.min(extraMinYHistorical, extraMinYForecast), Math.max(extraMaxYHistorical, extraMaxYForecast)]
                   }
                   style={{ backgroundColor: '#fff' }}
+                  margin={{
+                    top: 70
+                  }}
                 >
                   <VerticalGridLines/>
                   <HorizontalGridLines/>

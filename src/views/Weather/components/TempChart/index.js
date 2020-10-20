@@ -238,6 +238,9 @@ const TempChart = ({ actionsState }) => {
                 style={{
                   backgroundColor: '#fff',
                 }}
+                margin={{
+                  top: 70
+                }}
               >
                 <VerticalGridLines/>
                 <HorizontalGridLines/>
