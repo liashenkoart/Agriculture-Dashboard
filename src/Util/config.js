@@ -1,5 +1,5 @@
 const local = {
-    backend_server: "http://127.0.0.1:5000",
+    backend_server: "http://0.0.0.0:8080",
     firebase: {
         apiKey: "AIzaSyA7xoASmah7_N-eUGd-2hbRQxEthpe9myk",
         authDomain: "climate-ai.firebaseapp.com",
