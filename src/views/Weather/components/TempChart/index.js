@@ -142,8 +142,12 @@ const TempChart = ({ actionsState }) => {
   const forecastMinArr = useMemo(() => getForecastMinArr(data['ds_fc']), [data]);
   const forecastMaxArr = useMemo(() => getForecastMaxArr(data['ds_fc']), [data]);
 
-  const forecastMinTemp = useMemo(() => getForecastMinTemp(data['ds_fc'], forecastMinArr), [data, forecastMinArr]);
-  const forecastMaxTemp = useMemo(() => getForecastMaxTemp(data['ds_fc'], forecastMaxArr), [data, forecastMaxArr]);
+  const forecastMinTemp = useMemo(() => {
+    return getForecastMinTemp(data['ds_fc'], historicalMinTemp[historicalMinTemp.length - 1], forecastMinArr);
+  }, [data, forecastMinArr]);
+  const forecastMaxTemp = useMemo(() => {
+    return getForecastMaxTemp(data['ds_fc'], historicalMaxTemp[historicalMaxTemp.length - 1], forecastMaxArr);
+  }, [data, forecastMaxArr]);
 
   const minYForecast = useMemo(() => getMinY(forecastMinTemp), [forecastMinTemp]);
   const maxYForecast = useMemo(() => getMaxY(forecastMaxTemp), [forecastMaxTemp]);

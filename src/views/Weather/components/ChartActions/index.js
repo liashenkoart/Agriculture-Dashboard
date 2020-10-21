@@ -228,7 +228,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
                   color: state.currentTab === 'solltemp' && !tabsDisabled ? '#fff' : '',
                 }}
               >
-                Soll Temperature
+                Soil Temperature
               </Typography>
             </Box>
           </Card>
@@ -237,8 +237,8 @@ const ChartActions = ({ initialState, onStateChange }) => {
           ref={sollMolsture}
           className="headerBlockContainer headerBlockContainer-hover"
           style={{
-            boxShadow: state.currentTab === 'sollmolsture' && !tabsDisabled ? '0px 4px 10px #00548D' : '',
-            backgroundColor: state.currentTab === 'sollmolsture' && !tabsDisabled ? '#00548D' : '',
+            boxShadow: (state.currentTab === 'sollmolsture' && !tabsDisabled) || (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? '0px 4px 10px #00548D' : '',
+            backgroundColor: (state.currentTab === 'sollmolsture' && !tabsDisabled) || (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? '#00548D' : '',
           }}
           onClick={() => {
             setState({
@@ -254,7 +254,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
           <Card className="headerBlock">
             <Box className="infoContainer">
               {
-                state.currentTab === 'sollmolsture' && !tabsDisabled ? (
+                (state.currentTab === 'sollmolsture' && !tabsDisabled) || (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? (
                   <img src={OilIcon}/>
                 ) : (
                   <img src={OilIconActive}/>
@@ -266,11 +266,12 @@ const ChartActions = ({ initialState, onStateChange }) => {
                 className="titleText"
                 style={{
                   marginBottom: 10,
-                  color: state.currentTab === 'sollmolsture' && !tabsDisabled ? '#fff' : ''
+                  color: (state.currentTab === 'sollmolsture' && !tabsDisabled) || (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? '#fff' : ''
                 }}
               >
-                Soll
-                Molsture
+                {
+                  state.currentTab === 'precipitation' && state.extraPrecipitationChart ? 'Water Budget' : 'Soil Molsture'
+                }
               </Typography>
             </Box>
           </Card>

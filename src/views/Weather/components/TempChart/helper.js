@@ -16,15 +16,33 @@ const getMaxY = (historicalMaxTemp) => Math.max(...historicalMaxTemp.map((d) => 
 const getForecastMinArr = (forecast) => [].concat.apply([], Object.values(forecast['t2m_min']));
 const getForecastMaxArr = (forecast) => [].concat.apply([], Object.values(forecast['t2m_max']));
 
-const getForecastMinTemp = (forecast, forecastMinArr) => forecast.time.map((item, index) => ({
-  x: new Date(item).getTime(),
-  y: forecastMinArr[index],
-}));
+const getForecastMinTemp = (forecast, lastHistoricalPoint, forecastMinArr) => forecast.time.map((item, index) => {
+  if (!index) {
+    return {
+      x: new Date(item).getTime(),
+      y: lastHistoricalPoint.y,
+    };
+  } else {
+    return {
+      x: new Date(item).getTime(),
+      y: forecastMinArr[index],
+    };
+  }
+});
 
-const getForecastMaxTemp = (forecast, forecastMaxArr) => forecast.time.map((item, index) => ({
-  x: new Date(item).getTime(),
-  y: forecastMaxArr[index],
-}));
+const getForecastMaxTemp = (forecast, lastHistoricalPoint, forecastMaxArr) => forecast.time.map((item, index) => {
+  if (!index) {
+    return {
+      x: new Date(item).getTime(),
+      y: lastHistoricalPoint.y,
+    };
+  } else {
+    return {
+      x: new Date(item).getTime(),
+      y: forecastMaxArr[index],
+    };
+  }
+});
 
 const getClimMin = (clim) => {
   const climMinLightenY0Arr = [];
