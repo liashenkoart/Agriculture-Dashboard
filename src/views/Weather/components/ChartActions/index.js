@@ -72,7 +72,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
             </Typography>
           </div>
           {
-            state.currentTab !== 'solltemp' && state.currentTab !== 'sollmolsture' ? (
+            state.currentTab !== 'solltemp' && state.currentTab !== 'sollmolsture' && !state.extraPrecipitationChart ? (
               <div className="textBlockContainer"
                    style={{
                      marginBottom: 22,
@@ -203,6 +203,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
             setState({
               ...state,
               currentTab: 'solltemp',
+              isMonthly: false,
               extraPrecipitationChart: false,
               additional2: false,
               additional3: false,
@@ -288,19 +289,23 @@ const ChartActions = ({ initialState, onStateChange }) => {
           }}
           overlay={(
             <div className="more-content-dropdown">
-              <div
-                className="more-item-dropdown"
-                onClick={() => {
-                  setState({
-                    ...state,
-                    currentTab: 'precipitation',
-                    extraDropdown: false,
-                    extraPrecipitationChart: !state.extraPrecipitationChart,
-                  })
-                }}
-              >
-                Precipitation-evaporation
-              </div>
+              {
+                !(state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? (
+                  <div
+                    className="more-item-dropdown"
+                    onClick={() => {
+                      setState({
+                        ...state,
+                        currentTab: 'precipitation',
+                        extraDropdown: false,
+                        extraPrecipitationChart: !state.extraPrecipitationChart,
+                      })
+                    }}
+                  >
+                    Water budget
+                  </div>
+                ) : null
+              }
               <div
                 className="more-item-dropdown"
                 onClick={() => {
@@ -373,15 +378,15 @@ const ChartActions = ({ initialState, onStateChange }) => {
             }
           </div>
         </Dropdown>
-        <div className="headerBlockContainer profileBlock">
-          <div className="profileTextContainer">
-            <p className="profileTextBold">Variety: <span className="profileText">Yukon Gold</span></p>
-            <p className="profileTextBold">Variety: <span className="profileText">Yukon Gold</span></p>
-            <p className="profileTextBold">Variety: <span className="profileText">Yukon Gold</span></p>
-            <p className="profileTextBold">Variety: <span className="profileText">Yukon Gold</span></p>
-          </div>
-          <img src={Logo} alt=""/>
-        </div>
+        {/*<div className="headerBlockContainer profileBlock">*/}
+        {/*  <div className="profileTextContainer">*/}
+        {/*    <p className="profileTextBold">Variety: <span className="profileText">Yukon Gold</span></p>*/}
+        {/*    <p className="profileTextBold">Variety: <span className="profileText">Yukon Gold</span></p>*/}
+        {/*    <p className="profileTextBold">Variety: <span className="profileText">Yukon Gold</span></p>*/}
+        {/*    <p className="profileTextBold">Variety: <span className="profileText">Yukon Gold</span></p>*/}
+        {/*  </div>*/}
+        {/*  <img src={Logo} alt=""/>*/}
+        {/*</div>*/}
       </div>
     </>
   );

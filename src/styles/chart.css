@@ -28,7 +28,8 @@ p.y-label {
   margin-top: 20px;
   margin-bottom: 10px;
   display: grid;
-  grid-template-columns: repeat(5, minmax(135px, 1fr)) 46px minmax(196px, 1fr);
+  /*grid-template-columns: repeat(5, minmax(135px, 1fr)) 46px minmax(196px, 1fr);*/
+  grid-template-columns: repeat(5, minmax(135px, 1fr)) 26px;
 }
 
 .headerBlockContainer-hover:hover {
