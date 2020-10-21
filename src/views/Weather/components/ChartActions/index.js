@@ -337,6 +337,23 @@ const ChartActions = ({ initialState, onStateChange }) => {
               >
                 Aditional Graph 4
               </div>
+              {
+                state.currentTab === 'precipitation' && state.extraPrecipitationChart ? (
+                  <div
+                    className="more-item-dropdown"
+                    onClick={() => {
+                      setState({
+                        ...state,
+                        extraDropdown: false,
+                        extraPrecipitationChart: !state.extraPrecipitationChart,
+                        currentTab: 'sollmolsture',
+                      })
+                    }}
+                  >
+                    Soil Temperature
+                  </div>
+                ) : null
+              }
             </div>
           )}
           animation="slide-up"
