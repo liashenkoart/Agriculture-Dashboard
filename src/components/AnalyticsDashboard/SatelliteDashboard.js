@@ -24,10 +24,10 @@ export default function SatelliteDashboard() {
                <div id="exptectedHarvestDay">
                    Expected Harvest Day
                </div>
-               
+
            </div>
            <div id="NDVI Chart">
-               NDVI Chart
+               NDVI TabView
            </div>
            <div id="Map">
                Map

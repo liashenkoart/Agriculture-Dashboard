@@ -54,30 +54,32 @@ const Main = (props) => {
     const shouldOpenSidebar = isDesktop ? true : openSidebar
 
     return (
-        <div
-            className={clsx({
-                [classes.root]: true,
-                [classes.shiftContent]: isDesktop,
-            })}
-        >
-            <DashboardHeader showLogout={true} hasBack={true} />
-            <main className={classes.content}>
-                <Grid container>
-                    <Grid item lg={2} className={classes.sidebarRoot}>
-                        <Sidebar
-                            onClose={handleSidebarClose}
-                            open={shouldOpenSidebar}
-                            variant={isDesktop ? "persistent" : "temporary"}
-                            fieldName={id}
-                        />
+        <>
+            <div
+              className={clsx({
+                  [classes.root]: true,
+                  [classes.shiftContent]: isDesktop,
+              })}
+            >
+                <DashboardHeader showLogout={true} hasBack={true} />
+                <main className={classes.content}>
+                    <Grid container>
+                        <Grid item lg={2} className={classes.sidebarRoot}>
+                            <Sidebar
+                              onClose={handleSidebarClose}
+                              open={shouldOpenSidebar}
+                              variant={isDesktop ? "persistent" : "temporary"}
+                              fieldName={id}
+                            />
+                        </Grid>
+                        <Grid item lg={10}>
+                            {children}
+                        </Grid>
                     </Grid>
-                    <Grid item lg={10}>
-                        {children}
-                    </Grid>
-                </Grid>
-            </main>
-            <Footer />
-        </div>
+                </main>
+                <Footer />
+            </div>
+        </>
     )
 }
 

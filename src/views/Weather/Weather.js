@@ -1,7 +1,7 @@
 // Import React
 import React, { useContext, useEffect } from "react"
 // Import Components
-import { DailyForecast, SeasonalForecast, WeatherSideBar, WeatherWidget } from "./components"
+import { DailyForecast, TabView, WeatherSideBar, WeatherWidget } from "./components"
 // Import Libraries
 import { makeStyles } from "@material-ui/styles"
 import { Grid } from "@material-ui/core"
@@ -337,27 +337,10 @@ const Weather = () => {
     return (
         <div className={`WEATHER-SECTION ${classes.root}`}>
             <Grid className="GRID-CONTAINER" container spacing={4}>
-                <Grid className="LEFT-SUBGRID-CONTAINER" container item lg={9} spacing={4}>
-                    <Grid className="WEATHER-WIDGET-GRID" item lg={12}>
-                        <WeatherWidget className="WEATHER-WIDGET" weatherData={weatherData} />
-                    </Grid>
-
+                <Grid className="LEFT-SUBGRID-CONTAINER" container item spacing={4}>
                     <Grid item lg={12}>
-                        <DailyForecast className="DAILY-FORECAST" week={week} />
+                        <TabView />
                     </Grid>
-                    <Grid item lg={12}>
-                        <SeasonalForecast
-                            className="SEASONAL-FORECAST"
-                            seasonalForecast={seasonalForecast}
-                            historicalrainforecast={precipitationForecast}
-                            historicalforecast={historicalForecast}
-                            temp_units={unitPreference === "metric" ? "°C" : "°F"}
-                            rain_units={unitPreference === "metric" ? "mm" : "in."}
-                        />
-                    </Grid>
-                </Grid>
-                <Grid item lg={3}>
-                    <WeatherSideBar className="WEATHER-SIDE-BAR" coord={mapView} />
                 </Grid>
             </Grid>
         </div>
