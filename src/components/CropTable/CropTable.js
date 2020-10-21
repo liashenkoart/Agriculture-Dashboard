@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 import { useHistory } from "react-router-dom"
 import app from "../../Util/Fire"
@@ -43,12 +43,14 @@ import {
 
 // Table meta fields
 import { plantingDateField, plantStageField, yieldForecastField, notesField, temperatureField } from "./tableMetaFields"
+import { AuthContext } from "../../Auth/Auth"
 
 function CropTable() {
     // field data
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
     const history = useHistory()
+    const {permissions} = useContext(AuthContext);
 
     // get table data
     useEffect(() => {
@@ -159,7 +161,7 @@ function CropTable() {
                     <>
                         <button
                             className="crop-table__icon-button"
-                            onClick={() => history.push("/general/" + rowData.uuid)}
+                            onClick={() => history.push("/"+permissions['default']+"/" + rowData.uuid)}
                         >
                             <VisibilityIcon />
                         </button>

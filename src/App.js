@@ -40,21 +40,24 @@ function App() {
                                 <ReceiveTest />
                             </Route>
                             <RouteWithLayout
+                                name = 'regions'
                                 component={RegionView}
                                 exact
                                 layout={MainLayout}
                                 path="/regionAlerts/:id"
                             />
-                            <RouteWithLayout component={DashboardView} exact layout={MainLayout} path="/general/:id" />
-                            <RouteWithLayout component={WeatherView} exact layout={MainLayout} path="/weather/:id" />
+                            <RouteWithLayout component={DashboardView} name={'general'} exact layout={MainLayout} path="/general/:id" />
+                            <RouteWithLayout component={WeatherView} name={'weather'} exact layout={MainLayout} path="/weather/:id" />
                             <RouteWithLayout
                                 component={SatelliteView}
+                                name={'satellite'}
                                 exact
                                 layout={MainLayout}
                                 path="/satellite/:id"
                             />
                             <RouteWithLayout
                                 component={SustainabilityView}
+                                name={'sustainability'}
                                 exact
                                 layout={MainLayout}
                                 path="/sustainability/:id"

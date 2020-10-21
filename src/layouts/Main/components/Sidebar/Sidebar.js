@@ -1,5 +1,5 @@
 // Import React
-import React from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 // Import
 import { Profile, SidebarNav } from "./components"
@@ -15,6 +15,7 @@ import EcoIcon from "@material-ui/icons/Eco"
 import PublicIcon from "@material-ui/icons/Public"
 import NatureIcon from "@material-ui/icons/Nature"
 import WatchLaterIcon from "@material-ui/icons/WatchLater"
+import { AuthContext } from "../../../../Auth/Auth"
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,39 +38,70 @@ const Sidebar = (props) => {
     const { className, fieldName, open, variant, onClose } = props
 
     const classes = useStyles()
-
-    const pages = [
-        {
+    const {permissions} = useContext(AuthContext);
+    const [pages, setPages] = useState([])
+    const [lock, setLock] = useState(true)
+    const p = {
+        'general': {
             title: "General",
-            href: "/general/" + fieldName,
+                href: "/general/" + fieldName,
             icon: <SettingsIcon />,
         },
-        {
+        'weather': {
             title: "Weather",
-            href: "/weather/" + fieldName,
+                href: "/weather/" + fieldName,
             icon: <CloudIcon />,
         },
-        /*        {
-            title: "Soil",
-            href: "/soil/" + fieldName,
-            icon: <EcoIcon />,
-        },*/
-        {
+        'satellite': {
             title: "Satellite",
-            href: "/satellite/" + fieldName,
+                href: "/satellite/" + fieldName,
             icon: <PublicIcon />,
-        },
-        /*        {
-            title: "Sustainability",
-            href: "/sustainability/" + fieldName,
-            icon: <NatureIcon />,
-        },
-        {
-            title: "Long Term",
-            href: "/longterm/" + fieldName,
-            icon: <WatchLaterIcon />,
-        },*/
-    ]
+        }
+    }
+    useEffect(() => {
+        if(lock){
+            let page = []
+            for (let key in permissions){
+                if (permissions[key] === true && key!='default'){
+                    page.push(p[key])
+                }
+            }
+            setPages(page)
+            setLock(false)
+        }
+    },[pages, lock] )
+    // const pages = [
+    //     {
+    //         title: "General",
+    //         href: "/general/" + fieldName,
+    //         icon: <SettingsIcon />,
+    //     },
+    //     {
+    //         title: "Weather",
+    //         href: "/weather/" + fieldName,
+    //         icon: <CloudIcon />,
+    //     },
+    //     /*        {
+    //         title: "Soil",
+    //         href: "/soil/" + fieldName,
+    //         icon: <EcoIcon />,
+    //     },*/
+    //     {
+    //         title: "Satellite",
+    //         href: "/satellite/" + fieldName,
+    //         icon: <PublicIcon />,
+    //     },
+    //     /*        {
+    //         title: "Sustainability",
+    //         href: "/sustainability/" + fieldName,
+    //         icon: <NatureIcon />,
+    //     },
+    //     {
+    //         title: "Long Term",
+    //         href: "/longterm/" + fieldName,
+    //         icon: <WatchLaterIcon />,
+    //     },*/
+    // ]
 
     return (
         <Card className={clsx(classes.root, className)}>

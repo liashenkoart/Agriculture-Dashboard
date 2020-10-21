@@ -69,3 +69,5 @@ build/
 
 # IntelliJ config files
 .idea/
+
+.DS_Store
