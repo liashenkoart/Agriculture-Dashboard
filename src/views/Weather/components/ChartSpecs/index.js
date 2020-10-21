@@ -58,6 +58,28 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
     infoContainer
   } = useStyles();
 
+  let colsArr = [];
+
+  if (actionsState.currentTab === 'minmax' || actionsState.currentTab === 'precipitation') {
+    colsArr = [
+      'clim_time',
+      'clim_tp_sum',
+      'forecast_time',
+      'forecast_tp_sum',
+      'observed_time',
+      'observed_tp_sum',
+    ];
+  } else {
+    colsArr = [
+      'clim_time',
+      'clim_e_sum',
+      'forecast_time',
+      'forecast_e_sum',
+      'observed_time',
+      'observed_e_sum',
+    ];
+  }
+
   return (
     <div className={headerBlocksContainer}>
       {
@@ -79,14 +101,7 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
       <div className="btns-container">
         <Dropdown
           chartRef={chartRef}
-          cols={[
-            'clim_time',
-            'clim_tp_sum',
-            'forecast_time',
-            'forecast_tp_sum',
-            'observed_time',
-            'observed_tp_sum',
-          ]}
+          cols={colsArr}
           data={data}
         />
       </div>
