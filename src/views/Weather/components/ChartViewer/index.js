@@ -49,7 +49,7 @@ const ChartViewer = ({ type, points }) => {
                 points.target === 'forecast' ? <img src={BlueDotsIcon}/> : <img src={BlueObserved}/>
               }
               <Typography className={temperatureText}>
-                {Math.floor(points.data[0].y)}mm
+                {+points.data[0].y.toFixed(1)}mm
               </Typography>
             </Box>
           </Card>

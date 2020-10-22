@@ -58,27 +58,17 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
     infoContainer
   } = useStyles();
 
-  let colsArr = [];
-
-  if (actionsState.currentTab === 'minmax' || actionsState.currentTab === 'precipitation') {
-    colsArr = [
-      'clim_time',
-      'clim_tp_sum',
-      'forecast_time',
-      'forecast_tp_sum',
-      'observed_time',
-      'observed_tp_sum',
-    ];
-  } else {
-    colsArr = [
-      'clim_time',
-      'clim_e_sum',
-      'forecast_time',
-      'forecast_e_sum',
-      'observed_time',
-      'observed_e_sum',
-    ];
-  }
+  let colsArr = [
+    'clim_time',
+    'clim_t2m_min',
+    'clim_t2m_max',
+    'forecast_time',
+    'forecast_t2m_min',
+    'forecast_t2m_max',
+    'observed_time',
+    'observed_t2m_min',
+    'observed_t2m_max',
+  ];
 
   return (
     <div className={headerBlocksContainer}>

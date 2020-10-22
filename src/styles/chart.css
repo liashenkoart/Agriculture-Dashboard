@@ -1,6 +1,6 @@
 .chart-grid {
   display: grid;
-  grid-template-columns: 1fr minmax(120px, auto);
+  grid-template-columns: 20px 1fr minmax(120px, auto);
   grid-gap: 30px;
 }
 

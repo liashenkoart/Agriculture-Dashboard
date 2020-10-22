@@ -7,7 +7,7 @@ const getHistoricalTemp = (historical) => historical.time.map((item, index) => (
 
 const getExtraHistoricalTemp = (historical, extraHistorical, coefficient) => extraHistorical.time.map((item, index) => ({
   x: new Date(item).getTime(),
-  y: historical[index].y - extraHistorical['e_sum'][index] * coefficient,
+  y: historical[index].y + extraHistorical['e_sum'][index] * coefficient,
 }));
 
 const getForecastArr = (forecast) => [].concat.apply([], Object.values(forecast['tp_sum']));
@@ -19,10 +19,25 @@ const getForecastTemp = (forecast, forecastMinArr) => forecast.time.map((item, i
   y: forecastMinArr[index],
 }));
 
-const getExtraForecastTemp = (forecast, extraForecast, forecastMinArr, coefficient) => extraForecast.time.map((item, index) => ({
-  x: new Date(item).getTime(),
-  y: forecast[index].y - forecastMinArr[index] * coefficient,
-}));
+const getExtraForecastTemp = (
+  forecast,
+  extraForecast,
+  forecastMinArr,
+  lastHistoricalPoint,
+  coefficient
+) => extraForecast.time.map((item, index) => {
+  if (!index) {
+    return {
+      x: new Date(item).getTime(),
+      y: lastHistoricalPoint.y,
+    };
+  } else {
+    return {
+      x: new Date(item).getTime(),
+      y: forecast[index].y + forecastMinArr[index] * coefficient,
+    };
+  }
+});
 
 const getClim = (clim) => {
   const climLightenY0Arr = [];
@@ -81,13 +96,13 @@ const getExtraClim = (clim, extraClim, coefficient) => {
   const extraClimLighten = extraClim.time.map((item, index) => ({
     x: new Date(item).getTime(),
     y0: clim.climLighten[index].y0 - climLightenY0Arr[index] * coefficient,
-    y: clim.climLighten[index].y - climLightenY1Arr[index] * coefficient,
+    y: clim.climLighten[index].y + climLightenY1Arr[index] * coefficient,
   }));
 
   const extraClimDarken = extraClim.time.map((item, index) => ({
     x: new Date(item).getTime(),
-    y0: clim.climDarken[index].y0 -climDarkenY0Arr[index] * coefficient,
-    y: clim.climDarken[index].y - climDarkenY1Arr[index] * coefficient,
+    y0: clim.climDarken[index].y0 - climDarkenY0Arr[index] * coefficient,
+    y: clim.climDarken[index].y + climDarkenY1Arr[index] * coefficient,
   }));
 
   return {
@@ -105,6 +120,8 @@ const trimmData = (data) => data.filter((item) => {
 const getMinY = (historicalTemp) => Math.min(...historicalTemp.map((d) => d.y));
 const getMaxY = (historicalTemp) => Math.max(...historicalTemp.map((d) => d.y));
 
+const getMinY0 = (historicalTemp) => Math.min(...historicalTemp.map((d) => d.y0));
+
 export {
   monthNames,
   getHistoricalTemp,
@@ -117,5 +134,6 @@ export {
   getExtraClim,
   getMinY,
   getMaxY,
+  getMinY0,
   trimmData,
 }

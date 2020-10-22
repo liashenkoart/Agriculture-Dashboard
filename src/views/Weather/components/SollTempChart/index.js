@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState, useRef, useEffect, useContext } from 'react';
-import { Box, Card, CardContent, CircularProgress } from '@material-ui/core';
+import { Box, Card, CardContent, CircularProgress, Typography } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import {
   FlexibleWidthXYPlot,
@@ -217,6 +217,9 @@ const SollTempChart = ({ actionsState }) => {
         {
           data.pending ? (
             <>
+              <Typography className="y-label">
+                Soil temperature in [C]
+              </Typography>
               <Box className="chart-preload-container">
                 <CircularProgress />
               </Box>
@@ -229,6 +232,9 @@ const SollTempChart = ({ actionsState }) => {
             </>
           ) : (
             <>
+              <Typography className="y-label">
+                Soil temperature in [C]
+              </Typography>
               <FlexibleWidthXYPlot
                 className="flexible-chart"
                 height={500}
