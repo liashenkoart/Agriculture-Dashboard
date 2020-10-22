@@ -80,7 +80,7 @@ const PrecipitationChart = ({ actionsState }) => {
       'e_sum': [],
     },
     pending: true,
-    coefficient: 1,
+    coefficient: 0.3,
   });
 
   useEffect(() => {
@@ -222,8 +222,8 @@ const PrecipitationChart = ({ actionsState }) => {
   const minYForecast = useMemo(() => getMinY(forecastTemp), [forecastTemp]);
   const maxYForecast = useMemo(() => getMaxY(forecastTemp), [forecastTemp]);
 
-  const extraMinYClim = useMemo(() => getMinY0(trimmData(extraClimDarken)) * 2, [evaporationData.pending]);
-  const extraMaxYClim = useMemo(() => getMaxY(trimmData(extraClimLighten)) * 2, [evaporationData.pending]);
+  const extraMinYClim = useMemo(() => getMinY0(trimmData(extraClimDarken)) * 10, [evaporationData.pending]);
+  const extraMaxYClim = useMemo(() => getMaxY(trimmData(extraHistoricalTemp)), [evaporationData.pending]);
 
   const histCsvData = data['ds_hist'].time.map((item, index) => {
     return [

@@ -43,7 +43,7 @@ const getExtraForecastTemp = (
   } else {
     return {
       x: new Date(item).getTime(),
-      y: forecast[index].y + forecastMinArr[index] * coefficient,
+      y: forecast[index].y - forecastMinArr[index] * coefficient,
     };
   }
 });
