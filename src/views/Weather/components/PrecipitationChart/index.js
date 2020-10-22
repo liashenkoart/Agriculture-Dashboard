@@ -192,7 +192,9 @@ const PrecipitationChart = ({ actionsState }) => {
   const historicalTemp = useMemo(() => getHistoricalTemp(data['ds_hist']), [data]);
 
   const forecastArr = useMemo(() => getForecastArr(data['ds_fc']), [data]);
-  const forecastTemp = useMemo(() => getForecastTemp(data['ds_fc'], forecastArr), [data, forecastArr]);
+  const forecastTemp = useMemo(() => {
+    return getForecastTemp(data['ds_fc'], historicalTemp[historicalTemp.length - 1], forecastArr);
+  }, [data, forecastArr]);
 
   const { climLighten, climDarken } = useMemo(() => getClim(data['ds_clim']), [data]);
 
@@ -220,8 +222,8 @@ const PrecipitationChart = ({ actionsState }) => {
   const minYForecast = useMemo(() => getMinY(forecastTemp), [forecastTemp]);
   const maxYForecast = useMemo(() => getMaxY(forecastTemp), [forecastTemp]);
 
-  const extraMinYClim = useMemo(() => getMinY0(trimmData(extraClimDarken)) * 1.5, [evaporationData.pending]);
-  const extraMaxYClim = useMemo(() => getMaxY(trimmData(extraClimLighten)) * 1.5, [evaporationData.pending]);
+  const extraMinYClim = useMemo(() => getMinY0(trimmData(extraClimDarken)) * 2, [evaporationData.pending]);
+  const extraMaxYClim = useMemo(() => getMaxY(trimmData(extraClimLighten)) * 2, [evaporationData.pending]);
 
   const histCsvData = data['ds_hist'].time.map((item, index) => {
     return [

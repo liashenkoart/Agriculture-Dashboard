@@ -14,10 +14,19 @@ const getForecastArr = (forecast) => [].concat.apply([], Object.values(forecast[
 
 const getExtraForecastArr = (forecast) => [].concat.apply([], Object.values(forecast['e_sum']));
 
-const getForecastTemp = (forecast, forecastMinArr) => forecast.time.map((item, index) => ({
-  x: new Date(item).getTime(),
-  y: forecastMinArr[index],
-}));
+const getForecastTemp = (forecast, lastHistoricalPoint, forecastMinArr) => forecast.time.map((item, index) => {
+  if (!index) {
+    return {
+      x: new Date(item).getTime(),
+      y: lastHistoricalPoint.y,
+    };
+  } else {
+    return {
+      x: new Date(item).getTime(),
+      y: forecastMinArr[index],
+    };
+  }
+});
 
 const getExtraForecastTemp = (
   forecast,

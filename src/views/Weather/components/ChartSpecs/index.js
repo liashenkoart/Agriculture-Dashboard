@@ -75,13 +75,16 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
       {
         actionsState.extraPrecipitationChart ? (
           <div className="slider-container">
+            <Typography className={titleText}>
+              Evaporation Rate
+            </Typography>
             <Slider
-              defaultValue={1}
+              defaultValue={0.3}
               aria-labelledby="discrete-slider-small-steps"
               step={0.1}
               marks
-              min={1}
-              max={1.5}
+              min={0.3}
+              max={2}
               valueLabelDisplay="auto"
               onChange={onSliderChange}
             />

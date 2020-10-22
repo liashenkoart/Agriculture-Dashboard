@@ -5,14 +5,13 @@ import { Card, Typography, Box } from '@material-ui/core';
 import minMaxIconActive from '../../../../assets/Chart/min-max-active.svg';
 import CloudIconActive from '../../../../assets/Chart/cloud-active.svg';
 import SunIconActive from '../../../../assets/Chart/sun-active.svg';
-import OilIconActive from '../../../../assets/Chart/oil-active.svg';
 import minMaxIcon from '../../../../assets/Chart/min-max.svg';
 import CloudIcon from '../../../../assets/Chart/cloud.svg';
 import SunIcon from '../../../../assets/Chart/sun.svg';
-import OilIcon from '../../../../assets/Chart/oil.svg';
+import WaterBudgetIcon from '../../../../assets/Chart/water-budget.svg';
+import WaterBudgetIconActive from '../../../../assets/Chart/water-budget-active.svg';
 import DotIcon from '../../../../assets/Chart/dots.svg';
 import DotIconWhite from '../../../../assets/Chart/dots-white.svg';
-import Logo from '../../../../assets/Chart/logo.svg';
 import Profile from '../../../../assets/Chart/profile.svg';
 
 const ChartActions = ({ initialState, onStateChange }) => {
@@ -244,8 +243,9 @@ const ChartActions = ({ initialState, onStateChange }) => {
           onClick={() => {
             setState({
               ...state,
-              currentTab: 'sollmolsture',
-              extraPrecipitationChart: false,
+              isMonthly: false,
+              currentTab: 'precipitation',
+              extraPrecipitationChart: true,
               additional2: false,
               additional3: false,
               additional4: false,
@@ -256,9 +256,9 @@ const ChartActions = ({ initialState, onStateChange }) => {
             <Box className="infoContainer">
               {
                 (state.currentTab === 'sollmolsture' && !tabsDisabled) || (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? (
-                  <img src={OilIcon}/>
+                  <img style={{ width: 24 }} src={WaterBudgetIcon}/>
                 ) : (
-                  <img src={OilIconActive}/>
+                  <img style={{ width: 24 }} src={WaterBudgetIconActive}/>
                 )
               }
             </Box>
@@ -270,9 +270,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
                   color: (state.currentTab === 'sollmolsture' && !tabsDisabled) || (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? '#fff' : ''
                 }}
               >
-                {
-                  state.currentTab === 'precipitation' && state.extraPrecipitationChart ? 'Water Budget' : 'Soil Molsture'
-                }
+                Water Budget
               </Typography>
             </Box>
           </Card>
@@ -289,23 +287,6 @@ const ChartActions = ({ initialState, onStateChange }) => {
           }}
           overlay={(
             <div className="more-content-dropdown">
-              {
-                !(state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? (
-                  <div
-                    className="more-item-dropdown"
-                    onClick={() => {
-                      setState({
-                        ...state,
-                        currentTab: 'precipitation',
-                        extraDropdown: false,
-                        extraPrecipitationChart: !state.extraPrecipitationChart,
-                      })
-                    }}
-                  >
-                    Water budget
-                  </div>
-                ) : null
-              }
               <div
                 className="more-item-dropdown"
                 onClick={() => {
@@ -342,23 +323,6 @@ const ChartActions = ({ initialState, onStateChange }) => {
               >
                 Aditional Graph 4
               </div>
-              {
-                state.currentTab === 'precipitation' && state.extraPrecipitationChart ? (
-                  <div
-                    className="more-item-dropdown"
-                    onClick={() => {
-                      setState({
-                        ...state,
-                        extraDropdown: false,
-                        extraPrecipitationChart: !state.extraPrecipitationChart,
-                        currentTab: 'sollmolsture',
-                      })
-                    }}
-                  >
-                    Soil Temperature
-                  </div>
-                ) : null
-              }
             </div>
           )}
           animation="slide-up"
