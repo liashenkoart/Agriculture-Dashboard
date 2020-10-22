@@ -11,21 +11,26 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         app.auth().onAuthStateChanged((user) => {
-            setCurrentUser(user)
-            setPending(false)
-            if (user!==null) {
+            if (user!=null) {
+                setPending(true)
                 user.getIdToken().then((token) => {
                         networking
                             .get("/api/v1/settings/permissions", { extraHeaders: { "User-Token": token } })
                             .then((res) => res.data)
                             .then((result) => {
                                 setPermissions(result)
+                                setCurrentUser(user)
+                                setPending(false)
                             })
                             .catch((error) => {
                                 console.log('There was a problem obtaining permissions')
                             })
                     }
                 )
+            }
+            else{
+                setCurrentUser(user)
+                setPending(false)
             }
         })
     }, [])
