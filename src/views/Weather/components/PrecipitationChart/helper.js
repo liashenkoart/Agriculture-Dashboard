@@ -7,7 +7,7 @@ const getHistoricalTemp = (historical) => historical.time.map((item, index) => (
 
 const getExtraHistoricalTemp = (historical, extraHistorical, coefficient) => extraHistorical.time.map((item, index) => ({
   x: new Date(item).getTime(),
-  y: historical[index].y + extraHistorical['e_sum'][index] * coefficient,
+  y: historical[index].y - extraHistorical['e_sum'][index] * coefficient,
 }));
 
 const getForecastArr = (forecast) => [].concat.apply([], Object.values(forecast['tp_sum']));
@@ -105,13 +105,13 @@ const getExtraClim = (clim, extraClim, coefficient) => {
   const extraClimLighten = extraClim.time.map((item, index) => ({
     x: new Date(item).getTime(),
     y0: clim.climLighten[index].y0 - climLightenY0Arr[index] * coefficient,
-    y: clim.climLighten[index].y + climLightenY1Arr[index] * coefficient,
+    y: clim.climLighten[index].y - climLightenY1Arr[index] * coefficient,
   }));
 
   const extraClimDarken = extraClim.time.map((item, index) => ({
     x: new Date(item).getTime(),
     y0: clim.climDarken[index].y0 - climDarkenY0Arr[index] * coefficient,
-    y: clim.climDarken[index].y + climDarkenY1Arr[index] * coefficient,
+    y: clim.climDarken[index].y - climDarkenY1Arr[index] * coefficient,
   }));
 
   return {
