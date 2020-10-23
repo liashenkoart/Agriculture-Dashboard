@@ -4,6 +4,7 @@ import ChartActions from '../ChartActions';
 import TempChart from '../TempChart';
 import PrecipitationChart from '../PrecipitationChart';
 import SollTempChart from '../SollTempChart';
+import RelativeHumidityChart from '../RelativeHumidityChart';
 
 const TabView = () => {
   const [actionsState, setActionsState] = useState({
@@ -11,6 +12,7 @@ const TabView = () => {
     currentTab: 'minmax',
     extraDropdown: false,
     extraPrecipitationChart: false,
+    extraHumidityChart: false,
     additional2: false,
     additional3: false,
     additional4: false,
@@ -28,6 +30,10 @@ const TabView = () => {
         return <PrecipitationChart actionsState={actionsState} />;
       case 'solltemp':
         return <SollTempChart actionsState={actionsState} />;
+    }
+
+    if (actionsState.extraHumidityChart) {
+      return <RelativeHumidityChart actionsState={actionsState} />;
     }
   }, [actionsState]);
 

@@ -222,8 +222,8 @@ const PrecipitationChart = ({ actionsState }) => {
   const minYForecast = useMemo(() => getMinY(forecastTemp), [forecastTemp]);
   const maxYForecast = useMemo(() => getMaxY(forecastTemp), [forecastTemp]);
 
-  const extraMinYClim = useMemo(() => getMinY0(trimmData(extraClimDarken)) * 10, [evaporationData.pending]);
-  const extraMaxYClim = useMemo(() => getMaxY(trimmData(extraHistoricalTemp)), [evaporationData.pending]);
+  const extraMinYClim = useMemo(() => getMinY(trimmData(extraForecastTemp)) * 10, [evaporationData.pending]);
+  const extraMaxYClim = useMemo(() => getMaxY(trimmData(extraForecastTemp)), [evaporationData.pending]);
 
   const histCsvData = data['ds_hist'].time.map((item, index) => {
     return [
@@ -295,14 +295,14 @@ const PrecipitationChart = ({ actionsState }) => {
               <>
                 <Typography className="y-label">
                   {
-                    !actionsState.extraPrecipitationChart ? 'Temperature in F' : 'Precipitation [mm]'
+                    !actionsState.extraPrecipitationChart ? 'Precipitation [mm]' : 'Water Budget [mm]'
                   }
                 </Typography>
                 <Box className="chart-preload-container">
                   <CircularProgress/>
                 </Box>
                 <ChartSpecs
-                  type="temp"
+                  type="precipitation"
                   chartRef={chartRef}
                   data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
                   actionsState={actionsState}
@@ -313,7 +313,7 @@ const PrecipitationChart = ({ actionsState }) => {
               <>
                 <Typography className="y-label">
                   {
-                    !actionsState.extraPrecipitationChart ? 'Temperature in F' : 'Precipitation [mm]'
+                    !actionsState.extraPrecipitationChart ? 'Precipitation [mm]' : 'Water Budget [mm]'
                   }
                 </Typography>
                 <FlexibleWidthXYPlot
@@ -427,7 +427,7 @@ const PrecipitationChart = ({ actionsState }) => {
                     />
                   </Crosshair>
                   <ChartLabel
-                    text={!actionsState.extraPrecipitationChart ? 'Precipitation' : 'Precipitation-evaporation'}
+                    text={!actionsState.extraPrecipitationChart ? 'Precipitation' : 'Water Budget'}
                     className="main-titles"
                     includeMargin={false}
                     xPercent={0.035}

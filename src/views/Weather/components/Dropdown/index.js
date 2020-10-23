@@ -6,6 +6,9 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { withStyles } from '@material-ui/core';
 import { CSVLink } from 'react-csv';
+import { useParams } from 'react-router';
+
+import { monthNames } from '../TempChart/helper';
 
 import DownloadIcon from '../../../../assets/Chart/download.svg';
 import ArrowDownBlue from '../../../../assets/Chart/arrow-down-blue.svg';
@@ -30,7 +33,8 @@ const CustomCheckbox = withStyles({
   />
 ));
 
-const DropdownComponent = ({ cols, data }) => {
+const DropdownComponent = ({ cols, data, actionsState }) => {
+  const { id } = useParams();
   const linkRef = useRef(null);
   const [state, setState] = useState({
     exportToPng: false,
@@ -77,6 +81,14 @@ const DropdownComponent = ({ cols, data }) => {
     }
   };
 
+  let currentTab = actionsState.currentTab;
+
+  if (actionsState.extraPrecipitationChart) {
+    currentTab = 'water-budget';
+  } else if (actionsState.extraHumidityChart) {
+    currentTab = 'relative-humidity';
+  }
+
   return (
     <Dropdown
       trigger="click"
@@ -121,7 +133,7 @@ const DropdownComponent = ({ cols, data }) => {
             data={data}
             headers={cols}
             className="hidden-link"
-            filename="chart.csv"
+            filename={`${id}_${new Date().getDate() + monthNames[new Date().getMonth()]}_${currentTab}.csv`}
           />
           <button
             className="export-now"

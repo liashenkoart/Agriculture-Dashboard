@@ -70,6 +70,26 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
     'observed_t2m_max',
   ];
 
+  if (actionsState.currentTab === 'precipitation') {
+    colsArr = [
+      'clim_time',
+      'clim_tp_sum',
+      'forecast_time',
+      'forecast_tp_sum',
+      'observed_time',
+      'observed_tp_sum',
+    ];
+  } else if (actionsState.extraHumidityChart) {
+    colsArr = [
+      'clim_time',
+      'clim_tp_sum',
+      'forecast_time',
+      'forecast_tp_sum',
+      'observed_time',
+      'observed_tp_sum',
+    ];
+  }
+
   return (
     <div className={headerBlocksContainer}>
       {
@@ -96,6 +116,7 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
           chartRef={chartRef}
           cols={colsArr}
           data={data}
+          actionsState={actionsState}
         />
       </div>
       <div className={headerBlockContainer}>

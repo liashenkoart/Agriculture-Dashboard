@@ -56,33 +56,43 @@ const ChartViewer = ({ type, points }) => {
         );
       case 'temp':
         return (
-          <>
-            {
-              points.min.length && points.max.length ? (
-                <Card className={chartViewer}>
-                  <Typography className={titleText}>
-                    {new Date(points.min[0].x).getDate()}<sup>th</sup> {monthNames[new Date(points.min[0].x).getMonth()]}
-                  </Typography>
-                  <Box className={infoContainer}>
-                    {
-                      points.target === 'forecast' ? <img src={RedDotsIcon}/> : <img src={RedObserved}/>
-                    }
-                    <Typography className={temperatureText}>
-                      {Math.floor(points.max[0].y)}℃
-                    </Typography>
-                  </Box>
-                  <Box className={infoContainer} style={{ marginBottom: 0 }}>
-                    {
-                      points.target === 'forecast' ? <img src={BlueDotsIcon}/> : <img src={BlueObserved}/>
-                    }
-                    <Typography className={temperatureText}>
-                      {Math.floor(points.min[0].y)}℃
-                    </Typography>
-                  </Box>
-                </Card>
-              ) : null
-            }
-          </>
+          <Card className={chartViewer}>
+            <Typography className={titleText}>
+              {new Date(points.min[0].x).getDate()}<sup>th</sup> {monthNames[new Date(points.min[0].x).getMonth()]}
+            </Typography>
+            <Box className={infoContainer}>
+              {
+                points.target === 'forecast' ? <img src={RedDotsIcon}/> : <img src={RedObserved}/>
+              }
+              <Typography className={temperatureText}>
+                {Math.floor(points.max[0].y)}°C
+              </Typography>
+            </Box>
+            <Box className={infoContainer} style={{ marginBottom: 0 }}>
+              {
+                points.target === 'forecast' ? <img src={BlueDotsIcon}/> : <img src={BlueObserved}/>
+              }
+              <Typography className={temperatureText}>
+                {Math.floor(points.min[0].y)}°C
+              </Typography>
+            </Box>
+          </Card>
+        );
+      case 'relative-humidity':
+        return (
+          <Card className={chartViewer}>
+            <Typography className={titleText}>
+              {new Date(points.data[0].x).getDate()}<sup>th</sup> {monthNames[new Date(points.data[0].x).getMonth()]}
+            </Typography>
+            <Box className={infoContainer}>
+              {
+                points.target === 'forecast' ? <img src={BlueDotsIcon}/> : <img src={BlueObserved}/>
+              }
+              <Typography className={temperatureText}>
+                {+points.data[0].y.toFixed(1)}%
+              </Typography>
+            </Box>
+          </Card>
         );
     }
   };

@@ -13,6 +13,8 @@ import WaterBudgetIconActive from '../../../../assets/Chart/water-budget-active.
 import DotIcon from '../../../../assets/Chart/dots.svg';
 import DotIconWhite from '../../../../assets/Chart/dots-white.svg';
 import Profile from '../../../../assets/Chart/profile.svg';
+import HumidityIcon from '../../../../assets/Chart/humidity.svg';
+import HumidityIconActive from '../../../../assets/Chart/humidity-active.svg';
 
 const ChartActions = ({ initialState, onStateChange }) => {
   const [state, setState] = useState(initialState);
@@ -26,7 +28,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
   const sollTempTab = useRef(null);
   const sollMolsture = useRef(null);
 
-  const tabsDisabled = state.extraPrecipitationChart || state.additional2 || state.additional3 || state.additional4;
+  const tabsDisabled = state.extraHumidityChart || state.extraPrecipitationChart || state.additional2 || state.additional3 || state.additional4;
 
   if (tabsDisabled) {
     minMaxTab.current.classList.remove('headerBlockContainer-hover');
@@ -71,7 +73,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
             </Typography>
           </div>
           {
-            state.currentTab !== 'solltemp' && state.currentTab !== 'sollmolsture' && !state.extraPrecipitationChart ? (
+            state.currentTab !== 'solltemp' && state.currentTab !== 'sollmolsture' && !state.extraPrecipitationChart && !state.extraHumidityChart ? (
               <div className="textBlockContainer"
                    style={{
                      marginBottom: 22,
@@ -121,6 +123,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
               ...state,
               currentTab: 'minmax',
               extraPrecipitationChart: false,
+              extraHumidityChart: false,
               additional2: false,
               additional3: false,
               additional4: false,
@@ -162,6 +165,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
               ...state,
               currentTab: 'precipitation',
               extraPrecipitationChart: false,
+              extraHumidityChart: false,
               additional2: false,
               additional3: false,
               additional4: false,
@@ -204,6 +208,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
               currentTab: 'solltemp',
               isMonthly: false,
               extraPrecipitationChart: false,
+              extraHumidityChart: false,
               additional2: false,
               additional3: false,
               additional4: false,
@@ -237,8 +242,8 @@ const ChartActions = ({ initialState, onStateChange }) => {
           ref={sollMolsture}
           className="headerBlockContainer headerBlockContainer-hover"
           style={{
-            boxShadow: (state.currentTab === 'sollmolsture' && !tabsDisabled) || (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? '0px 4px 10px #00548D' : '',
-            backgroundColor: (state.currentTab === 'sollmolsture' && !tabsDisabled) || (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? '#00548D' : '',
+            boxShadow: state.extraHumidityChart || (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? '0px 4px 10px #00548D' : '',
+            backgroundColor: state.extraHumidityChart || (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? '#00548D' : '',
           }}
           onClick={() => {
             setState({
@@ -246,6 +251,7 @@ const ChartActions = ({ initialState, onStateChange }) => {
               isMonthly: false,
               currentTab: 'precipitation',
               extraPrecipitationChart: true,
+              extraHumidityChart: false,
               additional2: false,
               additional3: false,
               additional4: false,
@@ -255,10 +261,18 @@ const ChartActions = ({ initialState, onStateChange }) => {
           <Card className="headerBlock">
             <Box className="infoContainer">
               {
-                (state.currentTab === 'sollmolsture' && !tabsDisabled) || (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? (
-                  <img style={{ width: 24 }} src={WaterBudgetIcon}/>
+                state.extraHumidityChart ? (
+                  <img style={{ width: 24 }} src={HumidityIcon}/>
                 ) : (
-                  <img style={{ width: 24 }} src={WaterBudgetIconActive}/>
+                  <>
+                    {
+                      (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? (
+                        <img style={{ width: 24 }} src={WaterBudgetIcon}/>
+                      ) : (
+                        <img style={{ width: 24 }} src={WaterBudgetIconActive}/>
+                      )
+                    }
+                  </>
                 )
               }
             </Box>
@@ -267,10 +281,12 @@ const ChartActions = ({ initialState, onStateChange }) => {
                 className="titleText"
                 style={{
                   marginBottom: 10,
-                  color: (state.currentTab === 'sollmolsture' && !tabsDisabled) || (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? '#fff' : ''
+                  color: state.extraHumidityChart || (state.currentTab === 'precipitation' && state.extraPrecipitationChart) ? '#fff' : ''
                 }}
               >
-                Water Budget
+                {
+                  state.extraHumidityChart ? 'Relative Humidity' : 'Water Budget'
+                }
               </Typography>
             </Box>
           </Card>
@@ -287,6 +303,44 @@ const ChartActions = ({ initialState, onStateChange }) => {
           }}
           overlay={(
             <div className="more-content-dropdown">
+              {
+                !state.extraHumidityChart ? (
+                  <div
+                    className="more-item-dropdown"
+                    onClick={() => {
+                      setState({
+                        ...state,
+                        extraHumidityChart: !state.extraHumidityChart,
+                        extraPrecipitationChart: false,
+                        isMonthly: false,
+                        currentTab: 'water-budget',
+                        extraDropdown: false,
+                      })
+                    }}
+                  >
+                    Relative Humidity
+                  </div>
+                ) : null
+              }
+              {
+                state.extraHumidityChart ? (
+                  <div
+                    className="more-item-dropdown"
+                    onClick={() => {
+                      setState({
+                        ...state,
+                        extraHumidityChart: !state.extraHumidityChart,
+                        extraPrecipitationChart: true,
+                        isMonthly: false,
+                        currentTab: 'precipitation',
+                        extraDropdown: false,
+                      })
+                    }}
+                  >
+                    Water Budget
+                  </div>
+                ) : null
+              }
               <div
                 className="more-item-dropdown"
                 onClick={() => {

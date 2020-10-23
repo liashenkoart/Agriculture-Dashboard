@@ -218,7 +218,7 @@ const SollTempChart = ({ actionsState }) => {
           data.pending ? (
             <>
               <Typography className="y-label">
-                Soil temperature in [C]
+                Soil temperature in °C
               </Typography>
               <Box className="chart-preload-container">
                 <CircularProgress />
@@ -233,7 +233,7 @@ const SollTempChart = ({ actionsState }) => {
           ) : (
             <>
               <Typography className="y-label">
-                Soil temperature in [C]
+                Soil temperature in °C
               </Typography>
               <FlexibleWidthXYPlot
                 className="flexible-chart"

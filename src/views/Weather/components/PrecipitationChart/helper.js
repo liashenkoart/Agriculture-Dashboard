@@ -10,9 +10,9 @@ const getExtraHistoricalTemp = (historical, extraHistorical, coefficient) => ext
   y: historical[index].y - extraHistorical['e_sum'][index] * coefficient,
 }));
 
-const getForecastArr = (forecast) => [].concat.apply([], Object.values(forecast['tp_sum']));
+const getForecastArr = (forecast) => forecast['tp_sum']['0.5'];
 
-const getExtraForecastArr = (forecast) => [].concat.apply([], Object.values(forecast['e_sum']));
+const getExtraForecastArr = (forecast) => forecast['e_sum']['0.5'];
 
 const getForecastTemp = (forecast, lastHistoricalPoint, forecastMinArr) => forecast.time.map((item, index) => {
   if (!index) {

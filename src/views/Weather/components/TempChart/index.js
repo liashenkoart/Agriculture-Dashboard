@@ -222,7 +222,7 @@ const TempChart = ({ actionsState }) => {
           data.pending ? (
             <>
               <Typography className="y-label">
-                Temperature in F
+                Temperature in °C
               </Typography>
               <Box className="chart-preload-container">
                 <CircularProgress />
@@ -237,7 +237,7 @@ const TempChart = ({ actionsState }) => {
           ) : (
             <>
               <Typography className="y-label">
-                Temperature in F
+                Temperature in °C
               </Typography>
               <FlexibleWidthXYPlot
                 className="flexible-chart"
