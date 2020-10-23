@@ -15,8 +15,8 @@ const getHistoricalMaxTemp = (historical) => historical.time.map((item, index) =
 const getMinY = (historicalMinTemp) => Math.min(...historicalMinTemp.map((d) => d.y));
 const getMaxY = (historicalMaxTemp) => Math.max(...historicalMaxTemp.map((d) => d.y));
 
-const getForecastMinArr = (forecast) => [].concat.apply([], Object.values(forecast['stl1_min']));
-const getForecastMaxArr = (forecast) => [].concat.apply([], Object.values(forecast['stl1_max']));
+const getForecastMinArr = (forecast) => forecast['stl1_min']['0.5'];
+const getForecastMaxArr = (forecast) => forecast['stl1_max']['0.5'];
 
 const getForecastMinTemp = (forecast, forecastMinArr) => forecast.time.map((item, index) => ({
   x: new Date(item).getTime(),
