@@ -12,6 +12,8 @@ import RedLightenHistoricalIcon from '../../../../assets/Chart/red-lighten-histo
 import RedDarkenHistoricalIcon from '../../../../assets/Chart/red-darken-historical.svg';
 import BlueLightenHistoricalIcon from '../../../../assets/Chart/blue-lighten-historical.svg';
 import BlueDarkenHistoricalIcon from '../../../../assets/Chart/blue-darken-historical.svg';
+import GreenLightenHistoricalIcon from '../../../../assets/Chart/green-lighten-historical.svg';
+import GreenDarkenHistoricalIcon from '../../../../assets/Chart/green-darken-historical.svg';
 
 const useStyles = makeStyles(() => ({
   headerBlocksContainer: {
@@ -88,6 +90,15 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
       'observed_time',
       'observed_tp_sum',
     ];
+  } else if (actionsState.extraEvapotranspirationChart) {
+    colsArr = [
+      'clim_time',
+      'clim_e_sum',
+      'forecast_time',
+      'forecast_e_sum',
+      'observed_time',
+      'observed_e_sum',
+    ];
   }
 
   return (
@@ -140,14 +151,27 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
                   </Typography>
                 </Box>
               </>
-            ) : (
+            ) : null
+          }
+          {
+            type === 'precipitation' ? (
               <Box className={infoContainer} style={{ marginBottom: 0 }}>
                 <img src={BlueObservedIcon}/>
                 <Typography className={temperatureText}>
                   T
                 </Typography>
               </Box>
-            )
+            ) : null
+          }
+          {
+            type === 'evapotranspiration' ? (
+              <Box className={infoContainer} style={{ marginBottom: 0 }}>
+                <img src={RedObservedIcon}/>
+                <Typography className={temperatureText}>
+                  T
+                </Typography>
+              </Box>
+            ) : null
           }
         </Card>
       </div>
@@ -172,14 +196,27 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
                   </Typography>
                 </Box>
               </>
-            ) : (
+            ) : null
+          }
+          {
+            type === 'precipitation' ? (
               <Box className={infoContainer} style={{ marginBottom: 0 }}>
                 <img src={BlueDotsIcon}/>
                 <Typography className={temperatureText}>
                   T
                 </Typography>
               </Box>
-            )
+            ) : null
+          }
+          {
+            type === 'evapotranspiration' ? (
+              <Box className={infoContainer} style={{ marginBottom: 0 }}>
+                <img src={RedDotsIcon}/>
+                <Typography className={temperatureText}>
+                  T
+                </Typography>
+              </Box>
+            ) : null
           }
         </Card>
       </div>
@@ -216,7 +253,10 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
                   </Typography>
                 </Box>
               </>
-            ) : (
+            ) : null
+          }
+          {
+            type === 'precipitation' ? (
               <>
                 <Box className={infoContainer}>
                   <img src={BlueLightenHistoricalIcon}/>
@@ -231,7 +271,25 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
                   </Typography>
                 </Box>
               </>
-            )
+            ) : null
+          }
+          {
+            type === 'evapotranspiration' ? (
+              <>
+                <Box className={infoContainer}>
+                  <img src={GreenLightenHistoricalIcon}/>
+                  <Typography className={temperatureText}>
+                    90%
+                  </Typography>
+                </Box>
+                <Box className={infoContainer} style={{ marginBottom: 0 }}>
+                  <img src={GreenDarkenHistoricalIcon}/>
+                  <Typography className={temperatureText}>
+                    50%
+                  </Typography>
+                </Box>
+              </>
+            ) : null
           }
         </Card>
       </div>

@@ -94,6 +94,22 @@ const ChartViewer = ({ type, points }) => {
             </Box>
           </Card>
         );
+      case 'evapotranspiration':
+        return (
+          <Card className={chartViewer}>
+            <Typography className={titleText}>
+              {new Date(points.data[0].x).getDate()}<sup>th</sup> {monthNames[new Date(points.data[0].x).getMonth()]}
+            </Typography>
+            <Box className={infoContainer}>
+              {
+                points.target === 'forecast' ? <img src={RedDotsIcon}/> : <img src={RedObserved}/>
+              }
+              <Typography className={temperatureText}>
+                {+points.data[0].y.toFixed(1)}mm
+              </Typography>
+            </Box>
+          </Card>
+        );
     }
   };
 

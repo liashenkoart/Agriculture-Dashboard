@@ -3,8 +3,9 @@ import React, { useState, useCallback, memo } from 'react';
 import ChartActions from '../ChartActions';
 import TempChart from '../TempChart';
 import PrecipitationChart from '../PrecipitationChart';
-import SollTempChart from '../SoilTempChart';
+import SoilTempChart from '../SoilTempChart';
 import RelativeHumidityChart from '../RelativeHumidityChart';
+import EvapotranspirationChart from '../EvapotranspirationChart';
 
 const TabView = () => {
   const [actionsState, setActionsState] = useState({
@@ -12,6 +13,7 @@ const TabView = () => {
     currentTab: 'minmax',
     extraDropdown: false,
     extraPrecipitationChart: false,
+    extraEvapotranspirationChart: false,
     extraHumidityChart: false,
     additional2: false,
     additional3: false,
@@ -28,12 +30,14 @@ const TabView = () => {
         return <TempChart actionsState={actionsState} />;
       case 'precipitation':
         return <PrecipitationChart actionsState={actionsState} />;
-      case 'solltemp':
-        return <SollTempChart actionsState={actionsState} />;
+      case 'soil':
+        return <SoilTempChart actionsState={actionsState} />;
     }
 
     if (actionsState.extraHumidityChart) {
       return <RelativeHumidityChart actionsState={actionsState} />;
+    } else if (actionsState.extraEvapotranspirationChart) {
+      return <EvapotranspirationChart actionsState={actionsState} />
     }
   }, [actionsState]);
 
