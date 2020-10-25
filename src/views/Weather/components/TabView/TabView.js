@@ -3,7 +3,7 @@ import React, { useState, useCallback, memo } from 'react';
 import ChartActions from '../ChartActions';
 import TempChart from '../TempChart';
 import PrecipitationChart from '../PrecipitationChart';
-import SollTempChart from '../SollTempChart';
+import SollTempChart from '../SoilTempChart';
 import RelativeHumidityChart from '../RelativeHumidityChart';
 
 const TabView = () => {

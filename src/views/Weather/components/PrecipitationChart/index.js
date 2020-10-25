@@ -222,8 +222,10 @@ const PrecipitationChart = ({ actionsState }) => {
   const minYForecast = useMemo(() => getMinY(forecastTemp), [forecastTemp]);
   const maxYForecast = useMemo(() => getMaxY(forecastTemp), [forecastTemp]);
 
-  const extraMinYClim = useMemo(() => getMinY(trimmData(extraForecastTemp)) * 10, [evaporationData.pending]);
-  const extraMaxYClim = useMemo(() => getMaxY(trimmData(extraForecastTemp)), [evaporationData.pending]);
+  const extraMinYForecast = useMemo(() => getMinY(trimmData(extraForecastTemp)) * 10, [evaporationData.pending]);
+  const extraMaxYForecast = useMemo(() => getMaxY(trimmData(extraForecastTemp)), [evaporationData.pending]);
+  const extraMinYHistorical = useMemo(() => getMinY(trimmData(extraHistoricalTemp)) * 10, [evaporationData.pending]);
+  const extraMaxYHistorical = useMemo(() => getMaxY(trimmData(extraHistoricalTemp)), [evaporationData.pending]);
 
   const histCsvData = data['ds_hist'].time.map((item, index) => {
     return [
@@ -325,7 +327,7 @@ const PrecipitationChart = ({ actionsState }) => {
                   yDomain={
                     !actionsState.extraPrecipitationChart ?
                       [Math.min(minYHistorical, minYForecast), Math.max(maxYHistorical, maxYForecast)] :
-                      [extraMinYClim, extraMaxYClim]
+                      [Math.min(extraMinYHistorical, extraMinYForecast), Math.max(extraMaxYHistorical, extraMaxYForecast)]
                   }
                   style={{ backgroundColor: '#fff' }}
                   margin={{ top: 70 }}
@@ -400,12 +402,12 @@ const PrecipitationChart = ({ actionsState }) => {
                             x: points.data[0].x,
                             y: !actionsState.extraPrecipitationChart ?
                               Math.min(minYForecast, minYHistorical) :
-                              extraMinYClim,
+                              Math.min(extraMinYHistorical, extraMinYForecast),
                           }, {
                             x: points.data[0].x,
                             y: !actionsState.extraPrecipitationChart ?
                               Math.max(maxYForecast, maxYHistorical) :
-                              extraMaxYClim,
+                              Math.max(extraMaxYHistorical, extraMaxYForecast),
                           }]}
                           strokeStyle="dashed"
                           color="#707070"
