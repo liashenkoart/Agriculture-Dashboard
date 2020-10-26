@@ -118,3 +118,17 @@ code {
 header.mui-fixed {
     z-index: 100000 !important;
 }
+
+html {
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    height: 100%;
+}
+
+#root {
+    height:100%
+}

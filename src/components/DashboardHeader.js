@@ -126,7 +126,7 @@ export default function Dashboard({ handleDrawerOpen, open, showLogout, hasMenu,
                         Contact Us
                     </Typography>
                 </div>
-                <IconButton color="inherit" style={{ justifyContent: "flex-end" }} onClick={() => app.auth().signOut()}>
+                <IconButton color="inherit" style={{ justifyContent: "flex-end" }} href="mailto:edgar@climate.ai">
                     <MailIcon />
                 </IconButton>
                 {showLogout && (
