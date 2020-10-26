@@ -329,26 +329,26 @@ const ChartActions = ({ initialState, onStateChange }) => {
                   </div>
                 ) : null
               }
-              {
-                !state.extraHumidityChart ? (
-                  <div
-                    className="more-item-dropdown"
-                    onClick={() => {
-                      setState({
-                        ...state,
-                        extraHumidityChart: !state.extraHumidityChart,
-                        extraEvapotranspirationChart: false,
-                        extraPrecipitationChart: false,
-                        isMonthly: false,
-                        currentTab: 'relative-humidity',
-                        extraDropdown: false,
-                      })
-                    }}
-                  >
-                    Relative Humidity
-                  </div>
-                ) : null
-              }
+              {/*{*/}
+              {/*  !state.extraHumidityChart ? (*/}
+              {/*    <div*/}
+              {/*      className="more-item-dropdown"*/}
+              {/*      onClick={() => {*/}
+              {/*        setState({*/}
+              {/*          ...state,*/}
+              {/*          extraHumidityChart: !state.extraHumidityChart,*/}
+              {/*          extraEvapotranspirationChart: false,*/}
+              {/*          extraPrecipitationChart: false,*/}
+              {/*          isMonthly: false,*/}
+              {/*          currentTab: 'relative-humidity',*/}
+              {/*          extraDropdown: false,*/}
+              {/*        })*/}
+              {/*      }}*/}
+              {/*    >*/}
+              {/*      Relative Humidity*/}
+              {/*    </div>*/}
+              {/*  ) : null*/}
+              {/*}*/}
               {
                 !state.extraEvapotranspirationChart ? (
                   <div
