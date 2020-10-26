@@ -9,11 +9,8 @@ import { useParams } from "react-router-dom"
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        paddingTop: 56,
         height: "100%",
-        [theme.breakpoints.up("sm")]: {
-            paddingTop: 64,
-        },
+
     },
     shiftContent: {
         paddingLeft: "6vw",
@@ -23,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
         height: "100%",
         // display: 'flex'
     },
+    appBarSpacer: theme.mixins.toolbar,
     icon: {
         height: 24,
         width: 24,
@@ -63,6 +61,7 @@ const Main = (props) => {
             >
                 <DashboardHeader showLogout={true} hasBack={true} />
                 <main className={classes.content}>
+                    <div className={classes.appBarSpacer} />
                     <Grid container>
                         <Grid item lg={2} className={classes.sidebarRoot}>
                             <Sidebar
@@ -76,8 +75,8 @@ const Main = (props) => {
                             {children}
                         </Grid>
                     </Grid>
+                    <Footer />
                 </main>
-                <Footer />
             </div>
         </>
     )
