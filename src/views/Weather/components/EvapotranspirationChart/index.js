@@ -153,25 +153,35 @@ const PrecipitationChart = ({ actionsState }) => {
     ];
   });
 
-  const combinedCsvData = (clim, forecast, historical) => clim.map((item, index) => {
-    if (historical[index] && !forecast[index]) {
-      return [
-        ...item,
-        [''],
-        ...historical[index],
-      ];
-    } else if (forecast[index]) {
-      return [
-        ...item,
-        ...forecast[index],
-        [''],
-      ];
-    } else {
-      return [
-        ...item,
-      ];
+  const combinedCsvData = (clim, forecast, historical) => {
+    const csvArr = [];
+    let j = 0;
+    for (let i = 0; i <= clim.length; i++) {
+      if (historical[i]) {
+        csvArr.push([
+          ...clim[i],
+          [''],
+          [''],
+          ...historical[i],
+        ]);
+      } else if (clim[i] && forecast[j]) {
+        csvArr.push([
+          ...clim[i],
+          ...forecast[j],
+          [''],
+          [''],
+        ]);
+        j += 1;
+      } else if (clim[i]) {
+        csvArr.push([
+          ...clim[i],
+          [''],
+          [''],
+        ]);
+      }
     }
-  });
+    return csvArr;
+  };
 
   const useStyles = makeStyles((theme) => ({
     root: {

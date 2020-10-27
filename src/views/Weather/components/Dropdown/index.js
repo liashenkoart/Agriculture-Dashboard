@@ -84,9 +84,17 @@ const DropdownComponent = ({ cols, data, actionsState }) => {
   let currentTab = actionsState.currentTab;
 
   if (actionsState.extraPrecipitationChart) {
-    currentTab = 'water-budget';
+    currentTab = 'Water Budget';
   } else if (actionsState.extraHumidityChart) {
-    currentTab = 'relative-humidity';
+    currentTab = 'Relative Humidity';
+  } else if (actionsState.currentTab === 'minmax') {
+    currentTab = 'Min & Max Temp';
+  } else if (actionsState.currentTab === 'precipitation') {
+    currentTab = 'Precipitation';
+  } else if (actionsState.currentTab === 'soil') {
+    currentTab = 'Soil Temperature';
+  } else if (actionsState.extraEvapotranspirationChart) {
+    currentTab = 'Evapotranspiration';
   }
 
   return (
