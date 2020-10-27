@@ -61,43 +61,35 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
   } = useStyles();
 
   let colsArr = [
-    'clim_time',
-    'clim_t2m_min',
-    'clim_t2m_max',
-    'forecast_time',
-    'forecast_t2m_min',
-    'forecast_t2m_max',
-    'observed_time',
-    'observed_t2m_min',
-    'observed_t2m_max',
+    'Timeline',
+    'History_min',
+    'History_max',
+    'Forecast_min',
+    'Forecast_max',
+    'Observed_min',
+    'Observed_max',
   ];
 
   if (actionsState.currentTab === 'precipitation') {
     colsArr = [
-      'clim_time',
-      'clim_tp_sum',
-      'forecast_time',
-      'forecast_tp_sum',
-      'observed_time',
-      'observed_tp_sum',
+      'Timeline',
+      'History',
+      'Forecast',
+      'Observed',
     ];
   } else if (actionsState.extraHumidityChart) {
     colsArr = [
-      'clim_time',
-      'clim_tp_sum',
-      'forecast_time',
-      'forecast_tp_sum',
-      'observed_time',
-      'observed_tp_sum',
+      'Timeline',
+      'History',
+      'Forecast',
+      'Observed',
     ];
   } else if (actionsState.extraEvapotranspirationChart) {
     colsArr = [
-      'clim_time',
-      'clim_e_sum',
-      'forecast_time',
-      'forecast_e_sum',
-      'observed_time',
-      'observed_e_sum',
+      'Timeline',
+      'History',
+      'Forecast',
+      'Observed',
     ];
   }
 

@@ -156,8 +156,11 @@ const TempChart = ({ actionsState }) => {
   const { climMaxLighten, climMaxDarken } = useMemo(() => getClimMax(data['ds_clim']), [data]);
 
   const histCsvData = data['ds_hist'].time.map((item, index) => {
+    console.log([
+      data['ds_hist']['t2m_min'][index],
+      data['ds_hist']['t2m_max'][index],
+    ]);
     return [
-      item,
       data['ds_hist']['t2m_min'][index],
       data['ds_hist']['t2m_max'][index],
     ];
@@ -165,7 +168,6 @@ const TempChart = ({ actionsState }) => {
 
   const forcCsvData = data['ds_fc'].time.map((item, index) => {
     return [
-      item,
       forecastMinArr[index],
       forecastMaxArr[index],
     ];
@@ -188,14 +190,12 @@ const TempChart = ({ actionsState }) => {
         ...item,
         [''],
         [''],
-        [''],
         ...historical[index],
       ];
     } else if (forecast[index]) {
       return [
         ...item,
         ...forecast[index],
-        [''],
         [''],
         [''],
       ]

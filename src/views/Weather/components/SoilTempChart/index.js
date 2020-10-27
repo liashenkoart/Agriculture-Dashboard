@@ -153,7 +153,6 @@ const SollTempChart = ({ actionsState }) => {
 
   const histCsvData = data['ds_hist'].time.map((item, index) => {
     return [
-      item,
       data['ds_hist']['stl1_min'][index],
       data['ds_hist']['stl1_max'][index],
     ];
@@ -161,7 +160,6 @@ const SollTempChart = ({ actionsState }) => {
 
   const forcCsvData = data['ds_fc'].time.map((item, index) => {
     return [
-      item,
       forecastMinArr[index],
       forecastMaxArr[index],
     ];
@@ -184,14 +182,12 @@ const SollTempChart = ({ actionsState }) => {
         ...item,
         [''],
         [''],
-        [''],
         ...historical[index],
       ];
     } else if (forecast[index]) {
       return [
         ...item,
         ...forecast[index],
-        [''],
         [''],
         [''],
       ]
@@ -334,7 +330,7 @@ const SollTempChart = ({ actionsState }) => {
                   />
                 </Crosshair>
                 <ChartLabel
-                  text="Soll temperature"
+                  text="Soil temperature"
                   className="main-titles"
                   includeMargin={false}
                   xPercent={0.035}

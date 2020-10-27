@@ -134,14 +134,12 @@ const PrecipitationChart = ({ actionsState }) => {
 
   const histCsvData = data['ds_hist'].time.map((item, index) => {
     return [
-      item,
       data['ds_hist']['e_sum'][index],
     ];
   });
 
   const forcCsvData = data['ds_fc'].time.map((item, index) => {
     return [
-      item,
       forecastArr[index],
     ];
   });
@@ -160,7 +158,6 @@ const PrecipitationChart = ({ actionsState }) => {
       return [
         ...item,
         [''],
-        [''],
         ...historical[index],
       ];
     } else if (forecast[index]) {
@@ -168,8 +165,7 @@ const PrecipitationChart = ({ actionsState }) => {
         ...item,
         ...forecast[index],
         [''],
-        [''],
-      ]
+      ];
     } else {
       return [
         ...item,

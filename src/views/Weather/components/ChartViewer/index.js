@@ -105,7 +105,7 @@ const ChartViewer = ({ type, points }) => {
                 points.target === 'forecast' ? <img src={RedDotsIcon}/> : <img src={RedObserved}/>
               }
               <Typography className={temperatureText}>
-                {+points.data[0].y.toFixed(1)}mm
+                {+points.data[0].y.toFixed(1)}wmm
               </Typography>
             </Box>
           </Card>

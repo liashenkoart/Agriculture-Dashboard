@@ -27,7 +27,6 @@ import {
   getExtraClim,
   getMinY,
   getMaxY,
-  getMinY0,
   trimmData,
 } from './helper';
 
@@ -229,14 +228,12 @@ const PrecipitationChart = ({ actionsState }) => {
 
   const histCsvData = data['ds_hist'].time.map((item, index) => {
     return [
-      item,
       data['ds_hist']['tp_sum'][index],
     ];
   });
 
   const forcCsvData = data['ds_fc'].time.map((item, index) => {
     return [
-      item,
       forecastArr[index],
     ];
   });
@@ -254,7 +251,6 @@ const PrecipitationChart = ({ actionsState }) => {
     if (historical[index] && !forecast[index]) {
       return [
         ...item,
-        [''],
         [''],
         ...historical[index],
       ];
