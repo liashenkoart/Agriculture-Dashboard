@@ -33,10 +33,13 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        height: "100vh",
+        height: "100%",
+    },
+    grid: {
+        height: "100%",
     },
     image: {
-        backgroundImage: "url(https://source.unsplash.com/random)",
+        backgroundImage: "url(/images/sign_in.jpg)",
         backgroundRepeat: "no-repeat",
         backgroundColor: theme.palette.type === "dark" ? theme.palette.grey[900] : theme.palette.grey[50],
         backgroundSize: "cover",
@@ -60,7 +63,11 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(3, 0, 2),
     },
     appBarSpacer: theme.mixins.toolbar,
-    content: {},
+    content: {
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+    },
     container: {},
 }))
 
@@ -90,9 +97,9 @@ const SignInSideBar = ({ history }) => {
         <div className={classes.root}>
             <CssBaseline />
             <DashboardHeader showLogout={false} hasMenu={false} />
-            <main className={classes.content}>
+            <main className={classes.content} >
                 <div className={classes.appBarSpacer} />
-                <Grid container component="main" style={{ flexgrow: 1 }}>
+                <Grid container component="main" style={{ flexgrow: 1 }} className={classes.grid}>
                     <Grid item xs={false} sm={4} md={7} className={classes.image} />
                     <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                         <div className={classes.paper}>
