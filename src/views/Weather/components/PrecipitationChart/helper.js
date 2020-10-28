@@ -5,13 +5,10 @@ const getHistoricalTemp = (historical) => historical.time.map((item, index) => (
   y: historical['tp_sum'][index],
 }));
 
-const getExtraHistoricalTemp = (historical, extraHistorical, coefficient) => {
-  console.log(historical.length, extraHistorical['e_sum'].length);
-  return extraHistorical.time.map((item, index) => ({
-    x: new Date(item).getTime(),
-    y: historical[index].y - extraHistorical['e_sum'][index] * coefficient,
-  }))
-};
+const getExtraHistoricalTemp = (historical, extraHistorical, coefficient) => extraHistorical.time.map((item, index) => ({
+  x: new Date(item).getTime(),
+  y: historical[index].y - extraHistorical['e_sum'][index] * coefficient,
+}));
 
 const getForecastArr = (forecast) => forecast['tp_sum']['0.5'];
 

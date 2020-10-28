@@ -1,6 +1,7 @@
 import React from "react"
 import "./App.css"
-import "./styles/chart.css"
+import "./styles/chart.css";
+import 'react-toastify/dist/ReactToastify.css';
 import SignUp from "./components/SignUp"
 import { AuthProvider } from "./Auth/Auth"
 import PrivateRoute from "./Util/PrivateRoute"

@@ -13,6 +13,7 @@ import {
   Crosshair,
   ChartLabel,
 } from 'react-vis';
+import { ToastContainer, toast } from 'react-toastify';
 
 import { AuthContext } from '../../../../Auth/Auth';
 import networking from '../../../../Util/Networking';
@@ -103,6 +104,7 @@ const TempChart = ({ actionsState }) => {
               ...prevData,
               pending: false,
             }));
+            toast.error('Error occurred with server. Please, try later.');
           });
       });
   }, [actionsState.isMonthly, actionsState.currentTab]);
@@ -368,6 +370,7 @@ const TempChart = ({ actionsState }) => {
           )
         }
       </CardContent>
+      <ToastContainer />
     </Card>
   );
 };

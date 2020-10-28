@@ -33,7 +33,7 @@ const CustomCheckbox = withStyles({
   />
 ));
 
-const DropdownComponent = ({ cols, data, actionsState }) => {
+const DropdownComponent = ({ cols, data, actionsState, disabled }) => {
   const { id } = useParams();
   const linkRef = useRef(null);
   const [state, setState] = useState({

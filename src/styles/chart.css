@@ -219,7 +219,7 @@ button.button-dropdown {
   justify-content: space-between;
   align-items: center;
   position: relative;
-  z-index: 9999;
+  z-index: 9997;
   font-weight: 600;
 }
 
@@ -294,7 +294,7 @@ span.dropdown-item-text-bold {
 }
 
 .more-dropdown-container {
-  z-index: 10000 !important;
+  z-index: 9997 !important;
   margin-left: -200px;
 }
 
@@ -344,4 +344,8 @@ p.mainProfileBlockDesc {
 
 .slider-container {
   margin-top: 30px;
+}
+
+.Toastify__toast-body {
+  font-family: "Montserrat";
 }

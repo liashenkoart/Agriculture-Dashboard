@@ -14,6 +14,7 @@ import {
   Crosshair,
   ChartLabel
 } from 'react-vis';
+import { ToastContainer, toast } from 'react-toastify';
 
 import {
   monthNames,
@@ -90,6 +91,7 @@ const PrecipitationChart = ({ actionsState }) => {
               ...prevData,
               pending: false,
             }));
+            toast.error('Error occurred with server. Please, try later.');
           });
       });
   }, []);
@@ -118,14 +120,38 @@ const PrecipitationChart = ({ actionsState }) => {
     return `${new Date(d).getDate()} ${monthNames[new Date(d).getMonth()]}`;
   };
 
-  const historicalTemp = useMemo(() => getHistoricalTemp(data['ds_hist']), [data]);
+  const historicalTemp = useMemo(() => {
+    try {
+      return getHistoricalTemp(data['ds_hist']);
+    } catch (e) {
+      toast.error('Problem ocurred processsing information');
+      return [];
+    }
+  }, [data]);
 
-  const forecastArr = useMemo(() => getForecastArr(data['ds_fc']), [data]);
+  const forecastArr = useMemo(() => {
+    try {
+      return getForecastArr(data['ds_fc']);
+    } catch (e) {
+      return [];
+    }
+  }, [data]);
+
   const forecastTemp = useMemo(() => {
-    return getForecastTemp(data['ds_fc'], forecastArr);
+    try {
+      return getForecastTemp(data['ds_fc'], forecastArr);
+    } catch (e) {
+      return [];
+    }
   }, [data, forecastArr]);
 
-  const { climLighten, climDarken } = useMemo(() => getClim(data['ds_clim']), [data]);
+  const { climLighten, climDarken } = useMemo(() => {
+    try {
+      return getClim(data['ds_clim']);
+    } catch (e) {
+      return [];
+    }
+  }, [data]);
 
   const minYHistorical = useMemo(() => getMinY(historicalTemp), [historicalTemp]);
   const maxYHistorical = useMemo(() => getMaxY(historicalTemp), [historicalTemp]);
@@ -306,6 +332,7 @@ const PrecipitationChart = ({ actionsState }) => {
           }
         </CardContent>
       </Card>
+      <ToastContainer />
     </>
   );
 };

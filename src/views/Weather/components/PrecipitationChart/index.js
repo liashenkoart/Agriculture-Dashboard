@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState, useEffect, useContext } from 'react';
+import React, { useCallback, useMemo, useRef, useState, useEffect, useContext, memo } from 'react';
 import { Box, Card, CardContent, CircularProgress, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { useParams } from 'react-router-dom';
@@ -14,6 +14,7 @@ import {
   Crosshair,
   ChartLabel
 } from 'react-vis';
+import { ToastContainer, toast } from 'react-toastify';
 
 import {
   monthNames,
@@ -80,6 +81,7 @@ const PrecipitationChart = ({ actionsState }) => {
     },
     pending: true,
     coefficient: 0.3,
+    error: false,
   });
 
   useEffect(() => {
@@ -95,6 +97,23 @@ const PrecipitationChart = ({ actionsState }) => {
         ...prevData,
         pending: true,
       }));
+      setEvaporationData({
+        'ds_hist': {
+          time: [],
+          'e_sum': [],
+        },
+        'ds_fc': {
+          time: [],
+          'e_sum': [],
+        },
+        'ds_clim': {
+          time: [],
+          'e_sum': [],
+        },
+        pending: true,
+        coefficient: 0.3,
+        error: false,
+      });
       currentUser
         .getIdToken()
         .then((userToken) => {
@@ -112,6 +131,7 @@ const PrecipitationChart = ({ actionsState }) => {
                 ...prevData,
                 pending: false,
               }));
+              toast.error('Error occurred with server. Please, try later.');
             });
         });
     } else {
@@ -140,6 +160,7 @@ const PrecipitationChart = ({ actionsState }) => {
                 ...prevData,
                 pending: false,
               }));
+              toast.error('Error occurred with server. Please, try later.');
             });
           return userToken;
         })
@@ -159,6 +180,7 @@ const PrecipitationChart = ({ actionsState }) => {
                 ...prevData,
                 pending: false,
               }));
+              toast.error('Error occurred with server. Please, try later.');
             });
         });
     }
@@ -198,22 +220,41 @@ const PrecipitationChart = ({ actionsState }) => {
   const { climLighten, climDarken } = useMemo(() => getClim(data['ds_clim']), [data]);
 
   const extraHistoricalTemp = useMemo(() => {
-    return getExtraHistoricalTemp(historicalTemp, evaporationData['ds_hist'], evaporationData.coefficient);
+    try {
+      return getExtraHistoricalTemp(historicalTemp, evaporationData['ds_hist'], evaporationData.coefficient);
+    } catch (e) {
+      actionsState.extraPrecipitationChart && toast.error('Problem ocurred processsing information');
+      return [];
+    }
   }, [evaporationData, historicalTemp]);
 
-  const extraForecastArr = useMemo(() => getExtraForecastArr(evaporationData['ds_fc']), [evaporationData]);
+  const extraForecastArr = useMemo(() => {
+    try {
+      return getExtraForecastArr(evaporationData['ds_fc']);
+    } catch (e) {
+      return [];
+    }
+  }, [evaporationData]);
   const extraForecastTemp = useMemo(() => {
-    return getExtraForecastTemp(
-      forecastTemp,
-      evaporationData['ds_fc'],
-      extraForecastArr,
-      extraHistoricalTemp[extraHistoricalTemp.length - 1],
-      evaporationData.coefficient,
-    );
+    try {
+      return getExtraForecastTemp(
+        forecastTemp,
+        evaporationData['ds_fc'],
+        extraForecastArr,
+        extraHistoricalTemp[extraHistoricalTemp.length - 1],
+        evaporationData.coefficient,
+      );
+    } catch (e) {
+      return [];
+    }
   }, [evaporationData, extraForecastArr, forecastTemp]);
 
   const { extraClimLighten, extraClimDarken } = useMemo(() => {
-    return getExtraClim({ climLighten, climDarken }, evaporationData['ds_clim'], evaporationData.coefficient);
+    try {
+      return getExtraClim({ climLighten, climDarken }, evaporationData['ds_clim'], evaporationData.coefficient);
+    } catch (e) {
+      return [];
+    }
   }, [evaporationData, climLighten, climDarken]);
 
   const minYHistorical = useMemo(() => getMinY(historicalTemp), [historicalTemp]);
@@ -320,138 +361,144 @@ const PrecipitationChart = ({ actionsState }) => {
                     !actionsState.extraPrecipitationChart ? 'Precipitation [mm]' : 'Water Budget [mm]'
                   }
                 </Typography>
-                <FlexibleWidthXYPlot
-                  className="flexible-chart"
-                  height={500}
-                  xType="time"
-                  onMouseLeave={handleMouseLeave}
-                  ref={chartRef}
-                  yDomain={
-                    !actionsState.extraPrecipitationChart ?
-                      [Math.min(minYHistorical, minYForecast), Math.max(maxYHistorical, maxYForecast)] :
-                      [Math.min(extraMinYHistorical, extraMinYForecast), Math.max(extraMaxYHistorical, extraMaxYForecast)]
-                  }
-                  style={{ backgroundColor: '#fff' }}
-                  margin={{ top: 70 }}
-                >
-                  <VerticalGridLines/>
-                  <HorizontalGridLines/>
-                  <XAxis
-                    tickFormat={tickFormat}
-                    tickTotal={points.chartWidth ? points.chartWidth / 45 : null}
-                  />
-                  <YAxis/>
-                  {
-                    !actionsState.extraPrecipitationChart ? (
-                      [
-                        <AreaSeries
-                          data={!actionsState.isMonthly ? trimmData(climLighten) : climLighten}
-                          color="#C0E1EB"
-                        />,
-                        <AreaSeries
-                          data={!actionsState.isMonthly ? trimmData(climDarken) : climDarken}
-                          color="#A0CBE0"
-                        />,
-                        <LineSeries
-                          color="#237CB5"
-                          data={!actionsState.isMonthly ? trimmData(historicalTemp) : historicalTemp}
-                          curve="curveMonotoneX"
-                          onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
-                          onNearestX={handleSetPoints.bind({ target: 'historical' })}
-                        />,
-                        <LineSeries
-                          color="#237CB5"
-                          data={!actionsState.isMonthly ? trimmData(forecastTemp) : forecastTemp}
-                          curve="curveMonotoneX"
-                          strokeStyle="dashed"
-                          onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
-                          onNearestX={handleSetPoints.bind({ target: 'forecast' })}
+                {
+                  <>
+                    <FlexibleWidthXYPlot
+                      className="flexible-chart"
+                      height={500}
+                      xType="time"
+                      onMouseLeave={handleMouseLeave}
+                      ref={chartRef}
+                      yDomain={
+                        !actionsState.extraPrecipitationChart ?
+                          [Math.min(minYHistorical, minYForecast), Math.max(maxYHistorical, maxYForecast)] :
+                          [Math.min(extraMinYHistorical, extraMinYForecast), Math.max(extraMaxYHistorical, extraMaxYForecast)]
+                      }
+                      style={{ backgroundColor: '#fff' }}
+                      margin={{ top: 70 }}
+                    >
+                      <VerticalGridLines/>
+                      <HorizontalGridLines/>
+                      <XAxis
+                        tickFormat={tickFormat}
+                        tickTotal={points.chartWidth ? points.chartWidth / 45 : null}
+                      />
+                      <YAxis/>
+                      {
+                        !actionsState.extraPrecipitationChart ? (
+                          [
+                            <AreaSeries
+                              data={!actionsState.isMonthly ? trimmData(climLighten) : climLighten}
+                              color="#C0E1EB"
+                            />,
+                            <AreaSeries
+                              data={!actionsState.isMonthly ? trimmData(climDarken) : climDarken}
+                              color="#A0CBE0"
+                            />,
+                            <LineSeries
+                              color="#237CB5"
+                              data={!actionsState.isMonthly ? trimmData(historicalTemp) : historicalTemp}
+                              curve="curveMonotoneX"
+                              onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
+                              onNearestX={handleSetPoints.bind({ target: 'historical' })}
+                            />,
+                            <LineSeries
+                              color="#237CB5"
+                              data={!actionsState.isMonthly ? trimmData(forecastTemp) : forecastTemp}
+                              curve="curveMonotoneX"
+                              strokeStyle="dashed"
+                              onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
+                              onNearestX={handleSetPoints.bind({ target: 'forecast' })}
+                            />
+                          ]
+                        ) : (
+                          [
+                            <AreaSeries
+                              data={extraClimLighten}
+                              color="#C0E1EB"
+                            />,
+                            <AreaSeries
+                              data={extraClimDarken}
+                              color="#A0CBE0"
+                            />,
+                            <LineSeries
+                              color="#237CB5"
+                              data={extraHistoricalTemp}
+                              curve="curveMonotoneX"
+                              onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
+                              onNearestX={handleSetPoints.bind({ target: 'historical' })}
+                            />,
+                            <LineSeries
+                              color="#237CB5"
+                              data={extraForecastTemp}
+                              curve="curveMonotoneX"
+                              strokeStyle="dashed"
+                              onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
+                              onNearestX={handleSetPoints.bind({ target: 'forecast' })}
+                            />
+                          ]
+                        )
+                      }
+                      {
+                        points.data.length ? (
+                          [
+                            <LineSeries
+                              data={[{
+                                x: points.data[0].x,
+                                y: !actionsState.extraPrecipitationChart ?
+                                  Math.min(minYForecast, minYHistorical) :
+                                  Math.min(extraMinYHistorical, extraMinYForecast),
+                              }, {
+                                x: points.data[0].x,
+                                y: !actionsState.extraPrecipitationChart ?
+                                  Math.max(maxYForecast, maxYHistorical) :
+                                  Math.max(extraMaxYHistorical, extraMaxYForecast),
+                              }]}
+                              strokeStyle="dashed"
+                              color="#707070"
+                            />,
+                            <MarkSeries
+                              data={points.data}
+                              color="#446EA1"
+                            />
+                          ]
+                        ) : null
+                      }
+                      <Crosshair
+                        values={points.data}
+                        style={{ line: { display: 'none' } }}
+                      >
+                        <ChartViewer
+                          type="precipitation"
+                          points={points}
                         />
-                      ]
-                    ) : (
-                      [
-                        <AreaSeries
-                          data={!actionsState.isMonthly ? trimmData(extraClimLighten) : extraClimLighten}
-                          color="#C0E1EB"
-                        />,
-                        <AreaSeries
-                          data={!actionsState.isMonthly ? trimmData(extraClimDarken) : extraClimDarken}
-                          color="#A0CBE0"
-                        />,
-                        <LineSeries
-                          color="#237CB5"
-                          data={!actionsState.isMonthly ? trimmData(extraHistoricalTemp) : extraHistoricalTemp}
-                          curve="curveMonotoneX"
-                          onSeriesMouseOver={handleMouseOver.bind({ target: 'historical' })}
-                          onNearestX={handleSetPoints.bind({ target: 'historical' })}
-                        />,
-                        <LineSeries
-                          color="#237CB5"
-                          data={!actionsState.isMonthly ? trimmData(extraForecastTemp) : extraForecastTemp}
-                          curve="curveMonotoneX"
-                          strokeStyle="dashed"
-                          onSeriesMouseOver={handleMouseOver.bind({ target: 'forecast' })}
-                          onNearestX={handleSetPoints.bind({ target: 'forecast' })}
-                        />
-                      ]
-                    )
-                  }
-                  {
-                    points.data.length ? (
-                      [
-                        <LineSeries
-                          data={[{
-                            x: points.data[0].x,
-                            y: !actionsState.extraPrecipitationChart ?
-                              Math.min(minYForecast, minYHistorical) :
-                              Math.min(extraMinYHistorical, extraMinYForecast),
-                          }, {
-                            x: points.data[0].x,
-                            y: !actionsState.extraPrecipitationChart ?
-                              Math.max(maxYForecast, maxYHistorical) :
-                              Math.max(extraMaxYHistorical, extraMaxYForecast),
-                          }]}
-                          strokeStyle="dashed"
-                          color="#707070"
-                        />,
-                        <MarkSeries
-                          data={points.data}
-                          color="#446EA1"
-                        />
-                      ]
-                    ) : null
-                  }
-                  <Crosshair
-                    values={points.data}
-                    style={{ line: { display: 'none' } }}
-                  >
-                    <ChartViewer
-                      type="precipitation"
-                      points={points}
-                    />
-                  </Crosshair>
-                  <ChartLabel
-                    text={!actionsState.extraPrecipitationChart ? 'Precipitation' : 'Water Budget'}
-                    className="main-titles"
-                    includeMargin={false}
-                    xPercent={0.035}
-                    yPercent={0.1}
-                  />
-                </FlexibleWidthXYPlot>
+                      </Crosshair>
+                      <ChartLabel
+                        text={!actionsState.extraPrecipitationChart ? 'Precipitation' : 'Water Budget'}
+                        className="main-titles"
+                        includeMargin={false}
+                        xPercent={0.035}
+                        yPercent={0.1}
+                      />
+                    </FlexibleWidthXYPlot>
+                  </>
+                }
                 <ChartSpecs
                   type="precipitation"
                   chartRef={chartRef}
                   data={combinedCsvData(climCsvData, forcCsvData, histCsvData)}
                   actionsState={actionsState}
                   onSliderChange={handleChangeSlider}
+                  disabled={!evaporationData.pending && !extraHistoricalTemp.length}
                 />
               </>
             )
           }
         </CardContent>
       </Card>
+      <ToastContainer />
     </>
   );
 };
 
-export default PrecipitationChart;
+export default memo(PrecipitationChart);

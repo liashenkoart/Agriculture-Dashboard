@@ -116,7 +116,7 @@ code {
 }
 
 header.mui-fixed {
-    z-index: 100000 !important;
+    z-index: 9998 !important;
 }
 
 html {

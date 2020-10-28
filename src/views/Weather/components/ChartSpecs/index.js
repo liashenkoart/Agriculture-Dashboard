@@ -50,7 +50,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
+const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState, disabled }) => {
   const {
     headerBlocksContainer,
     headerBlockContainer,
@@ -110,6 +110,7 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
               max={2}
               valueLabelDisplay="auto"
               onChange={onSliderChange}
+              disabled={disabled}
             />
           </div>
         ) : null
@@ -120,6 +121,7 @@ const ChartSpecs = ({ type, chartRef, data, onSliderChange, actionsState }) => {
           cols={colsArr}
           data={data}
           actionsState={actionsState}
+          disabled={disabled}
         />
       </div>
       <div className={headerBlockContainer}>

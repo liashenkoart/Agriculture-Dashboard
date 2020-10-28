@@ -14,6 +14,7 @@ import {
   Crosshair,
   ChartLabel
 } from 'react-vis';
+import { toast, ToastContainer } from 'react-toastify';
 
 import {
   monthNames,
@@ -90,6 +91,7 @@ const PrecipitationChart = ({ actionsState }) => {
               ...prevData,
               pending: false,
             }));
+            toast.error('Error occurred with server. Please, try later.');
           });
       });
   }, []);
@@ -305,6 +307,7 @@ const PrecipitationChart = ({ actionsState }) => {
           }
         </CardContent>
       </Card>
+      <ToastContainer />
     </>
   );
 };
