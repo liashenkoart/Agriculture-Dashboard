@@ -262,10 +262,10 @@ const PrecipitationChart = ({ actionsState }) => {
   const minYForecast = useMemo(() => getMinY(forecastTemp), [forecastTemp]);
   const maxYForecast = useMemo(() => getMaxY(forecastTemp), [forecastTemp]);
 
-  const extraMinYForecast = useMemo(() => getMinY(trimmData(extraForecastTemp)) * 10, [evaporationData.pending]);
-  const extraMaxYForecast = useMemo(() => getMaxY(trimmData(extraForecastTemp)), [evaporationData.pending]);
-  const extraMinYHistorical = useMemo(() => getMinY(trimmData(extraHistoricalTemp)) * 10, [evaporationData.pending]);
-  const extraMaxYHistorical = useMemo(() => getMaxY(trimmData(extraHistoricalTemp)), [evaporationData.pending]);
+  const extraMinYForecast = useMemo(() => getMinY(extraForecastTemp) * 10, [evaporationData.pending]);
+  const extraMaxYForecast = useMemo(() => getMaxY(extraForecastTemp), [evaporationData.pending]);
+  const extraMinYHistorical = useMemo(() => getMinY(extraHistoricalTemp) * 10, [evaporationData.pending]);
+  const extraMaxYHistorical = useMemo(() => getMaxY(extraHistoricalTemp), [evaporationData.pending]);
 
   const histCsvData = data['ds_hist'].time.map((item, index) => {
     return [
